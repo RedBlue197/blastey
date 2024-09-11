@@ -1,45 +1,27 @@
-import os
-from sqlalchemy.orm import Session
-from fastapi import FastAPI, Request, HTTPException,Response
-from typing import Dict
+from fastapi import FastAPI, Request, HTTPException
 from utils.request_forwarder import forward_request
 from fastapi.middleware.cors import CORSMiddleware
 import httpx
-
-from routers.v1 import users as v1_users
 from middlewares import auth_middleware, logging_middleware
 from config import settings
 from slowapi.util import get_remote_address
 from slowapi import Limiter
 limiter = Limiter(key_func=get_remote_address)
 
-from fastapi_redis_cache import FastApiRedisCache, cache
 
-LOCAL_REDIS_URL = "redis://127.0.0.1:6379"
 
 app = FastAPI(
-    title="API Gateway",
-    description="This is Seftly project, with auto docs for the API and everything",
+    title="Blastey API Gateway",
+    description="This is Blastey project, with auto docs for the API and everything",
     version="1.0.0",
-    dependencies=[],
-    responses={404: {"description": "Not found"}},
 )
 
 excluded_paths = [
-    "/core/frontoffice/v1/demands/"
+    "/docs",
+    "/openapi.json",
+    "/redoc",
+    '/core/frontoffice/v1/activities/',
     ]
-
-# Middleware for logging
-app.add_middleware(logging_middleware.LoggingMiddleware)
-# Include authentication middleware globally
-app.add_middleware(auth_middleware.AuthMiddleware, excluded_paths=excluded_paths)
-
-
-
-
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to the API Gateway"}
 
 origins = ["*"]
 app.add_middleware(
@@ -50,20 +32,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Middleware for logging
+app.add_middleware(logging_middleware.LoggingMiddleware)
+# Include authentication middleware globally
+app.add_middleware(auth_middleware.AuthMiddleware, excluded_paths=excluded_paths)
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the API Gateway"}
 
+
 @app.on_event("startup")
 async def startup_event():
-    redis_cache = FastApiRedisCache()
-    redis_cache.init(
-        host_url=os.environ.get("REDIS_URL", LOCAL_REDIS_URL),
-        prefix="myapi-cache",
-        response_header="X-MyAPI-Cache",
-        ignore_arg_types=[Request, Response, Session]
-    )
-    # Load custom OpenAPI schema
+
     app.openapi_schema = await get_merged_openapi()
 
 async def get_merged_openapi() -> dict:

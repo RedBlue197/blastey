@@ -13,6 +13,10 @@ class OrderStatus(PyEnum):
     CANCELLED = "cancelled"
     COMPLETED = "completed"
 
+class OrderItemType(PyEnum):
+    ACTIVITY = "activity"
+    TRIP = "trip"
+
 class Order(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "orders"
 
@@ -23,18 +27,15 @@ class Order(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixi
     order_status = Column(Enum(OrderStatus), default=OrderStatus.PENDING, nullable=False)
 
     # Foreign Keys
-    demand_id = Column(UUID(as_uuid=True), ForeignKey("demands.demand_id", ondelete="SET NULL"), nullable=True)
-    request_id = Column(UUID(as_uuid=True), ForeignKey("requests.request_id", ondelete="SET NULL"), nullable=True)
-    offer_id = Column(UUID(as_uuid=True), ForeignKey("offers.offer_id", ondelete="SET NULL"), nullable=True)
-    product_offering_id = Column(UUID(as_uuid=True), ForeignKey("product_offerings.product_offering_id", ondelete="SET NULL"), nullable=True)
     client_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
-    traveler_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
+    merchant_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
 
 class OrderItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "order_items"
 
     order_item_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     order_id = Column(UUID(as_uuid=True), ForeignKey("orders.order_id", ondelete="CASCADE"), nullable=False)
+    order_item_type= Column(Enum(OrderItemType), default=OrderItemType.ACTIVITY, nullable=False)
     order_item_name = Column(String, nullable=False)
     order_item_quantity = Column(Numeric(precision=10, scale=2), nullable=False,default=1)
     order_item_price = Column(Numeric(precision=10, scale=2), nullable=False)

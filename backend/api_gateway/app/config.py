@@ -5,6 +5,7 @@ import os
 class DevSettings(BaseSettings):
     SERVICES: ClassVar[Dict[str, Dict[str, str]]] = {
         "core": {"url": "http://localhost:8001"},
+        "gateway": {"url": "http://localhost:8000"},
     }
     SECRET_KEY: str = "dev-secret-key"
     ENV: str = "development"
@@ -13,6 +14,8 @@ class DevSettings(BaseSettings):
 class ProdSettings(BaseSettings):
     SERVICES: ClassVar[Dict[str, Dict[str, str]]] = {
         "core": {"url": "http://core-service:8001"},
+        "gateway": {"url": "http://localhost:8000"},
+
     }
     SECRET_KEY: str = "prod-secret-key"
     ENV: str = "production"

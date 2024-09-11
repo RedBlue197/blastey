@@ -23,7 +23,7 @@ settings = get_settings()
 limiter = Limiter(key_func=get_remote_address)
 
 app=FastAPI(
-    title="Blastey API",
+    title="Blastey Core API",
     description="This is Blastey project, with auto docs for the API and everything",
     version="1.0.0",
     dependencies=[],

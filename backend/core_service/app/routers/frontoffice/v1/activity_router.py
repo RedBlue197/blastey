@@ -8,8 +8,8 @@ from utils.extract_user import extract_user_id
 import uuid
 
 router = APIRouter(
-    prefix="/core/frontoffice/v1/activitys",
-    tags=['Frontoffice activitys']
+    prefix="/core/frontoffice/v1/activities",
+    tags=['Frontoffice Activities']
 )
 
 #----------------------------------------------------GET ENDPOINTS----------------------------------------------------
