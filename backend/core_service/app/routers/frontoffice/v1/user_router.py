@@ -6,7 +6,7 @@ from dependencies.auth_dependency import bcrypt_context
 
 import uuid
 
-from models.user_model import User
+from models.user_model import User,UserRank,UserRole
 
 from interfaces.user_interface import UserInterface
 
@@ -64,20 +64,32 @@ async def create_user(
     db: db_dependency,  # Database dependency
     user: CreateUserRequest
 ):
-    db_user = User(
-        first_name=user.first_name,
-        last_name=user.last_name,
-        email=user.email,
-        phone_number=user.phone_number,
-        password=bcrypt_context.hash(user.password)
-    )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    db.close()
+    try :
+        db_user = User(
+            first_name=user.first_name,
+            last_name=user.last_name,
+            email=user.email,
+            user_role=UserRole(user.user_role),
+            user_rank=UserRank(user.user_rank),
+            user_phone_number=user.phone_number,
+            user_password=bcrypt_context.hash(user.password),
+            user_address=user.address,
+            user_city=user.city,
+            user_country=user.country,
+            user_postal_code=user.postal_code
+        )
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        db.close()
+    except Exception as e:
+        return success_response(
+            message="User creation failed",
+            error=str(e)
+        )
 
     # Handle response
     return success_response(
         message="User created successfully",
-        user_id=db_user.user_id
+        data=db_user,
     )

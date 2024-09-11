@@ -1,7 +1,5 @@
 from pydantic import BaseModel
 import uuid
-from models.activity_model import  ItemCategoryEnum
-from typing import Optional
 
 class CreateActivityItemRequest(BaseModel):
     activity_item_name: str

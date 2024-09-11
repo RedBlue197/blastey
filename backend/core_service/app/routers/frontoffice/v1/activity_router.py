@@ -90,7 +90,6 @@ async def create_activity(
         activity_title=create_activity_request.activity_title,
         activity_description=create_activity_request.activity_description,
         user_id=create_activity_request.user_id,
-        address_id=create_activity_request.address_id
     )
     db.add(create_activity_model)
     db.commit()

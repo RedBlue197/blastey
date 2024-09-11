@@ -1,7 +1,7 @@
 from sqlalchemy import event
 from datetime import datetime
 from models.base_model import TrackTimeMixin, CreatedByMixin, UpdatedByMixin, SoftDeleteMixin
-from configuration.database_configuration import Base
+from database import Base
 from main import current_user_var
 
 

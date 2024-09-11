@@ -10,7 +10,7 @@ class DevSettings(BaseSettings):
     }
     SECRET_KEY: str = "dev-secret-key"
     ENV: str = "development"
-    DATABASE_URL: str = "sqlite:///./dev.db"
+    DATABASE_URL: str = "postgresql://postgres:3SS5fe71@localhost:5432/db_blastey"
 
 class ProdSettings(BaseSettings):
     SERVICES: ClassVar[Dict[str, Dict[str, str]]] = {

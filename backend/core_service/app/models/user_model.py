@@ -1,13 +1,28 @@
 import uuid
-from sqlalchemy import Column, String, Boolean, DateTime
+from sqlalchemy import Column, String, Boolean, DateTime,Enum
 from sqlalchemy.dialects.postgresql import UUID
 from database import Base
 from models.base_model import TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin
+from enum import Enum as PyEnum
+
+class UserRank(PyEnum):
+    BRONZE = "bronze"
+    SILVER = "silver"
+    GOLD = "gold"
+    PLATINUM = "platinum"
+    DIAMOND = "diamond"
+    TITANIUM = "titanium"
+    MASTER = "master"
+
+class UserRole(PyEnum):
+    ADMIN = "admin"
+    USER = "user"
+
 
 class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "users"
 
-    user_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4,index=True)
     user_email = Column(String, unique=True, nullable=False)
     user_hashed_password = Column(String, nullable=False)
     user_first_name = Column(String, nullable=False)
@@ -21,3 +36,6 @@ class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     is_active = Column(Boolean, default=True)
     is_blocked = Column(Boolean, default=False)
     user_last_login_date = Column(DateTime, nullable=True)
+
+    user_rank = Column(Enum(UserRank), default=UserRank.BRONZE, nullable=False)
+    user_role = Column(Enum(UserRole), default=UserRole.USER, nullable=False)
