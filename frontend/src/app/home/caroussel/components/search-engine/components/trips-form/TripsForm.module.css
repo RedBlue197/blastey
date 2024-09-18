@@ -1,0 +1,58 @@
+/* Wrapper for the form */
+.searchForm {
+  display: flex;
+  flex-direction: column; /* Stacked layout by default */
+  gap: 1rem; /* Space between form fields */
+  background-color: white; /* Form background */
+  width: 100%;
+}
+
+/* Form group to wrap individual fields */
+.formGroup {
+  flex: 1; /* Allow fields to grow and fill space equally */
+}
+
+.searchButtonWrapper {
+  margin-top: 1rem; /* Margin on top for spacing on mobile */
+}
+
+/* Search button */
+.searchButton {
+  background-color: #1668d6; /* Primary color */
+  color: white;
+  font-weight: bold;
+  width: 100%; /* Full-width button for mobile */
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+/* Hover effect for search button */
+.searchButton:hover {
+  background-color: #135cb8; /* Darker shade on hover */
+}
+
+/* Responsive styling for larger screens */
+@media (min-width: 768px) {
+  .searchForm {
+    flex-direction: row; /* Change to row layout on larger screens */
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end; /* Align items to the bottom of the row */
+  }
+
+  .formGroup {
+    width: 30%; /* Adjust width to allow more form fields in the same row */
+  }
+
+  /* Search button should be on the left side and smaller */
+  .searchButtonWrapper {
+    width: auto; /* Allow button to take its natural size */
+    margin-top: 0; /* Remove top margin for inline alignment */
+  }
+
+  /* Ensure button sits inline with form fields */
+  .searchButtonWrapper button {
+    padding: 0.75rem 1.5rem;
+  }
+}

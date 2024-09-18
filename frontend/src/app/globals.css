@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* slick-carousel styles */
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  min-height: 100vh; /* Ensure the body takes up at least the full viewport height */
+  margin: 0; /* Remove default margin */
+}
+
+.main-content {
+  background-color: #ffffff; /* White background for main content */
+  min-height: calc(100vh - 60px); /* Adjust based on footer height or other fixed elements */
+  padding: 20px; /* Add some padding */
+}
+
+.primaryButton {
+  background-color: #0086f3;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+
+  /* Hover effect */
+  &:hover {
+    background-color: #006bbd; /* Darker shade of blue */
+    transform: translateY(-2px); /* Slightly lifts the button */
+  }
+}
+
+.secondaryButton {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #0086f3;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+
+  /* Hover effect */
+  &:hover {
+    background-color: #f0f0f0; /* Slightly darker background */
+    color: #006bbd; /* Blue color for the text */
+    transform: translateY(-2px); /* Slightly lifts the button */
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

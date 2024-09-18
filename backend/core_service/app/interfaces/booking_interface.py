@@ -1,11 +1,11 @@
 # app/interfaces/order.py
 
 from sqlalchemy.orm import Session
-from models.order_model import Order
+from backend.core_service.app.models.booking_model import Booking
 from interfaces.base_interface import BaseInterface
 
-class OrderInterface(BaseInterface[Order]):
+class BookingInterface(BaseInterface[Booking]):
     def __init__(self, db: Session):
-        super().__init__(db, Order, 'order_id')
+        super().__init__(db, Booking, 'booking_id')
 
     # Add more specific queries for Order model

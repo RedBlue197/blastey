@@ -1,0 +1,79 @@
+/* Container for carousel images */
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative; /* Allows positioning of the search engine over the image */
+}
+
+/* Container for individual images in the carousel */
+.imageContainer {
+  width: 100%;
+  max-width: 1200px; /* Limits the max width on larger screens */
+  height: 400px; /* Default height for desktop */
+  margin-bottom: 2rem; /* Adds spacing between image and search engine */
+  overflow: hidden; /* Ensures image doesn’t overflow */
+  position: relative; /* Ensures the search engine can overlap */
+}
+
+/* Style for images to ensure they are responsive */
+.fullWidthImage {
+  width: 100%;
+  height: 100%; /* Occupies full height of the container */
+  border-radius: 8px; /* Optional, for rounded corners */
+  object-fit: cover; /* Ensures the image covers the container while maintaining aspect ratio */
+}
+
+/* Wrapper for search engine with centering */
+.searchEngineWrapper {
+  border-radius: 8px;
+  position: absolute; /* Allows the search engine to overlap the image */
+  bottom: -30px; /* Adjust to position the search engine partially over the image */
+  left: 50%;
+  transform: translateX(-50%); /* Centers the search engine horizontally */
+  max-width: 80%; /* Increase the width */
+  width: 80%; /* Ensure the width is explicitly set */
+}
+
+@media (min-width: 768px) {
+  .searchEngineWrapper {
+    margin-bottom: 40px;
+    max-width: 70%; /* Adjusted width for larger screens */
+    width: 70%; /* Ensure the width is explicitly set */
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .imageContainer {
+    height: 250px; /* Adjusted height for responsive view */
+  }
+
+  .searchEngineWrapper {
+    position: static; /* Reset the position for smaller screens */
+    transform: none; /* Reset the transformation */
+    margin-top: 1rem; /* Adds space between the image and search engine */
+    bottom: 0; /* Reset bottom for smaller screens */
+    max-width: 90%; /* Increase width for smaller screens */
+    width: 90%; /* Ensure the width is explicitly set */
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .imageContainer {
+    height: 200px; /* Further adjusted height for smaller screens */
+    margin-bottom: 1rem; /* Reduce spacing on smaller screens */
+  }
+
+  .fullWidthImage {
+    border-radius: 4px; /* Smaller border radius for smaller screens */
+  }
+}

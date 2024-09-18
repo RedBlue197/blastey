@@ -1,0 +1,123 @@
+/* Wrapper for the search engine form and tabs */
+.searchEngine {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Center the content */
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1.5rem; /* Add padding for spacing */
+  background-color: #f8f9fa; /* Light background for the entire section */
+  border-radius: 8px; /* Rounded corners for a softer look */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Tabs section */
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.tab {
+  padding: 0.75rem 1.5rem; /* Larger padding for a more spacious feel */
+  background-color: #1668d6;
+  color: white;
+  border: none;
+  margin: 0 0.5rem;
+  border-radius: 24px; /* Fully rounded buttons for a modern look */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for hover */
+}
+
+.tab.active {
+  background-color: #38b6ff; /* Change color for active tab */
+}
+
+.tab:hover {
+  background-color: #135cb8;
+  transform: scale(1.05); /* Slight scale on hover for interactivity */
+}
+
+/* Main form container */
+.searchForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Form group container */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Style for search button */
+.searchButton {
+  padding: 0.75rem 1.5rem; /* Larger padding for better spacing */
+  background: #1668d6;
+  color: white;
+  border: none;
+  border-radius: 24px; /* Rounded button for consistency */
+  cursor: pointer;
+  height: 45px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.searchButton:hover {
+  background-color: #135cb8;
+  transform: translateY(-2px); /* Lift effect on hover */
+}
+
+.searchButtonWrapper {
+  display: flex;
+  justify-content: center;
+  align-self: flex-end;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  /* Stack the search button on mobile */
+  .searchForm {
+    flex-direction: column;
+  }
+
+  .formGroup {
+    flex-direction: column;
+  }
+
+  .searchButton {
+    width: 100%; /* Full width button */
+  }
+
+  .searchButtonWrapper {
+    margin-top: 1rem;
+    align-self: stretch;
+  }
+}
+
+@media (min-width: 768px) {
+  .searchForm {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .formGroup {
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+  }
+
+  .formGroup label {
+    margin-right: 0.5rem;
+  }
+
+  .searchButtonWrapper {
+    margin-left: auto;
+    width: auto;
+  }
+}

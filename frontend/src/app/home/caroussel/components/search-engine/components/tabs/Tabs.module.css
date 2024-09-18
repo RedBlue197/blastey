@@ -1,0 +1,52 @@
+.journeyTypeRadio {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  background-color: #f0f3f7;
+  border-radius: 3rem;
+  padding: 1em;
+  width: fit-content;
+}
+
+.journeyTypeRadioItem {
+  display: flex;
+  align-items: center;
+}
+
+.radioInput {
+  display: none;
+}
+
+.tab {
+  position: relative;
+  padding-left: 2rem;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.tab::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  background-color: white;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.radioInput:checked + .tab::before {
+  background-color: #1668d6;
+  border-color: #1668d6;
+}
+
+.radioInput:checked + .tab {
+  color: #1668d6;
+  font-weight: bold;
+}

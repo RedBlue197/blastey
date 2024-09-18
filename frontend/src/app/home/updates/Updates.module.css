@@ -1,0 +1,95 @@
+/* Updates.module.css */
+
+.updatesContainer {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    gap: 20px;
+    padding: 20px;
+}
+
+.updateItem {
+    position: relative; /* Relative positioning for content overlay */
+    width: calc(25% - 20px); /* Adjust width to fit 3 items per row with spacing */
+    height: 300px; /* Set a fixed height for the update items */
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Hide anything that overflows */
+    background-color: #000; /* Fallback color if image fails to load */
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for container */
+}
+
+.updateImage {
+    width: 100%; /* Image takes up the full width of the container */
+    height: 60%; /* Adjust height as needed */
+    background-size: cover;
+    background-position: center;
+    background-color: #000; /* Fallback color if image fails to load */
+}
+
+.updateContent {
+    width: 100%; /* Content takes up the full width of the container */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Space out the content */
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for content */
+    color: #fff; /* White text color for contrast */
+    z-index: 2; /* Ensure content is above the image */
+}
+
+.updateTitle {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.updateDescription {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.updateLinkContainer {
+    display: flex;
+    justify-content: flex-end; /* Align button to the left */
+    margin-top: auto; /* Push the button to the bottom */
+}
+
+.updateLink {
+    font-size: 14px;
+    color: #fff; /* Light blue color for links */
+    text-decoration: none; /* Remove underline from links */
+    background-color: #38b6ff; /* White background for button */
+    padding: 10px 15px; /* Padding around the button text */
+    border-radius: 5px; /* Rounded corners for button */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for button */
+    display: inline-block;
+}
+
+.updateLink:hover {
+    text-decoration: underline; /* Underline on hover */
+    background-color: #e6f0ff; /* Light blue background on hover */
+    color: #0056b3;
+}
+
+.updateLink:active {
+    color: #0056b3; /* Darker blue for active state */
+    background-color: #e6f0ff; /* Light blue background on hover */
+    color: #0056b3;}
+
+@media (max-width: 1200px) {
+    .updateItem {
+        width: calc(50% - 20px); /* Adjust width to fit 2 items per row */
+    }
+}
+
+@media (max-width: 768px) {
+    .updateItem {
+        width: calc(100% - 20px); /* Full width on smaller screens */
+        height: auto; /* Allow height to adjust based on content */
+    }
+
+    .updateImage {
+        height: 50%; /* Adjust image height on smaller screens */
+    }
+}

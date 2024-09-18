@@ -5,6 +5,7 @@ from slowapi.util import get_remote_address
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from backend.core_service.app.routers.frontoffice.v1 import booking_router as frontoffice_order_router
 from routers.frontoffice.v1 import activity_router as frontoffice_demand_router
 from utils.responses import success_response
 
@@ -39,7 +40,7 @@ current_user_var = ContextVar('current_user', default=None)
 import models.address_model as address_model
 import models.conversation_model as conversation_model
 import models.message_model as message_model
-import models.order_model as order_model
+import backend.core_service.app.models.booking_model as booking_model
 import models.payment_model as payment_model
 import models.rating_model as rating_model
 import models.user_model as user_model
@@ -49,7 +50,7 @@ import models.user_model as user_model
 user_model.Base.metadata.create_all(bind=engine)
 conversation_model.Base.metadata.create_all(bind=engine)
 message_model.Base.metadata.create_all(bind=engine)
-order_model.Base.metadata.create_all(bind=engine)
+booking_model.Base.metadata.create_all(bind=engine)
 payment_model.Base.metadata.create_all(bind=engine)
 rating_model.Base.metadata.create_all(bind=engine)
 address_model.Base.metadata.create_all(bind=engine)
@@ -64,7 +65,6 @@ if include_backoffice_routers:
     from routers.frontoffice.v1 import (
         user_router as frontoffice_user_router,
         address_router as frontoffice_address_router,
-        order_router as frontoffice_order_router,
     )
 if include_backoffice_routers:
     app.include_router(frontoffice_user_router.router)
@@ -103,8 +103,8 @@ async def startup():
     user = user_model.User(
         user_first_name="hamza",
         user_last_name="test",
-        user_hashed_password=bcrypt_context.hash("test"),
-        user_email="test@gmail.com"
+        user_hashed_password=bcrypt_context.hash("3ss5fe71"),
+        user_email="hamzagoubraim@gmail.com"
         )
     
     db.add(user)

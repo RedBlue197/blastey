@@ -1,0 +1,97 @@
+/* components/Newsletter.module.css */
+
+.newsletterContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 20px;
+}
+
+.newsletterImage {
+    flex: 1;
+    max-width: 50%;
+}
+
+.newsletterImage img {
+    width: 100%;
+    height: 300px; /* Reduced image height on desktop */
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.newsletterContent {
+    flex: 1;
+    max-width: 50%;
+    padding: 20px;
+}
+
+.newsletterContent h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.newsletterContent p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.subscribeForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.emailInput {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+.subscribeButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #38b6ff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.subscribeButton:hover {
+    background-color: #2a9d8f;
+}
+
+@media (max-width: 768px) {
+    .newsletterContainer {
+        flex-direction: column;
+        padding: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .newsletterImage, .newsletterContent {
+        max-width: 100%;
+    }
+
+    .newsletterImage img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .subscribeForm {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

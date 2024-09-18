@@ -6,6 +6,6 @@ from utils.extract_user import extract_user_id
 import uuid
 
 router = APIRouter(
-    prefix="/core/frontoffice/v1/orders",
-    tags=['Frontoffice Orders']
+    prefix="/core/frontoffice/v1/bookings",
+    tags=['Frontoffice Bookings']
 )

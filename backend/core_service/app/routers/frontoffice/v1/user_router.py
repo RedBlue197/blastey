@@ -12,7 +12,7 @@ from interfaces.user_interface import UserInterface
 
 from schemas.user_schema import CreateUserRequest
 
-from utils.responses import success_response
+from utils.responses import success_response,error_response
 
 router = APIRouter(
     prefix="/core/frontoffice/v1/users",
@@ -83,9 +83,10 @@ async def create_user(
         db.refresh(db_user)
         db.close()
     except Exception as e:
-        return success_response(
+        return error_response(
             message="User creation failed",
-            error=str(e)
+            error=str(e),
+            error_code=500
         )
 
     # Handle response

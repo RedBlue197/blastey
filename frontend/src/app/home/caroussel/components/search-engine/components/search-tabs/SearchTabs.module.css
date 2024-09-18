@@ -1,0 +1,59 @@
+/* Wrapper for the tab buttons */
+.tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem; /* Space between tabs */
+    margin-bottom: 1.5rem; /* Space between tabs and the search form */
+  }
+  
+  /* Individual tab button */
+  .tab {
+    padding: 0.75rem 1.5rem;
+    background-color: #afbcce; /* Default tab background */
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Active tab */
+  .tab.active {
+    background-color: #38b6ff; /* Lighter color for active tab */
+    color: #ffffff; /* Ensure text is white on active tab */
+    font-weight: 600; /* Make active tab text slightly bolder */
+  }
+  
+  /* Hover effect for inactive tabs */
+  .tab:not(.active):hover {
+    background-color: #45b4f4; /* Darker shade for hover */
+  }
+  
+  /* Responsive styling for smaller screens */
+  @media (max-width: 768px) {
+    .tabs {
+      flex-direction: column; /* Stack tabs vertically on mobile */
+      gap: 0.5rem; /* Smaller gap between tabs */
+    }
+  
+    .tab {
+      width: 100%; /* Make each tab full-width on mobile */
+      text-align: center; /* Center the text */
+    }
+  }
+  
+  /* Larger screens */
+  @media (min-width: 768px) {
+    .tabs {
+      flex-direction: row; /* Keep tabs in a row on larger screens */
+    }
+  
+    .tab {
+      min-width: 120px; /* Set a minimum width for each tab */
+      text-align: center; /* Center the text */
+    }
+  }
+  
