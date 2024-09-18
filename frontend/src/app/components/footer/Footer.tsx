@@ -7,11 +7,11 @@ export default function Footer() {
       <div className={styles.container}>
         <div className={styles.logoAndContact}>
           <div className={styles.logo}>
-            <Image src="/logo.png" alt="Seftly Logo" width={150} height={50} />
+            <Image src="/logo.png" alt="Blastey Logo" width={150} height={50} />
           </div>
           <div className={styles.contactInfo}>
             <h4>Contact Us</h4>
-            <p>Email: support@seftly.com</p>
+            <p>Email: support@Blastey.com</p>
             <p>Phone: +1 (234) 567-8901</p>
             <p>Address: 1234 Street Name, City, Country</p>
           </div>
@@ -45,15 +45,15 @@ export default function Footer() {
         </div>
       </div>
       <div className={styles.bottomText}>
-        <p>© 2024 Seftly. All rights reserved.</p>
+        <p>© 2024 Blastey. All rights reserved.</p>
         <div className={styles.socialIcons}>
-          <a href="https://facebook.com/seftly" target="_blank" rel="noopener noreferrer">
+          <a href="https://facebook.com/Blastey" target="_blank" rel="noopener noreferrer">
             <Image src="/social/facebook.svg" alt="Facebook" width={24} height={24} />
           </a>
-          <a href="https://twitter.com/seftly" target="_blank" rel="noopener noreferrer">
+          <a href="https://twitter.com/Blastey" target="_blank" rel="noopener noreferrer">
             <Image src="/social/twitter.svg" alt="Twitter" width={24} height={24} />
           </a>
-          <a href="https://linkedin.com/company/seftly" target="_blank" rel="noopener noreferrer">
+          <a href="https://linkedin.com/company/Blastey" target="_blank" rel="noopener noreferrer">
             <Image src="/social/linkedin.svg" alt="LinkedIn" width={24} height={24} />
           </a>
         </div>

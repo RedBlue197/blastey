@@ -61,14 +61,11 @@ export default function Navbar() {
             <button onClick={() => navigate('/home')} className={getLinkClass('/home', 'medium')}>
               {t('home')}
             </button>
-            <button onClick={() => navigate('/offers')} className={getLinkClass('/offers', 'medium')}>
-              {t('offers')}
+            <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+              {t('trips')}
             </button>
-            <button onClick={() => navigate('/orders')} className={getLinkClass('/orders', 'medium')}>
-              {t('orders')}
-            </button>
-            <button onClick={() => navigate('/requests')} className={getLinkClass('/requests', 'medium')}>
-              {t('requests')}
+            <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
+              {t('activities')}
             </button>
             <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
               {t('login')}
@@ -97,18 +94,15 @@ export default function Navbar() {
       </div>
       {isOpen && (
         <div className={styles.mobileMenu}>
-          <button onClick={() => navigate('/home')} className={getLinkClass('/home', 'medium')}>
-            {t('home')}
-          </button>
-          <button onClick={() => navigate('/offers')} className={getLinkClass('/offers', 'medium')}>
-            {t('offers')}
-          </button>
-          <button onClick={() => navigate('/orders')} className={getLinkClass('/orders', 'medium')}>
-            {t('orders')}
-          </button>
-          <button onClick={() => navigate('/requests')} className={getLinkClass('/requests', 'medium')}>
-            {t('requests')}
-          </button>
+            <button onClick={() => navigate('/home')} className={getLinkClass('/home', 'medium')}>
+              {t('home')}
+            </button>
+            <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+              {t('trips')}
+            </button>
+            <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
+              {t('activities')}
+            </button>
           <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
             {t('login')}
           </button>

@@ -7,30 +7,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 51, 51, 51; /* Dark Slate Grey for general text */
+  --background-start-rgb: 214, 219, 220; /* Light Sand for soft neutral background */
+  --background-end-rgb: 255, 255, 255; /* White for a clean finish */
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: 51, 51, 51; /* Dark Slate Grey text in light mode */
+    --background-start-rgb: 255, 255, 255; /* White background in light mode */
+    --background-end-rgb: 214, 219, 220; /* Light Sand for gradient transition */
   }
 }
 
+
 body {
-  color: rgb(var(--foreground-rgb));
+  color: rgb(var(--foreground-rgb)); /* Updated for Dark Slate Grey */
   background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
-    rgb(var(--background-start-rgb));
-  min-height: 100vh; /* Ensure the body takes up at least the full viewport height */
-  margin: 0; /* Remove default margin */
+    rgb(var(--background-start-rgb)); /* Light Sand to White gradient */
+  min-height: 100vh;
+  margin: 0;
 }
+
 
 .main-content {
   background-color: #ffffff; /* White background for main content */
@@ -39,7 +41,7 @@ body {
 }
 
 .primaryButton {
-  background-color: #0086f3;
+  background-color: #1668d6; /* Deep Ocean Blue */
   color: #ffffff;
   border: none;
   border-radius: 4px;
@@ -48,30 +50,30 @@ body {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
 
-  /* Hover effect */
   &:hover {
-    background-color: #006bbd; /* Darker shade of blue */
-    transform: translateY(-2px); /* Slightly lifts the button */
+    background-color: #005bb5; /* Slightly darker Deep Ocean Blue */
+    transform: translateY(-2px);
   }
 }
 
+
 .secondaryButton {
   background-color: #ffffff;
-  color: #000000;
-  border: 1px solid #0086f3;
+  color: #1668d6; /* Deep Ocean Blue text */
+  border: 1px solid #1668d6;
   border-radius: 4px;
   padding: 8px 16px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 
-  /* Hover effect */
   &:hover {
-    background-color: #f0f0f0; /* Slightly darker background */
-    color: #006bbd; /* Blue color for the text */
-    transform: translateY(-2px); /* Slightly lifts the button */
+    background-color: #f0f0f0;
+    color: #005bb5; /* Darker Blue */
+    transform: translateY(-2px);
   }
 }
+
 
 @layer utilities {
   .text-balance {
