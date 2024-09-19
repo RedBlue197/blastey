@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Text, Numeric, ForeignKey, Enum, Float, Boolean,Integer
+from sqlalchemy import Column, String, Text, Numeric, ForeignKey, Enum, Float, Boolean,Integer,DateTime
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from database import Base
@@ -73,5 +73,5 @@ class ActivityRatingImages(Base,TrackTimeMixin, SoftDeleteMixin, CreatedByMixin,
     __tablename__ = "activity_rating_images"
 
     activity_rating_image_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    activity_rating_id = Column(UUID(as_uuid=True), ForeignKey("activity_ratings.rating_id", ondelete="CASCADE"), nullable=False)
+    activity_rating_id = Column(UUID(as_uuid=True), ForeignKey("activity_ratings.activity_rating_id", ondelete="CASCADE"), nullable=False)
     activity_rating_image_url = Column(Text, nullable=False)
