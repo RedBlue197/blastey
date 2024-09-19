@@ -8,25 +8,20 @@ from models.base_model import (
 )
 from enum import Enum as PyEnum
 
-class LoyaltyType(PyEnum):
+class LoyaltyProgramTypeEnum(PyEnum):
     PLATFORM = "platform"
     HOST = "host"
+
+class LoyaltyTransactionTypeEnum(PyEnum):
+    EARN = "earn"
+    REDEEM = "redeem"
 
 class LoyaltyProgram(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin, DeletedByMixin):
     __tablename__ = "loyalty_programs"
 
     loyalty_program_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
-    program_name = Column(String, nullable=False)
-    loyalty_type = Column(Enum(LoyaltyType), nullable=False)  # PLATFORM or HOST
-    description = Column(String, nullable=True)
-    points_earned_per_action = Column(Integer, default=0)  # Points earned per action
-
-class LoyaltyTransaction(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin, DeletedByMixin):
-    __tablename__ = "loyalty_transactions"
-
-    loyalty_transaction_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
-    user_id = Column(UUID(as_uuid=True), nullable=False)
-    loyalty_program_id = Column(UUID(as_uuid=True), ForeignKey('loyalty_programs.loyalty_program_id'), nullable=False)
-    transaction_type = Column(String, nullable=False)  # e.g., 'earn', 'redeem'
-    points = Column(Integer, nullable=False)
-    description = Column(String, nullable=True)  # Optional description of the transaction
+    loyalty_program_name = Column(String, nullable=False)
+    loyalty_program_type = Column(Enum(LoyaltyProgramTypeEnum), nullable=False)  # PLATFORM or HOST
+    loyalty_program_description = Column(String, nullable=True)
+    loyalty_program_points_earned_per_action = Column(Integer, default=0)  # Points earned per action
+    host_id = Column(UUID(as_uuid=True), ForeignKey('users.user_id'), nullable=True)  # Host ID if loyalty type is HOST
