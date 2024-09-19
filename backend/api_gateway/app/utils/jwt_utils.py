@@ -1,7 +1,9 @@
 import jwt
 from datetime import datetime, timedelta
 
-SECRET_KEY = "your-secret-key"
+# Suggested code may be subject to a license. Learn more: ~LicenseLog:2306640976.
+SECRET_KEY = settings.SECRET_KEY
+
 
 def decode_jwt(token: str):
     try:

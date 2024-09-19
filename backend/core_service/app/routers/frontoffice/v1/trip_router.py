@@ -1,5 +1,7 @@
-from fastapi import status, APIRouter, Query, HTTPException, Request
+from fastapi import status, APIRouter, Query, HTTPException, Request,Depends
 from dependencies.db_dependency import db_dependency
+from dependencies.role_dependency import role_required
+from models.user_model import UserRole
 from models.trip_model import Trip, TripItem
 from interfaces.trip_interface import TripInterface
 from utils.responses import success_response
@@ -17,9 +19,10 @@ router = APIRouter(
 #API to get all trips
 @router.get("/", status_code=status.HTTP_200_OK)
 async def get_trips(
-    db: db_dependency, 
+    db: db_dependency,
+    Depends(role_required(required_roles=[UserRole.USER, UserRole.ADMIN])),
     page: int = Query(1, ge=1),  # Default to page 1, must be greater than or equal to 1
-    items_per_page: int = Query(10, le=100)  # Default to 10 items per page, max 100
+    items_per_page: int = Query(10, le=100),  # Default to 10 items per page, max 100
 ):
     # Initialize UserInterface
     trip_interface = TripInterface(db=db)

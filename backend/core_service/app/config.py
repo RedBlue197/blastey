@@ -8,7 +8,7 @@ class DevSettings(BaseSettings):
         "auth": {"url": "http://localhost:8001"},
         "orders": {"url": "http://localhost:8002"},
     }
-    SECRET_KEY: str = "dev-secret-key"
+    SECRET_KEY: str = "VIwCsS2THYOM0qvWYWszyAFbvnVPerJi8qGFYdrYbowINR7bM8Gd4/Gh/HgAKE/TL6k="
     ENV: str = "development"
     DATABASE_URL: str = "postgresql://postgres:3SS5fe71@localhost:5432/db_blastey"
 

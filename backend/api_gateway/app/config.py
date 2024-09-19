@@ -7,7 +7,7 @@ class DevSettings(BaseSettings):
         "core": {"url": "http://localhost:8001"},
         "gateway": {"url": "http://localhost:8000"},
     }
-    SECRET_KEY: str = "dev-secret-key"
+    SECRET_KEY: str = "VIwCsS2THYOM0qvWYWszyAFbvnVPerJi8qGFYdrYbowINR7bM8Gd4/Gh/HgAKE/TL6k="
     ENV: str = "development"
     DATABASE_URL: str = "sqlite:///./dev.db"
 
