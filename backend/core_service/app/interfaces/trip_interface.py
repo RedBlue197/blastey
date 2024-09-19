@@ -3,6 +3,7 @@
 from sqlalchemy.orm import Session
 from backend.core_service.app.models.trip_model import Trip
 from interfaces.base_interface import BaseInterface
+import uuid
 
 class TripInterface(BaseInterface[Trip]):
     def __init__(self, db: Session):
@@ -42,3 +43,10 @@ class TripInterface(BaseInterface[Trip]):
             Trips = []
 
         return Trips, total_count
+    
+    def get_trip_by_id(self, trip_id: uuid.UUID):
+        return self.db.query(Trip).filter(
+            Trip.is_deleted == False,
+            Trip.trip_id == trip_id
+            ).first()
+

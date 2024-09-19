@@ -55,7 +55,7 @@ async def get_activities(
             cacheable=True
         )
 
-@router.get("/activity-by-id/{activity_id}", status_code=status.HTTP_200_OK)
+@router.get("/{activity_id}", status_code=status.HTTP_200_OK)
 async def get_activity_by_id(
     db: db_dependency, 
     activity_id: uuid.UUID

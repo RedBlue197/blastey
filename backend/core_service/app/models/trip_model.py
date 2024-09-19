@@ -26,9 +26,10 @@ class  Trip(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixi
     trip_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     trip_title = Column(String, nullable=False)
     trip_description = Column(Text, nullable=True)
-    trip_start_date=Column(DateTime)
-    trip_end_date=Column(DateTime)
-    trip_country=Column(String, nullable=True)
+    trip_departure_date=Column(DateTime, nullable=True)
+    trip_return_date=Column(DateTime, nullable=True)
+    trip_origin=Column(String, nullable=True)
+    trip_destination=Column(String, nullable=True)
     trip_total_availability=Column(Integer, nullable=True)
     trip_total_booking=Column(Integer, nullable=True)
 
@@ -46,7 +47,7 @@ class TripItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByM
     trip_item_description= Column(String, nullable=False)
     trip_item_category = Column(Enum(TripItemCategoryEnum), nullable=True)
     trip_item_address = Column(String, nullable=True)   
-    trip_item_traveler_reward = Column(Numeric(precision=10, scale=2), nullable=False)  # Reward for the traveler
+    trip_item_traveler_reward = Column(Numeric(precision=10, scale=2), nullable=True)  # Reward for the traveler
     trip_item_type=Column(Enum(TripItemTypeEnum),default=TripItemTypeEnum.INCLUDED)
     trip_item_price=Column(Float, nullable=True) 
 
