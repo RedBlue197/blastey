@@ -7,8 +7,8 @@ import './globals.css'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Seftly - Home",
-  description: "Seftly is the go-to marketplace for travelers and locals",
+  title: "Blastey - Home",
+  description: "Blastey is the go-to marketplace for travelers and locals",
 };
 
 export default function AppLayout({

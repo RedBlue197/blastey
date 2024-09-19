@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import styles from './TripsList.module.css'; // Import your CSS module for styling
 
 // Define TypeScript interfaces for your data
@@ -61,6 +62,7 @@ const TripsList = () => {
       <h1>Traveller Trips</h1>
       <div className={styles.tripList}>
         {trips.map(trip => (
+          <Link key={trip.id} href={`/trips/${trip.id}`}>
           <div key={trip.id} className={styles.tripCard}>
             <img src={trip.picture} alt={`${trip.name}'s picture`} className={styles.picture} />
             <div className={styles.details}>
@@ -75,6 +77,8 @@ const TripsList = () => {
               <p><span className={styles.strong}>Price:</span> ${trip.price}</p>
             </div>
           </div>
+          </Link>
+
         ))}
       </div>
     </div>

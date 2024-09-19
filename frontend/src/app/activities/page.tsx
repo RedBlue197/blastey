@@ -1,8 +1,8 @@
-export default function Offers() {
+export default function Activities() {
     return (
       <main className={"mainContent"}>
         <h1>
-            Offers Page
+            Activities Page
         </h1>
       </main>
     );
