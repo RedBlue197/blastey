@@ -1,10 +1,19 @@
 {
+  "common": {
     "welcome": "Welcome to our application",
     "signIn": "Sign In",
     "email": "Email",
-    "password": "Passwordees",
-    "home":"Home",
-    "offers":"Offers",
-    "orders":"Orders"
+    "password": "Password",
+    "home": "Home",
+    "offers": "Offers",
+    "orders": "Orders"
+  },
+  "home": {
+    "greeting": "Welcome to the Home Page",
+    "description": "This is where you can find your offers and orders."
+  },
+  "orders": {
+    "orderHistory": "Your Order History",
+    "trackOrder": "Track your order"
   }
-  
+}
