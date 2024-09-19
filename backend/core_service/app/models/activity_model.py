@@ -26,6 +26,12 @@ class Activity(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByM
     activity_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     activity_title = Column(String, nullable=False)
     activity_description = Column(Text, nullable=True)
+    activity_start_date = Column(DateTime, nullable=False)
+    activity_end_date = Column(DateTime, nullable=False)
+    activity_price = Column(Numeric(precision=10, scale=2), nullable=False)
+    activity_total_availability = Column(Integer, nullable=True)
+    activity_total_booking=Column(Integer, nullable=True)
+    
 
     #Foreign Keys
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)

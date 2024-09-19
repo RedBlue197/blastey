@@ -16,6 +16,7 @@ class UserRank(PyEnum):
 
 class UserRole(PyEnum):
     ADMIN = "admin"
+    HOST= "host"
     USER = "user"
 
 
@@ -39,3 +40,5 @@ class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
 
     user_rank = Column(Enum(UserRank), default=UserRank.BRONZE, nullable=False)
     user_role = Column(Enum(UserRole), default=UserRole.USER, nullable=False)
+    newsletter_id= Column(UUID(as_uuid=True), ForeignKey("neswletters.newsletter_id"), nullable=True)
+    referrer_id=Column(UUID(as_uuid=True), ForeignKey("users.user_id"), nullable=True)

@@ -46,7 +46,7 @@ class BookingItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Updated
         today = datetime.utcnow().strftime('%Y%m%d')
 
         # Query the last booking number for today
-        last_booking = session.query(Booking).filter(Booking.booking_number.like(f"ORD-{today}-%")).booking_by(Booking.booking_number.desc()).first()
+        last_booking = session.query(Booking).filter(Booking.booking_number.like(f"BOOK-{today}-%")).booking_by(Booking.booking_number.desc()).first()
 
         # If no bookings exist for today, start with 000001
         if not last_booking:
@@ -57,7 +57,7 @@ class BookingItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Updated
             sequence = last_sequence + 1
 
         # Generate the booking number with the format ORD-YYYYMMDD-XXXXXX
-        booking_number = f"ORD-{today}-{sequence:06d}"
+        booking_number = f"BOOK-{today}-{sequence:06d}"
         return booking_number
     
 
