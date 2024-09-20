@@ -1,9 +1,11 @@
-from fastapi import status, APIRouter, Query, HTTPException, Request,Depends
+from fastapi import status, APIRouter, Query, HTTPException, Request,Depends, UploadFile, File
 from dependencies.db_dependency import db_dependency
 from dependencies.role_dependency import role_required
 from models.user_model import UserRole
 from models.trip_model import Trip, TripItem
 from interfaces.trip_interface import TripInterface
+from schemas.trip_schema import CreateTripRequest
+from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse
 from utils.responses import success_response,error_response
 from utils.extract_user import extract_user_id
 
@@ -17,7 +19,7 @@ router = APIRouter(
 #----------------------------------------------------GET ENDPOINTS----------------------------------------------------
 
 #API to get all trips
-@router.get("/", status_code=status.HTTP_200_OK)
+@router.get("/",response_model=GetTripsResponse, status_code=status.HTTP_200_OK)
 async def get_trips(
     db: db_dependency,
     Depends(role_required(required_roles=[UserRole.USER, UserRole.ADMIN])),
@@ -44,8 +46,9 @@ async def get_trips(
             items_per_page=items_per_page
         )
     else:
+        trips_response=GetTripsResponse.from_orm(trips)
         return success_response(
-            data=users,
+            data=trips_response,
             total_count=total_count,
             current_page=page,
             total_pages=total_pages,
@@ -53,7 +56,7 @@ async def get_trips(
         )
 
 #API to get a specific trip by id
-@router.get("/{trip_id}", status_code=status.HTTP_200_OK)
+@router.get("/{trip_id}",response_model=GetTripByIdResponse, status_code=status.HTTP_200_OK)
 async def get_trip_by_id(
     db: db_dependency,
     trip_id: uuid.UUID,
@@ -61,19 +64,33 @@ async def get_trip_by_id(
 ):
     trip = TripInterface(db=db).get_trip_by_id(trip_id)
     if trip:
-        return success_response(data=trip, message="Trip found")
+        trip_response=GetTripByIdResponse.from_orm(trip)
+        return success_response(
+            data=trip_response, 
+            message="Trip found"
+            )
     else:
-        return error_response(message="Activity not found",error_code=404)
+        return error_response(
+            message="Trip not found"
+            ,error_code=404
+            )
 
 
 #----------------------------------------------------POST ENDPOINTS----------------------------------------------------
 
-#API to create a a trip
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/create-trip", response_model=CreateTripResponse, status_code=status.HTTP_201_CREATED)
 async def create_trip(
-    db: db_dependency,
-    trip: Trip,
-    Depends(role_required(required_roles=[UserRole.HOST])),
+    db: Session = Depends(db_dependency),
+    trip: CreateTripRequest,
+    image_files: List[UploadFile] = File(...),  # Accept multiple image files
+    _: UserRole = Depends(role_required(required_roles=[UserRole.HOST])),
 ):
-    trip_id = TripInterface(db=db).create_trip(trip)
-    return success_response(data=trip_id, message="Trip created")
+    trip_obj = TripInterface(db=db).create_trip(trip, image_files)  # Pass image_files to create_trip
+
+    # Pydantic automatically transforms the SQLAlchemy object to a response model
+    trip_response = CreateTripResponse.from_orm(trip_obj)
+
+    return success_response(
+        data=trip_response, 
+        message="Trip created"
+    )

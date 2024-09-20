@@ -5,6 +5,9 @@ from typing import Optional
 from datetime import datetime
  
 
+class CreateTripItemImageRequest(BaseModel):
+    trip_image_is_primary: bool
+
 class CreateTripItemRequest(BaseModel):
     trip_item_date: Optional[datetime] = None
     trip_item_name : str
@@ -18,6 +21,7 @@ class CreateTripItemRequest(BaseModel):
 
 class CreateTripRequest(BaseModel):
     activity_items: list[CreateTripItemRequest]
+    trip_images: list[CreateTripItemImageRequest] = None
     trip_title: str
     trip_description: Optional[str] = None
     trip_departure_date: Optional[datetime] = None
@@ -26,7 +30,9 @@ class CreateTripRequest(BaseModel):
     trip_destination: Optional[str] = None
     trip_total_availability: Optional[int] = None
     trip_total_booking: Optional[int] = None
-    user_id: uuid.UUID
-    address_id: uuid.UUID
+    host_id: uuid.UUID
+    trip_link_url: Optional[str] = None
+    trip_price: Optional[float] = None
+
 
 
