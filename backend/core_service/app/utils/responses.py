@@ -1,4 +1,5 @@
 from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 from typing import Any, Optional, TypeVar
 from schemas.response_schema import APIResponse, PaginationMetadata
 
@@ -29,7 +30,11 @@ def success_response(
         pagination=pagination,
         cacheable=cacheable  # Include cacheable in the response
     )
-    return JSONResponse(status_code=200, content=response.dict())
+    
+    # Ensure everything is JSON-serializable, including UUIDs
+    json_content = jsonable_encoder(response)
+    
+    return JSONResponse(status_code=200, content=json_content)
 
 def error_response(
     message: str,
@@ -44,4 +49,8 @@ def error_response(
         data=data,
         cacheable=cacheable  # Include cacheable in the response if needed
     )
-    return JSONResponse(status_code=error_code, content=response.dict())
+    
+    # Ensure everything is JSON-serializable, including UUIDs
+    json_content = jsonable_encoder(response)
+    
+    return JSONResponse(status_code=error_code, content=json_content)

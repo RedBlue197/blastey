@@ -1,9 +1,15 @@
 # app/interfaces/order.py
 
 from sqlalchemy.orm import Session
-from backend.core_service.app.models.trip_model import Trip
 from interfaces.base_interface import BaseInterface
 import uuid
+from typing import List
+from fastapi import UploadFile, HTTPException
+from models.trip_model import Trip, TripItem, TripImages
+from schemas.trip_schema import CreateTripRequest
+from services.image_service import post_trip_images_on_gcs
+from sqlalchemy.sql import func
+
 
 class TripInterface(BaseInterface[Trip]):
     def __init__(self, db: Session):
@@ -15,8 +21,7 @@ class TripInterface(BaseInterface[Trip]):
             self.db.query(func.count(Trip.trip_id))
             .filter(
                 Trip.is_deleted == False,
-                Trip.is_blocked == False,
-                Trip.is_active == True
+                Trip.status == True
             )
             .scalar_subquery()  # Executes count as part of the same query
         )
@@ -26,8 +31,7 @@ class TripInterface(BaseInterface[Trip]):
             self.db.query(Trip, total_count_query.label('total_count'))
             .filter(
                 Trip.is_deleted == False,
-                Trip.is_blocked == False,
-                Trip.is_active == True
+                Trip.status == True
             )
             .offset(offset)
             .limit(limit)
@@ -36,7 +40,7 @@ class TripInterface(BaseInterface[Trip]):
         
         # Since total count is part of each row, extract it from the first result
         if trips_query:
-            total_count = Trips_query[0].total_count
+            total_count = trips_query[0].total_count
             Trips = [trip for trip, _ in trips_query]
         else:
             total_count = 0
@@ -51,7 +55,7 @@ class TripInterface(BaseInterface[Trip]):
             ).first()
 
     
-   def create_trip(self, trip: CreateTripRequest, image_files: List[UploadFile]):
+    def create_trip(self, trip: CreateTripRequest, image_files: List[UploadFile]):
         trip_id = uuid.uuid4()  # Generate a UUID for the trip
 
         # Upload images to GCS and get their public URLs
@@ -60,10 +64,10 @@ class TripInterface(BaseInterface[Trip]):
         # Create the main Trip object
         new_trip = Trip(
             trip_id=trip_id,
-            trip_name=trip.trip_name,
+            trip_name=trip.trip_title,
             trip_description=trip.trip_description,
-            trip_departure_date=trip.trip_start_date,
-            trip_return_date=trip.trip_end_date,
+            trip_departure_date=trip.trip_departure_date,
+            trip_return_date=trip.trip_return_date,
             trip_origin=trip.trip_origin,
             trip_destination=trip.trip_destination,
             trip_total_availability=trip.trip_total_availability,
@@ -110,7 +114,7 @@ class TripInterface(BaseInterface[Trip]):
             # Return a response with the created trip and images
             return {
                 "trip_id": str(new_trip.trip_id),
-                "trip_name": new_trip.trip_name,
+                "trip_name": new_trip.trip_title,
                 "trip_description": new_trip.trip_description,
                 "images": [{"uuid": img['uuid'], "url": img['public_url']} for img in uploaded_images]
             }

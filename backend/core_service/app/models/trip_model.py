@@ -80,5 +80,5 @@ class TripRatingImages(Base,TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Upd
     __tablename__ = "trip_rating_images"
 
     trip_rating_image_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    trip_rating_id = Column(UUID(as_uuid=True), ForeignKey("trip_ratings.rating_id", ondelete="CASCADE"), nullable=False)
+    trip_rating_id = Column(UUID(as_uuid=True), ForeignKey("trip_ratings.trip_rating_id", ondelete="CASCADE"), nullable=False)
     trip_rating_image_url = Column(Text, nullable=False)

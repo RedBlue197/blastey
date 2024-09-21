@@ -1,9 +1,10 @@
 import uuid
-from fastapi import HTTPException, UploadFile
+from fastapi import HTTPException, UploadFile, status
 from google.cloud import storage
 from typing import List
 from config import settings  # Adjust the import as necessary
 import uuid
+
 
 def post_trip_images_on_gcs(trip_id: uuid.UUID, files: List[UploadFile]):
     bucket_name = settings.BUCKET_NAME

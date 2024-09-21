@@ -46,7 +46,7 @@ class PaymentHistory(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Upda
 
     # Foreign keys
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
-    order_id = Column(UUID(as_uuid=True), ForeignKey("orders.order_id", ondelete="CASCADE"), nullable=False)
+    booking_id = Column(UUID(as_uuid=True), ForeignKey("bookings.booking_id", ondelete="CASCADE"), nullable=False)
 
 class Transaction(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "transactions"
@@ -58,4 +58,4 @@ class Transaction(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Updated
     
     # Foreign keys
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
-    payment_id = Column(UUID(as_uuid=True), ForeignKey("payments.payment_id", ondelete="CASCADE"), nullable=False)
+    booking_id = Column(UUID(as_uuid=True), ForeignKey("bookings.booking_id", ondelete="CASCADE"), nullable=False)

@@ -1,5 +1,6 @@
+from config import settings
+
 def create_trip_dynamic_link(link: str, trip_id: uuid.UUID, social_title: str, social_description: str, social_image_link: str):
-    settings = get_settings()  # Fetch the current settings
     
     url = f"https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key={settings.FIREBASE_API_KEY}"
     

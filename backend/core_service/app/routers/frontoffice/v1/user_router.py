@@ -2,15 +2,14 @@
 
 from fastapi import status, APIRouter, Query
 from dependencies.db_dependency import db_dependency
-from dependencies.auth_dependency import bcrypt_context
 
 import uuid
-
-from models.user_model import User,UserRank,UserRole
 
 from interfaces.user_interface import UserInterface
 
 from schemas.user_schema import CreateUserRequest
+
+from responses.user_response import GetUserByIdResponse,GetUserResponse,CreateUserResponse
 
 from utils.responses import success_response,error_response
 
@@ -20,9 +19,10 @@ router = APIRouter(
 )
 
 #----------------------------------------------------GET ENDPOINTS----------------------------------------------------
-@router.get("/{user_id}", status_code=status.HTTP_200_OK)
-async def get_user_by_id(
-    user_id: uuid.UUID,
+
+#API to get all users
+@router.get("/", status_code=status.HTTP_200_OK)
+async def get_users(
     db: db_dependency,  # Database dependency
     page: int = Query(1, ge=1),  # Default to page 1, must be greater than or equal to 1
     items_per_page: int = Query(10, le=100),  # Default to 10 items per page, max 100
@@ -34,63 +34,73 @@ async def get_user_by_id(
     offset = (page - 1) * items_per_page
     limit = items_per_page
 
-    # Query the user by ID with pagination using the interface
-    users, total_count = user_interface.get_user_by_id_with_pagination(str(user_id), offset, limit)
+    # Query all users with pagination using the interface
+    users, total_count = user_interface.get_all_users_with_pagination(offset, limit)
 
     # Calculate total pages
     total_pages = (total_count + items_per_page - 1) // items_per_page
 
     # Handle response
     if not users:
-        return success_response(
+        return error_response(
             message="No users found",
+            error_code=404
+        )
+    else:
+        users_response = [GetUserByIdResponse.from_orm(user) for user in users]
+
+        return success_response(
+            data=GetUserResponse(data=users_response),
             total_count=total_count,
             current_page=page,
             total_pages=total_pages,
             items_per_page=items_per_page
         )
+
+#API to get user by ID
+@router.get("/{user_id}", status_code=status.HTTP_200_OK)
+async def get_user_by_id(
+    user_id: uuid.UUID,
+    db: db_dependency,  # Database dependency
+):
+    # Initialize UserInterface
+    user_interface = UserInterface(db=db)
+
+    # Query the user by ID with pagination using the interface
+    user = user_interface.get_user_by_id_with_pagination(str(user_id))
+
+    # Handle response
+    if not user:
+        return error_response(
+            message="No users found",
+            error_code=404
+        )
     else:
+        user_response=GetUserByIdResponse.from_orm(user)
         return success_response(
-            data=users,
-            total_count=total_count,
-            current_page=page,
-            total_pages=total_pages,
-            items_per_page=items_per_page
+            data=user_response,
+
         )
     
 #----------------------------------------------------POST ENDPOINTS----------------------------------------------------
+
+#API to create user
 @router.post("/create-user", status_code=status.HTTP_201_CREATED)
 async def create_user(
-    db: db_dependency,  # Database dependency
-    user: CreateUserRequest
+    user: CreateUserRequest,
+    db: db_dependency  # Database dependency
 ):
-    try :
-        db_user = User(
-            first_name=user.first_name,
-            last_name=user.last_name,
-            email=user.email,
-            user_role=UserRole(user.user_role),
-            user_rank=UserRank(user.user_rank),
-            user_phone_number=user.phone_number,
-            user_password=bcrypt_context.hash(user.password),
-            user_address=user.address,
-            user_city=user.city,
-            user_country=user.country,
-            user_postal_code=user.postal_code
+    user_interface = UserInterface(db)
+    
+    try:
+        db_user = user_interface.create_user(user)
+        user_response = CreateUserResponse.from_orm(db_user)
+        return success_response(
+            message="User created successfully",
+            data=user_response,
         )
-        db.add(db_user)
-        db.commit()
-        db.refresh(db_user)
-        db.close()
     except Exception as e:
         return error_response(
-            message="User creation failed",
-            error=str(e),
+            message="User creation failed: " + str(e),
             error_code=500
         )
-
-    # Handle response
-    return success_response(
-        message="User created successfully",
-        data=db_user,
-    )

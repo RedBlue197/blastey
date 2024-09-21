@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 import uuid
-from trip_model import TripItemCategoryEnum, TripItemTypeEnum
+from models.trip_model import TripItemCategoryEnum, TripItemTypeEnum
 from typing import Optional
 from datetime import datetime
 

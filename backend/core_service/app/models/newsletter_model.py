@@ -1,7 +1,6 @@
-from sqlalchemy import Column, ForeignKey, Boolean, Text,Email
+from sqlalchemy import Column,String
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from datetime import datetime
 from database import Base
 from models.base_model import TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin
 

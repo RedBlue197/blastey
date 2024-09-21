@@ -19,6 +19,14 @@ from config import get_settings
 
 settings = get_settings()
 
+import psycopg2
+
+try:
+    conn = psycopg2.connect("dbname={settings.DATABASE_NAME} user={settings.DATABASE_USER} password={settings.DATABASE_PASSWORD} host={settings.DATABASE_HOST}")
+    print("Connected to the database")
+except Exception as e:
+    print(f"Error: {e}")
+
 
 limiter = Limiter(key_func=get_remote_address)
 
@@ -43,6 +51,9 @@ import models.booking_model as booking_model
 import models.payment_model as payment_model
 import models.rating_model as rating_model
 import models.user_model as user_model
+import models.activity_model as activity_model
+import models.newsletter_model as newsletter_model
+import models.trip_model as trip_model
 
 
 #Creating tables
@@ -53,6 +64,10 @@ booking_model.Base.metadata.create_all(bind=engine)
 payment_model.Base.metadata.create_all(bind=engine)
 rating_model.Base.metadata.create_all(bind=engine)
 address_model.Base.metadata.create_all(bind=engine)
+activity_model.Base.metadata.create_all(bind=engine)
+newsletter_model.Base.metadata.create_all(bind=engine)
+trip_model.Base.metadata.create_all(bind=engine)
+
 
 
 
@@ -64,11 +79,14 @@ if include_backoffice_routers:
     from routers.frontoffice.v1 import (
         user_router as frontoffice_user_router,
         address_router as frontoffice_address_router,
+        activity_router as activity_router,
+        trip_router as trip_router
     )
 if include_backoffice_routers:
     app.include_router(frontoffice_user_router.router)
     app.include_router(frontoffice_address_router.router)
     app.include_router(activity_router.router)
+    app.include_router(trip_router.router)
     
 
 
