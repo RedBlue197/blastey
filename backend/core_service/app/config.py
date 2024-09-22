@@ -10,12 +10,17 @@ class DevSettings(BaseSettings):
     }
     SECRET_KEY: str = "VIwCsS2THYOM0qvWYWszyAFbvnVPerJi8qGFYdrYbowINR7bM8Gd4/Gh/HgAKE/TL6k="
     ENV: str = "development"
+
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
+    HS256_ALGORITHM: str = "HS256"
+
     DATABASE_URL: str = "postgresql://postgres:3SS5fe71@localhost:5432/db_blastey"
     DATABASE_NAME: str = "db_blastey"
     DATABASE_USER: str = "postgres"
     DATABASE_PASSWORD: str = "3SS5fe71"
     DATABASE_HOST: str = "localhost"
     DATABASE_PORT: str = "5432"
+
     BUCKET_NAME: str = "blastey_bucket_dev_1"
     SERVICE_ACCOUNT_JSON: str = "services/dev_service_account.json"
 

@@ -1,7 +1,8 @@
 # app/routers/user_router.py
 
-from fastapi import status, APIRouter, Query
+from fastapi import status, APIRouter, Query,Request
 from dependencies.db_dependency import db_dependency
+from dependencies.auth_dependency import auth_bearer
 
 import uuid
 
@@ -13,6 +14,8 @@ from responses.user_response import GetUserByIdResponse,GetUserResponse,CreateUs
 
 from utils.responses import success_response,error_response
 
+from main import limiter
+
 router = APIRouter(
     prefix="/core/frontoffice/v1/users",
     tags=['Frontoffice Users']
@@ -22,8 +25,11 @@ router = APIRouter(
 
 #API to get all users
 @router.get("/", status_code=status.HTTP_200_OK)
+@limiter.limit("10/minute")
 async def get_users(
     db: db_dependency,  # Database dependency
+    auth:auth_bearer,
+    request: Request,
     page: int = Query(1, ge=1),  # Default to page 1, must be greater than or equal to 1
     items_per_page: int = Query(10, le=100),  # Default to 10 items per page, max 100
 ):

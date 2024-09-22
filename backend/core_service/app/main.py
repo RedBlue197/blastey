@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 
-from slowapi import Limiter
-from slowapi.util import get_remote_address
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+
+from slowapi.util import get_remote_address
+from slowapi import Limiter
 
 from routers.frontoffice.v1 import activity_router as activity_router
 from utils.responses import success_response
@@ -39,6 +40,8 @@ app=FastAPI(
     prefix="core"
 )
 
+
+
 from contextvars import ContextVar
 
 current_user_var = ContextVar('current_user', default=None)
@@ -68,28 +71,6 @@ activity_model.Base.metadata.create_all(bind=engine)
 newsletter_model.Base.metadata.create_all(bind=engine)
 trip_model.Base.metadata.create_all(bind=engine)
 
-
-
-
-# Flags to enable/disable routers
-include_backoffice_routers = True
-
-# Include routers
-if include_backoffice_routers:
-    from routers.frontoffice.v1 import (
-        user_router as frontoffice_user_router,
-        address_router as frontoffice_address_router,
-        activity_router as activity_router,
-        trip_router as trip_router
-    )
-if include_backoffice_routers:
-    app.include_router(frontoffice_user_router.router)
-    app.include_router(frontoffice_address_router.router)
-    app.include_router(activity_router.router)
-    app.include_router(trip_router.router)
-    
-
-
 app.add_middleware(LoggingMiddleware)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -104,6 +85,26 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Flags to enable/disable routers
+include_backoffice_routers = True
+
+# Include routers
+if include_backoffice_routers:
+    from routers.frontoffice.v1 import (
+        user_router as frontoffice_user_router,
+        address_router as frontoffice_address_router,
+        activity_router as activity_router,
+        trip_router as trip_router,
+        auth_router as auth_router
+    )
+if include_backoffice_routers:
+    app.include_router(frontoffice_user_router.router)
+    app.include_router(frontoffice_address_router.router)
+    app.include_router(activity_router.router)
+    app.include_router(trip_router.router)
+    app.include_router(auth_router.router)
+    
 
 @app.on_event("startup")
 async def startup():
