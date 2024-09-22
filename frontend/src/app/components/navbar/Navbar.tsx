@@ -54,7 +54,7 @@ export default function Navbar() {
       <div className={styles.container}>
         <div className={styles.flexContainer}>
           <div className={styles.logoContainer}>
-            <img className={styles.logo} src="/logo.jpg" alt="Logo" />
+            <img className={styles.logo} src="/Blastey_cover.png" alt="Logo" />
           </div>
           <div className={styles.desktopMenuLangage}>
           <div className={styles.desktopMenu}>
