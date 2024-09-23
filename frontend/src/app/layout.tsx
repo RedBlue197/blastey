@@ -19,7 +19,7 @@ export default function AppLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/Blastey_cover.png" />
+        <link rel="icon" href="/blastey.ico" />
         {/* You can add other meta tags and links here */}
       </head>
       <body className={inter.className}>
