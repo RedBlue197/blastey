@@ -1,11 +1,13 @@
 // ExampleComponent.tsx
 import { makeAPIRequest } from './api'; // Adjust the import path
+import {endpoints} from './endpoints'; // Adjust the import path
+import { microservices } from './microservices';
 
-async function fetchBrands(token: string | null) {
+export async function fetchTrips(token: string | null) {
   try {
     const data = await makeAPIRequest<{ result: any[] }>(
-      'yourMicroserviceName', // Replace with your actual microservice name
-      '/brands', // Endpoint
+      microservices.CORE, // Replace with your actual microservice name
+      endpoints.GET_TRIPS, // Endpoint
       {
         version: 'v1', // Provide necessary options
         token, // Include the token if available

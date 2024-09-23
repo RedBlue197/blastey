@@ -1,8 +1,8 @@
 // services/api.ts
 import axios, { AxiosRequestConfig } from 'axios';
 
-const URL = 'tiw-backend-service-v7ccxyeyuq-no.a.run.app';
-const BASE_URL = 'https://' + URL;
+const URL = 'localhost:8000'; // Replace with your actual URL
+const BASE_URL = 'http://' + URL;
 export const WS_BASE_URL = 'ws://' + URL + '/mobile-app/v1/messages/ws/';
 
 const api = axios.create({
