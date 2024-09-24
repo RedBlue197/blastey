@@ -17,3 +17,4 @@ redis
 aioredis
 fastapi-redis-cache
 google-cloud-storage
+pycryptodome

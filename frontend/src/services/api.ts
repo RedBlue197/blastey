@@ -1,5 +1,5 @@
-// services/api.ts
 import axios, { AxiosRequestConfig } from 'axios';
+import CryptoJS from 'crypto-js'; // Import crypto-js for encryption
 
 const URL = 'localhost:8000'; // Replace with your actual URL
 const BASE_URL = 'http://' + URL;
@@ -22,6 +22,15 @@ interface MakeAPIRequestOptions {
   [key: string]: any; // Allow for other Axios request options
 }
 
+// Define a secret key for encryption (make sure it matches with the backend)
+const SECRET_KEY = 'your-secret-key';
+
+// Function to encrypt data
+const encryptData = (data: any) => {
+  const stringifiedData = JSON.stringify(data); // Convert data to string before encryption
+  return CryptoJS.AES.encrypt(stringifiedData, SECRET_KEY).toString();
+};
+
 export const makeAPIRequest = async <T>(
   microservice: string,
   endpoint: string,
@@ -36,13 +45,14 @@ export const makeAPIRequest = async <T>(
       ...headers, // Merge custom headers
     },
     url,
-    data, // Include data in the request
     ...rest, // Other options like method, params, etc.
   };
 
-  config.headers = {
-    ...config.headers,
-  };
+  if (data) {
+    // Encrypt the data before sending it
+    const encryptedData = encryptData(data);
+    config.data = { data: encryptedData }; // Wrap the encrypted data inside a 'data' object
+  }
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`; // Include the token if it exists

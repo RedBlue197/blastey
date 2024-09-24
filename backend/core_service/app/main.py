@@ -10,6 +10,7 @@ from routers.frontoffice.v1 import activity_router as activity_router
 from utils.responses import success_response
 
 from middleware.logging_middleware import LoggingMiddleware
+from middleware.decryption_middleware import DecryptionMiddleware
 
 #dependencies
 from dependencies.db_dependency import bcrypt_context
@@ -72,6 +73,7 @@ newsletter_model.Base.metadata.create_all(bind=engine)
 trip_model.Base.metadata.create_all(bind=engine)
 
 app.add_middleware(LoggingMiddleware)
+app.add_middleware(DecryptionMiddleware)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
