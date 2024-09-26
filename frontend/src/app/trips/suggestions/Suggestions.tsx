@@ -20,7 +20,6 @@ const suggestions: Suggestion[] = [
 const Suggestions: React.FC = () => {
   return (
     <div className={styles.suggestionsWrapper}>
-      <div className={styles.arrowLeft}>&lt;</div>
       <div className={styles.suggestionsContainer}>
         {suggestions.map((suggestion) => (
           <div key={suggestion.id} className={styles.card} style={{ backgroundImage: `url(${suggestion.image})` }}>
@@ -32,7 +31,6 @@ const Suggestions: React.FC = () => {
           </div>
         ))}
       </div>
-      <div className={styles.arrowRight}>&gt;</div>
     </div>
   );
 };

@@ -29,7 +29,7 @@ class Payment(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMi
     payment_method = Column(Enum(PaymentMethodEnum), nullable=False)
     
     # Foreign keys
-    order_id = Column(UUID(as_uuid=True), ForeignKey("orders.order_id", ondelete="CASCADE"), nullable=False)
+    booking_id = Column(UUID(as_uuid=True), ForeignKey("bookings.booking_id", ondelete="CASCADE"), nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
 
 

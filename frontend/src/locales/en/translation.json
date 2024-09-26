@@ -9,8 +9,25 @@
     "orders": "Orders"
   },
   "home": {
+    "home":"Home",
     "greeting": "Welcome to the Home Page",
     "description": "This is where you can find your offers and orders."
+  },
+  "trips": {
+    "trips": "Trips",
+    "tripHistory": "Your Trip History",
+    "trackTrip": "Track your trip"
+  },
+  "activities": {
+    "activities": "Activities",
+    "activityHistory": "Your Activity History",
+    "trackActivity": "Track your activity"
+  },
+  "login": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign In"
   },
   "orders": {
     "orderHistory": "Your Order History",

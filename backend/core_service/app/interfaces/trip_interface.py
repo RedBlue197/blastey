@@ -1,14 +1,22 @@
 # app/interfaces/order.py
 
-from sqlalchemy.orm import Session
-from interfaces.base_interface import BaseInterface
-import uuid
-from typing import List
 from fastapi import UploadFile, HTTPException
-from models.trip_model import Trip, TripItem, TripImages
-from schemas.trip_schema import CreateTripRequest
-from services.image_service import post_trip_images_on_gcs
+
+from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
+
+from interfaces.base_interface import BaseInterface
+
+import uuid
+
+from typing import List,Optional
+
+from models.trip_model import Trip, TripItem, TripImages
+
+from schemas.trip_schema import CreateTripRequest
+from schemas.trip_schema import PatchTripRequest, PatchTripItemRequest
+
+from services.image_service import post_trip_images_on_gcs
 
 
 class TripInterface(BaseInterface[Trip]):
@@ -131,7 +139,7 @@ class TripInterface(BaseInterface[Trip]):
         return True
 
 
-    def patch_trip(self, trip_id: UUID4, trip_update: PatchTripRequest, image_files: Optional[list[UploadFile]] = None):
+    def patch_trip(self, trip_id: uuid.UUID, trip_update: PatchTripRequest, image_files: Optional[list[UploadFile]] = None):
         try:
             # Fetch the existing trip
             trip_obj = self.db.query(Trip).filter(Trip.id == trip_id).first()

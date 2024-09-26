@@ -1,7 +1,7 @@
-from pydantic import BaseModel, Field, UUID4, conint, constr, Optional
+from pydantic import BaseModel, Field, UUID4
 from models.trip_model import TripItemCategoryEnum, TripItemTypeEnum
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 class CreateTripItemImageRequest(BaseModel):
     trip_image_is_primary: bool = Field(..., description="Indicates if the image is primary")
@@ -12,7 +12,7 @@ class CreateTripItemRequest(BaseModel):
     trip_item_description: Optional[str] = Field(None, max_length=500, description="Description of the trip item")
     trip_item_category: TripItemCategoryEnum = Field(..., description="Category of the trip item")
     trip_item_address: Optional[str] = Field(None, max_length=200, description="Address of the trip item")
-    trip_item_traveler_reward: Optional[conint(ge=0)] = Field(None, description="Traveler reward for the trip item")
+    trip_item_traveler_reward: Optional[int] = Field(None, description="Traveler reward for the trip item")
     trip_item_type: TripItemTypeEnum = Field(..., description="Type of the trip item")
     trip_item_price: Optional[float] = Field(None, ge=0, description="Price of the trip item")
 
@@ -25,10 +25,10 @@ class CreateTripRequest(BaseModel):
     trip_return_date: Optional[datetime] = Field(None, description="Return date of the trip")
     trip_origin: Optional[str] = Field(None, max_length=100, description="Origin of the trip")
     trip_destination: Optional[str] = Field(None, max_length=100, description="Destination of the trip")
-    trip_total_availability: Optional[conint(ge=0)] = Field(None, description="Total availability of the trip")
-    trip_total_booking: Optional[conint(ge=0)] = Field(None, description="Total bookings of the trip")
+    trip_total_availability: Optional[int] = Field(None, description="Total availability of the trip")
+    trip_total_booking: Optional[int] = Field(None, description="Total bookings of the trip")
     host_id: UUID4 = Field(..., description="Host ID")
-    trip_link_url: Optional[str] = Field(None, regex=r'^https?:\/\/\S+$', description="Link URL of the trip")
+    trip_link_url: Optional[str] = Field(None, pattern=r'^https?:\/\/\S+$', description="Link URL of the trip")
     trip_price: Optional[float] = Field(None, ge=0, description="Price of the trip")
 
 
@@ -38,7 +38,7 @@ class PatchTripItemRequest(BaseModel):
     trip_item_description: Optional[str] = Field(None, max_length=500, description="Description of the trip item")
     trip_item_category: Optional[TripItemCategoryEnum] = Field(None, description="Category of the trip item")
     trip_item_address: Optional[str] = Field(None, max_length=200, description="Address of the trip item")
-    trip_item_traveler_reward: Optional[conint(ge=0)] = Field(None, description="Traveler reward for the trip item")
+    trip_item_traveler_reward: Optional[int] = Field(None, description="Traveler reward for the trip item")
     trip_item_type: Optional[TripItemTypeEnum] = Field(None, description="Type of the trip item")
     trip_item_price: Optional[float] = Field(None, ge=0, description="Price of the trip item")
 
@@ -51,10 +51,10 @@ class PatchTripRequest(BaseModel):
     trip_return_date: Optional[datetime] = Field(None, description="Return date of the trip")
     trip_origin: Optional[str] = Field(None, max_length=100, description="Origin of the trip")
     trip_destination: Optional[str] = Field(None, max_length=100, description="Destination of the trip")
-    trip_total_availability: Optional[conint(ge=0)] = Field(None, description="Total availability of the trip")
-    trip_total_booking: Optional[conint(ge=0)] = Field(None, description="Total bookings of the trip")
+    trip_total_availability: Optional[int] = Field(None, description="Total availability of the trip")
+    trip_total_booking: Optional[int] = Field(None, description="Total bookings of the trip")
     host_id: Optional[UUID4] = Field(None, description="Host ID")
-    trip_link_url: Optional[str] = Field(None, regex=r'^https?:\/\/\S+$', description="Link URL of the trip")
+    trip_link_url: Optional[str] = Field(None, pattern=r'^https?:\/\/\S+$', description="Link URL of the trip")
     trip_price: Optional[float] = Field(None, ge=0, description="Price of the trip")
     status : Optional [bool] = Field(None, description="Status of the trip")
 

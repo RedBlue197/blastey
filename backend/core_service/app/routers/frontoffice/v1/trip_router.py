@@ -1,11 +1,10 @@
 from fastapi import status, APIRouter, Query, UploadFile, File
 from dependencies.db_dependency import db_dependency
 from interfaces.trip_interface import TripInterface
-from schemas.trip_schema import CreateTripRequest
-from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse
+from schemas.trip_schema import CreateTripRequest, PatchTripRequest
+from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemResponse
 from utils.responses import success_response,error_response
-import logging
-
+from typing import Optional
 
 import uuid
 

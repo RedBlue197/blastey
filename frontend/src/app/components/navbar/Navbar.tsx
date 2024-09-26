@@ -23,7 +23,7 @@ export default function Navbar() {
     router.push(path);
   };
 
-  const getLinkClass = (path: string, size: 'small' | 'medium' | 'large' = 'medium'): string => {
+  const getLinkClass: (path: string, size?: 'small' | 'medium' | 'large') => string = (path: string, size: 'small' | 'medium' | 'large' = 'medium'): string => {
     const sizeClass =
       size === 'small'
         ? styles.buttonSmall
@@ -59,16 +59,16 @@ export default function Navbar() {
           <div className={styles.desktopMenuLangage}>
           <div className={styles.desktopMenu}>
             <button onClick={() => navigate('/home')} className={getLinkClass('/home', 'medium')}>
-              {t('home')}
+              {t('home.home')}
             </button>
             <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
-              {t('trips')}
+              {t('trips.trips')}
             </button>
             <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
-              {t('activities')}
+              {t('activities.activities')}
             </button>
             <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
-              {t('login')}
+              {t('login.login')}
             </button>
           </div>
           <div className={styles.languageSelector}>

@@ -36,21 +36,25 @@ def success_response(
     
     return JSONResponse(status_code=200, content=json_content)
 
+import logging
+
 def error_response(
     message: str,
     error_code: int = 400,
     data: Any = None,
-    cacheable: Optional[bool] = None  # Include cacheable parameter if needed
+    cacheable: Optional[bool] = None
 ) -> JSONResponse:
     response = APIResponse(
         success=False,
         message=message,
         error_code=error_code,
         data=data,
-        cacheable=cacheable  # Include cacheable in the response if needed
+        cacheable=cacheable
     )
     
-    # Ensure everything is JSON-serializable, including UUIDs
     json_content = jsonable_encoder(response)
+    
+    # Log the content for debugging
+    logging.info(f"Error Response: {json_content}")
     
     return JSONResponse(status_code=error_code, content=json_content)

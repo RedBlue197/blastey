@@ -38,7 +38,7 @@ export const makeAPIRequest = async <T>(
 ): Promise<T> => {
   const { version = 'v1', headers = {}, token = null, data = null, ...rest } = options;
 
-  const url = `${BASE_URL}/${microservice}/${version}${endpoint}`;
+  const url = `${BASE_URL}/${microservice}/frontoffice/${version}${endpoint}`;
   const config: AxiosRequestConfig = {
     headers: {
       'Content-Type': 'application/json',
