@@ -131,3 +131,57 @@ class TripInterface(BaseInterface[Trip]):
         return True
 
 
+    def patch_trip(self, trip_id: UUID4, trip_update: PatchTripRequest, image_files: Optional[list[UploadFile]] = None):
+        try:
+            # Fetch the existing trip
+            trip_obj = self.db.query(Trip).filter(Trip.id == trip_id).first()
+
+            if not trip_obj:
+                return None
+
+            # Apply the partial update for trip fields
+            update_data = trip_update.dict(exclude_unset=True)
+            for field, value in update_data.items():
+                if field != "activity_items":  # Skip trip items for now
+                    setattr(trip_obj, field, value)
+
+            # Handle trip items if they are provided in the update request
+            if trip_update.activity_items:
+                self.update_trip_items(trip_obj, trip_update.activity_items)
+
+            # Handle image files if any
+            if image_files:
+                self.update_trip_images(trip_obj, image_files)
+
+            # Commit the changes to the database
+            self.db.commit()
+            self.db.refresh(trip_obj)
+
+            return trip_obj
+
+        except Exception as e:
+            # If any error occurs, roll back the transaction
+            self.db.rollback()
+            raise Exception(f"Error updating trip: {str(e)}")
+
+    def update_trip_items(self, trip_obj, updated_items: list[PatchTripItemRequest]):
+        # Fetch existing trip items
+        existing_items = {item.id: item for item in trip_obj.items}
+
+        for item_data in updated_items:
+            item_dict = item_data.dict(exclude_unset=True)
+            
+            # Check if the item already exists (by some unique identifier like ID)
+            if "id" in item_dict and item_dict["id"] in existing_items:
+                # Update the existing trip item
+                existing_item = existing_items[item_dict["id"]]
+                for field, value in item_dict.items():
+                    setattr(existing_item, field, value)
+            else:
+                # If item does not exist, create a new trip item and add to the trip
+                new_item = TripItem(**item_dict)
+                trip_obj.items.append(new_item)
+
+    def update_trip_images(self, trip_obj, image_files: list[UploadFile]):
+        # Logic for handling image updates (if required)
+        pass

@@ -34,6 +34,8 @@ class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     user_country = Column(String, nullable=True)
     user_postal_code = Column(String, nullable=True)
     user_avatar = Column(String, nullable=True)
+    user_auth_token = Column(String, nullable=True)
+    user_notification_token = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
     is_blocked = Column(Boolean, default=False)
     user_last_login_date = Column(DateTime, nullable=True)
@@ -42,3 +44,16 @@ class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     user_role = Column(Enum(UserRole), default=UserRole.USER, nullable=False)
     newsletter_id= Column(UUID(as_uuid=True), ForeignKey("newsletters.newsletter_id"), nullable=True)
     referrer_id=Column(UUID(as_uuid=True), ForeignKey("users.user_id"), nullable=True)
+
+
+class UserDetails(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
+    __tablename__ = "user_details"
+
+    user_detail_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
+    user_bio = Column(String, nullable=True)
+    user_education = Column(String, nullable=True)
+    user_facebook_link = Column(String, nullable=True)
+    user_twitter_link = Column(String, nullable=True)
+    user_instagram_link = Column(String, nullable=True)
+    user_birthdate=Column(DateTime, nullable=True)

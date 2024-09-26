@@ -98,3 +98,36 @@ async def create_trip(
             message="Failed to create trip : "+str(e),
             error_code=500
         )
+
+#----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
+
+@router.patch("/update-trip/{trip_id}", status_code=status.HTTP_200_OK)
+async def patch_trip(
+    trip_id: uuid.UUID, 
+    db: db_dependency, 
+    trip_update: PatchTripRequest,
+    image_files: Optional[list[UploadFile]] = File(None),  # Image files are optional
+):
+    try:
+        # Update trip in the database through the interface
+        trip_obj = TripInterface(db=db).patch_trip(trip_id, trip_update, image_files)
+
+        if not trip_obj:
+            return error_response(
+                message="Trip not found",
+                error_code=404  
+            )
+
+        # Transform the updated trip object into response
+        trip_response = CreateTripResponse.from_orm(trip_obj)
+        trip_response.activity_items = [CreateTripItemResponse.from_orm(item) for item in trip_obj.items]
+
+        return success_response(
+            data=trip_response, 
+            message="Trip updated"
+        )
+    except Exception as e:
+        return error_response(
+            message=f"Failed to update trip: {str(e)}",
+            error_code=500
+        )
