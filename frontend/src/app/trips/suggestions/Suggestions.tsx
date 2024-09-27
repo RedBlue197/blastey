@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import styles from './Suggestions.module.css';
+import LoadingSuggestions from './LoadingSuggestions'; // Import the loading fallback component
 
 interface Suggestion {
   id: string;
@@ -19,19 +20,21 @@ const suggestions: Suggestion[] = [
 
 const Suggestions: React.FC = () => {
   return (
-    <div className={styles.suggestionsWrapper}>
-      <div className={styles.suggestionsContainer}>
-        {suggestions.map((suggestion) => (
-          <div key={suggestion.id} className={styles.card} style={{ backgroundImage: `url(${suggestion.image})` }}>
-            <div className={styles.cardContent}>
-              <span className={styles.tag}>{suggestion.title}</span>
-              <p className={styles.price}>{suggestion.price}</p>
-              <p className={styles.days}>{suggestion.days} Days</p>
+    <Suspense fallback={<LoadingSuggestions />}>
+      <div className={styles.suggestionsWrapper}>
+        <div className={styles.suggestionsContainer}>
+          {suggestions.map((suggestion) => (
+            <div key={suggestion.id} className={styles.card} style={{ backgroundImage: `url(${suggestion.image})` }}>
+              <div className={styles.cardContent}>
+                <span className={styles.tag}>{suggestion.title}</span>
+                <p className={styles.price}>{suggestion.price}</p>
+                <p className={styles.days}>{suggestion.days} Days</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 
