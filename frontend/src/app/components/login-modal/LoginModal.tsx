@@ -3,6 +3,7 @@
 import { useState, ChangeEvent } from "react";
 // import { signIn } from "next-auth/react"; // Uncomment for actual sign-in
 import styles from "./LoginModal.module.css"; // Import the CSS module
+import {fetchToken} from "@/services/auth_api_handler"
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -28,6 +29,21 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     try {
       // Implement email sign-in logic here
       console.log("Signing in with email:", email);
+      
+      const signInData={
+        "username":email,
+        "password":password
+      }
+      const result = await fetchToken(
+              signInData,null
+            ).then((response)=>{
+              if (response.status === 200) {
+                console.log("Successfully connected")
+              }
+              else if (response.status ===401) {
+                console.error("Wrong credantials")
+              }
+            })
     } catch (error) {
       setError("Sign-in failed. Please try again.");
     }

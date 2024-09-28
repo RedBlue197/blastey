@@ -6,7 +6,10 @@ from datetime import timedelta
 from config import settings
 from fastapi import APIRouter, HTTPException, status
 from dependencies.db_dependency import db_dependency
-from dependencies.auth_dependency import auth_dependency, auth_bearer
+from dependencies.auth_dependency import  auth_bearer,auth_dependency
+
+from utils.responses import success_response,error_response
+
 
 
 
@@ -18,9 +21,9 @@ router=APIRouter(
 
 
 
-@router.post("/token",response_model=Token)
-async def login_for_access_token(form_data: auth_dependency,db:db_dependency):
-    user = authenticate_user(form_data.username,form_data.password,db)
+@router.post("/token", status_code=status.HTTP_200_OK)
+async def login_for_access_token(login_request: auth_dependency,db:db_dependency):
+    user = authenticate_user(login_request.username, login_request.password, db)
     if not user :
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="User not valid",)
@@ -29,7 +32,11 @@ async def login_for_access_token(form_data: auth_dependency,db:db_dependency):
         "id":str(user.user_id)
     }
     token= create_access_token(data,timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
-    return {"access_token":token,"token_type":"bearer"}
+    return success_response(
+    data=token,
+    status=200
+)
+
 
 async def get_current_user(token: auth_bearer):
     print("Token Identified successfully")

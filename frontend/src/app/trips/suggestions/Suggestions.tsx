@@ -1,6 +1,9 @@
-import React, { Suspense } from 'react';
+"use client"
+
+import React, { useState,Suspense } from 'react';
 import styles from './Suggestions.module.css';
-import LoadingSuggestions from './LoadingSuggestions'; // Import the loading fallback component
+import LoadingSuggestions from './loading/LoadingSuggestions'; // Import the loading fallback component
+import { PrimaryButton } from '@/app/components';
 
 interface Suggestion {
   id: string;
@@ -17,11 +20,28 @@ const suggestions: Suggestion[] = [
   { id: '4', title: 'Essaouira Escape', price: '$250', days: 3, image: 'https://picsum.photos/300/300' },
   { id: '5', title: 'Tangier Tour', price: '$450', days: 6, image: 'https://picsum.photos/300/300' },
 ];
-
 const Suggestions: React.FC = () => {
+
+  const [loading, setLoading] = useState(false);
+
+const handleClick = () => {
+  setLoading(true);
+  
+  // Simulate an async action, such as a network request
+  setTimeout(() => {
+    setLoading(false); // Reset the loading state after action is complete
+  }, 2000);
+};
+
   return (
     <Suspense fallback={<LoadingSuggestions />}>
       <div className={styles.suggestionsWrapper}>
+      <PrimaryButton 
+        label="Submit" 
+        onClick={handleClick} 
+        loading={loading} 
+        disabled={false} 
+      />
         <div className={styles.suggestionsContainer}>
           {suggestions.map((suggestion) => (
             <div key={suggestion.id} className={styles.card} style={{ backgroundImage: `url(${suggestion.image})` }}>

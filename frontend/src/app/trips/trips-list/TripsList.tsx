@@ -1,5 +1,5 @@
 'use client'; // Ensure this component runs on the client side
-import { useEffect, useState } from 'react';
+import { useEffect, useState ,Suspense } from 'react';
 import styles from './TripsList.module.css'; // Import your CSS module for styling
 import { fetchTrips } from '@/services/trip_api_handler';
 import FilterAndSearch from '../filter-and-search/FilterAndSearch';

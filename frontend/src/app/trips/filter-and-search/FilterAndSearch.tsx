@@ -1,4 +1,5 @@
 import { FaSearch } from 'react-icons/fa';
+import {Dropdown} from '@/app/components';
 
 interface FilterAndSearchProps {
   searchQuery: string;
@@ -49,6 +50,10 @@ const FilterAndSearch: React.FC<FilterAndSearchProps> = ({
           <option value="price">Price: Low to High</option>
           <option value="rating">Rating: High to Low</option>
         </select>
+        <Dropdown options={[
+            "test",
+            "test"
+        ]} />
       </div>
     </div>
   );

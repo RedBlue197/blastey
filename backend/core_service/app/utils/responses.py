@@ -5,6 +5,13 @@ from schemas.response_schema import APIResponse, PaginationMetadata
 
 T = TypeVar('T')
 
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
+from typing import Any, Optional, TypeVar
+from schemas.response_schema import APIResponse, PaginationMetadata
+
+T = TypeVar('T')
+
 def success_response(
     data: Optional[T] = None,
     message: str = "Request was successful",
@@ -12,7 +19,8 @@ def success_response(
     current_page: Optional[int] = None,
     total_pages: Optional[int] = None,
     items_per_page: Optional[int] = None,
-    cacheable: Optional[bool] = None  # New parameter for caching
+    cacheable: Optional[bool] = None,  # New parameter for caching
+    status: int = 200  # Set default to 200
 ) -> JSONResponse:
     pagination = None
     if all(v is not None for v in [total_count, current_page, total_pages, items_per_page]):
@@ -28,13 +36,24 @@ def success_response(
         message=message,
         data=data,
         pagination=pagination,
-        cacheable=cacheable  # Include cacheable in the response
+        cacheable=cacheable,  # Include cacheable in the response
     )
+
+    # Include status in the response
+    response_with_status = {
+        "success": response.success,
+        "message": response.message,
+        "data": response.data,
+        "pagination": response.pagination,
+        "error_code": response.error_code,
+        "cacheable": response.cacheable,
+        "status": status  # Add the status here
+    }
     
     # Ensure everything is JSON-serializable, including UUIDs
-    json_content = jsonable_encoder(response)
+    json_content = jsonable_encoder(response_with_status)
     
-    return JSONResponse(status_code=200, content=json_content)
+    return JSONResponse(status_code=status, content=json_content)
 
 import logging
 

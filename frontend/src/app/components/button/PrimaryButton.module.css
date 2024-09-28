@@ -1,0 +1,50 @@
+.primaryButton {
+    background-color: #00bf63; /* Primary Color */
+    color: white; /* Text color */
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .primaryButton:hover {
+    background-color: #00a355;
+    transform: translateY(-2px);
+  }
+  
+  .primaryButton:active {
+    transform: translateY(0);
+  }
+  
+  .primaryButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .primaryButtonText {
+    font-family: 'Tajawal', sans-serif;
+    letter-spacing: 1px;
+  }
+  
+  .spinner {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 3px solid white;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
