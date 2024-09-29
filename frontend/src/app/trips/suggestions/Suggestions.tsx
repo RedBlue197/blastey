@@ -4,6 +4,7 @@ import React, { useState,Suspense } from 'react';
 import styles from './Suggestions.module.css';
 import LoadingSuggestions from './loading/LoadingSuggestions'; // Import the loading fallback component
 import { PrimaryButton } from '@/app/components';
+import { fetchTripById } from '@/services/trip_api_handler'; // Import the fetchTripById function from the API service
 
 interface Suggestion {
   id: string;
@@ -24,8 +25,18 @@ const Suggestions: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
 
-const handleClick = () => {
+const handleClick = async () => {
   setLoading(true);
+
+  const result = await fetchTripById(
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoiaGFtemFnb3VicmFpbUBnbWFpbC5jb20iLCJpZCI6IjA5NDY1OTU2LTZmMmMtNGRhMC1iYjQ0LTAwZTI5NmQ0ODIxMCIsImV4cCI6MTcyNzYyNTIyN30.ryM4wJ0tCBLDMtgVxBVk8i2uTgFHNobD1Pq37xOKvZc',
+     '978f9fbe-82ea-4cba-b180-e9ae7cde3470').then(
+    (response) => {
+      console.log('Trip fetched successfully:', response);
+    },
+    (error) => {
+      console.error('Error fetching trip:', error);
+});
   
   // Simulate an async action, such as a network request
   setTimeout(() => {

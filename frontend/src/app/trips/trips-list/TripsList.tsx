@@ -27,25 +27,23 @@ const TripsList = () => {
   const [sortOption, setSortOption] = useState<string>(''); // State for sort option
   const [filterOption, setFilterOption] = useState<string>(''); // State for filter option
 
-  useEffect(() => {
-    const token = null; // Replace with actual token logic if needed
-    const getTrips = async () => {
-      try {
-        const response = await fetchTrips(token);
-        if (response.status === 200) {
-          setTrips(response.data);
-          setFilteredTrips(response.data); // Initialize filtered trips with all trips
-        } else if (response.status === 404) {
-          setTrips([]);
-          setFilteredTrips([]); // No trips available
-        } else {
-          console.error('Error fetching trips');
-        }
-      } catch (error) {
-        console.error('Error fetching trips:', error);
+  const getTrips = async () => {
+    try {
+      const response = await fetchTrips();
+      if (response.status === 200) {
+        setTrips(response.data);
+        setFilteredTrips(response.data); // Initialize filtered trips with all trips
+      } else if (response.status === 404) {
+        setTrips([]);
+        setFilteredTrips([]); // No trips available
+      } else {
+        console.error('Error fetching trips');
       }
-    };
-
+    } catch (error) {
+      console.error('Error fetching trips:', error);
+    }
+  };
+  useEffect(() => {
     getTrips();
   }, []);
 

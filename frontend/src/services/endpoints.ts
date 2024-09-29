@@ -5,7 +5,8 @@ export const endpoints= {
     },
     "trips" :
     {
-        GET_TRIPS : '/trips/?page=1&items_per_page=10'
+        GET_TRIPS : '/trips/?page=1&items_per_page=10',
+        GET_TRIP_BY_ID : '/trips/'
     },
     
 }

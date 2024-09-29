@@ -52,7 +52,7 @@ class DecryptionMiddleware(BaseHTTPMiddleware):
                     request._body = json.dumps(decrypted_json).encode('utf-8')  # Ensure it's in bytes
                     
                     # Log the entire decrypted request
-                    print("Full Decrypted Request:", decrypted_json)  # Log the decrypted JSON
+                    # print("Full Decrypted Request:", decrypted_json)  # Log the decrypted JSON
                 else:
                     print("Required fields 'iv' and 'data' are missing.")
             except Exception as e:

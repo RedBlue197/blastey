@@ -27,9 +27,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
   const handleEmailSignIn = async () => {
     try {
-      // Implement email sign-in logic here
-      console.log("Signing in with email:", email);
-      
+      // Implement email sign-in logic here      
       const signInData={
         "username":email,
         "password":password
@@ -38,12 +36,14 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               signInData,null
             ).then((response)=>{
               if (response.status === 200) {
+                localStorage.setItem('token', response.data);
                 console.log("Successfully connected")
               }
               else if (response.status ===401) {
                 console.error("Wrong credantials")
               }
             })
+      
     } catch (error) {
       setError("Sign-in failed. Please try again.");
     }

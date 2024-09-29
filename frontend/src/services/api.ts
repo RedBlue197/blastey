@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
+import { createCipheriv, randomBytes } from 'crypto';
 
 const URL = 'localhost:8000'; // Replace with your actual URL
 const BASE_URL = 'http://' + URL;
@@ -16,14 +16,13 @@ const api = axios.create({
 interface MakeAPIRequestOptions {
   version?: string; // Default to 'v1' or 'v2'
   headers?: Record<string, string>;
-  token?: string | null;
+  withCredentials?: boolean; // To indicate if the request needs credentials
   data?: any;
   microservice?: string;
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE'; // Specify HTTP method
   [key: string]: any; // Allow for other Axios request options
 }
 
-// Define your AES encryption key and initialization vector (IV)
 // Define your AES encryption key (32 bytes for AES-256) and initialization vector (IV)
 const AES_SECRET_KEY = Buffer.from('04f5e5332f60cbe3f35f4a7d2525b9ce2678e3590db173ad281d85954e9463bf', 'hex'); // Must be 32 bytes
 const IV = randomBytes(16); // IV should be 16 bytes
@@ -44,7 +43,6 @@ const encryptData = (data: any) => {
   return { iv: IV.toString('hex'), encryptedData: encrypted };
 };
 
-
 export const makeAPIRequest = async <T>(
   microservice: string,
   endpoint: string,
@@ -53,15 +51,13 @@ export const makeAPIRequest = async <T>(
   const {
     version = 'v1',
     headers = {},
-    token = null,
+    withCredentials = false, // Default value for withCredentials
     data = null,
     method = 'GET',
     ...rest
   } = options;
 
   const url = `${BASE_URL}/${microservice}/frontoffice/${version}${endpoint}`;
-  console.log("Request URL:", url); // Log the request URL
-
   const config: AxiosRequestConfig = {
     method,
     url,
@@ -72,19 +68,25 @@ export const makeAPIRequest = async <T>(
     ...rest,
   };
 
+  // Get the token from local storage if withCredentials is true
+  if (withCredentials) {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null; // Access local storage only in the browser context
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  } else if (options.token && config.headers) {
+    // If a token was passed in options, use that
+    config.headers.Authorization = `Bearer ${options.token}`;
+  }
+
   if (data) {
     try {
       const { iv, encryptedData } = encryptData(data);
       config.data = { iv, data: encryptedData }; // Wrap the encrypted data inside a 'data' object
-      console.log("Encrypted Data:", { iv, encryptedData }); // Log encrypted data
     } catch (error) {
       console.error("Error encrypting data:", error);
       throw error;
     }
-  }
-
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
   }
 
   try {

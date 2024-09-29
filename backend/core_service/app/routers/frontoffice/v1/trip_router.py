@@ -1,5 +1,6 @@
 from fastapi import status, APIRouter, Query, UploadFile, File
 from dependencies.db_dependency import db_dependency
+from dependencies.auth_dependency import auth_dependency,user_dependency
 from interfaces.trip_interface import TripInterface
 from schemas.trip_schema import CreateTripRequest, PatchTripRequest
 from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemResponse
@@ -18,6 +19,7 @@ router = APIRouter(
 #API to get all trips
 @router.get("/", status_code=status.HTTP_200_OK)
 async def get_trips(
+    user:user_dependency,
     db: db_dependency,
     page: int = Query(1, ge=1),
     items_per_page: int = Query(10, le=100),
@@ -51,6 +53,7 @@ async def get_trips(
 #API to get a specific trip by id
 @router.get("/{trip_id}",response_model=GetTripByIdResponse, status_code=status.HTTP_200_OK)
 async def get_trip_by_id(
+    user:user_dependency,
     db: db_dependency,
     trip_id: uuid.UUID,
 ):
