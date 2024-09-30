@@ -1,15 +1,13 @@
+// pages/_app.tsx
+import { AppProps } from 'next/app';
+import { AuthProvider } from '@/context/AuthContext'; // Update the path accordingly
+import '../globals.css'; // Include your global styles
 
-// import type { Metadata } from 'next'
-// export const metadata: Metadata = {
-//   title: 'Blastey - Home',
-//   description: 'Blastey is the go-to marketplace for travelers and locals',
-// }
-
-function Index() {
+function Index({ Component, pageProps }: AppProps) {
   return (
-      <main className="mainContent">
-        {/* Your page content */}
-      </main>
+    <AuthProvider>
+      <Component {...pageProps} />
+    </AuthProvider>
   );
 }
 
