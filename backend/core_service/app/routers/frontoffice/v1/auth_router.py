@@ -8,6 +8,7 @@ from fastapi import APIRouter, HTTPException, status
 from dependencies.db_dependency import db_dependency
 from dependencies.auth_dependency import  auth_bearer,auth_dependency
 from schemas.auth_schema import LoginRequest
+from responses.auth_response import GetTokenResponse
 
 from utils.responses import success_response,error_response
 
@@ -30,10 +31,12 @@ async def login_for_access_token(login_request: LoginRequest,db:db_dependency):
                             detail="User not valid",)
     data={
         "user_email":user.user_email,
-        "id":str(user.user_id)
+        "user_id":str(user.user_id),
+        "user_role": user.user_role
     }
     token= create_access_token(data,timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
+    token_response=GetTokenResponse.from_orm(token)
     return success_response(
-    data=token,
+    data=token_response,
     status=200
 )

@@ -2,7 +2,7 @@
 
 from fastapi import status, APIRouter, Query,Request
 from dependencies.db_dependency import db_dependency
-from dependencies.auth_dependency import auth_bearer
+from dependencies.auth_dependency import auth_bearer,get_current_user
 
 import uuid
 
@@ -94,6 +94,7 @@ async def get_user_by_id(
 @router.post("/create-user", status_code=status.HTTP_201_CREATED)
 async def create_user(
     user: CreateUserRequest,
+    current_user: dict = Depends(lambda: get_current_user(allowed_roles=[UserRole.ADMIN])),
     db: db_dependency  # Database dependency
 ):
     user_interface = UserInterface(db)

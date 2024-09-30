@@ -40,40 +40,6 @@ body {
   padding: 20px; /* Add some padding */
 }
 
-.primaryButton {
-  background-color: #1668d6; /* Deep Ocean Blue */
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-
-  &:hover {
-    background-color: #005bb5; /* Slightly darker Deep Ocean Blue */
-    transform: translateY(-2px);
-  }
-}
-
-
-.secondaryButton {
-  background-color: #ffffff;
-  color: #1668d6; /* Deep Ocean Blue text */
-  border: 1px solid #1668d6;
-  border-radius: 4px;
-  padding: 8px 16px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
-
-  &:hover {
-    background-color: #f0f0f0;
-    color: #005bb5; /* Darker Blue */
-    transform: translateY(-2px);
-  }
-}
-
 
 @layer utilities {
   .text-balance {
