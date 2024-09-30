@@ -4,7 +4,6 @@ import Suggestions from './suggestions/Suggestions';
 import LoadingSuggestions from './suggestions/loading/LoadingSuggestions'; // Loading fallback for suggestions
 import LoadingTripsList from './trips-list/loading/LoadingTripsList'; // Loading fallback for trips
 import { Metadata } from 'next';
-import withAuth from '@/hoc/withAuth'; // Adjust the path to your HOC
 
 // Set page-specific metadata
 export const metadata: Metadata = {
@@ -12,6 +11,7 @@ export const metadata: Metadata = {
   description: 'Explore all available trips',
 };
 
+// Wrap the Trips component with the withAuth HOC
 function Trips() {
   return (
     <main>
@@ -25,6 +25,6 @@ function Trips() {
     </main>
   );
 }
-console.log("///////////////////////////////////////////////")
-console.log('withAuth:', withAuth); // Add this line
-export default withAuth(Trips); // Wrap the component with the withAuth HOC
+
+// Export the wrapped component
+export default Trips;

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import React,{ useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {jwtDecode} from 'jwt-decode';
 
@@ -26,7 +26,6 @@ const withAuth = (WrappedComponent: React.ComponentType<any>) => {
 
     useEffect(() => {
       const token = localStorage.getItem('token');
-
       if (token && !isTokenExpired(token)) {
         setIsAuthenticated(true);
       } else {

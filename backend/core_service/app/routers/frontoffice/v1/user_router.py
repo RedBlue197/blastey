@@ -1,10 +1,12 @@
 # app/routers/user_router.py
 
-from fastapi import status, APIRouter, Query,Request
+from fastapi import status, APIRouter, Query,Request,Depends
 from dependencies.db_dependency import db_dependency
 from dependencies.auth_dependency import auth_bearer,get_current_user
 
 import uuid
+
+from models.user_model import UserRole
 
 from interfaces.user_interface import UserInterface
 
@@ -94,8 +96,9 @@ async def get_user_by_id(
 @router.post("/create-user", status_code=status.HTTP_201_CREATED)
 async def create_user(
     user: CreateUserRequest,
+    db: db_dependency,  # Database dependency
     current_user: dict = Depends(lambda: get_current_user(allowed_roles=[UserRole.ADMIN])),
-    db: db_dependency  # Database dependency
+
 ):
     user_interface = UserInterface(db)
     
