@@ -1,7 +1,7 @@
 // pages/protected.tsx (Example of a protected page)
 import useAuthRedirect from '@/hooks/useAuthRedirect';
 
-const ProtectedPage = () => {
+const Dashboard = () => {
   // Specify the roles allowed to access this page
   const allowedRoles = ['admin', 'editor']; // Example roles
 
@@ -14,4 +14,4 @@ const ProtectedPage = () => {
   );
 };
 
-export default ProtectedPage;
+export default Dashboard;

@@ -1,10 +1,10 @@
 "use client";
-
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../../i18n';
 import LoginModal from '../login-modal/LoginModal';
+import { useAuth } from '@/context/AuthContext'; // Make sure this path is correct
 import styles from './Navbar.module.css';
 
 export default function Navbar() {
@@ -13,6 +13,7 @@ export default function Navbar() {
   const { t } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
+  const { isAuthenticated, userRole, logout } = useAuth(); // Using useAuth hook
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -23,7 +24,10 @@ export default function Navbar() {
     router.push(path);
   };
 
-  const getLinkClass: (path: string, size?: 'small' | 'medium' | 'large') => string = (path: string, size: 'small' | 'medium' | 'large' = 'medium'): string => {
+  const getLinkClass: (path: string, size?: 'small' | 'medium' | 'large') => string = (
+    path: string,
+    size: 'small' | 'medium' | 'large' = 'medium'
+  ): string => {
     const sizeClass =
       size === 'small'
         ? styles.buttonSmall
@@ -57,27 +61,49 @@ export default function Navbar() {
             <img className={styles.logo} src="/Blastey_cover.png" alt="Logo" />
           </div>
           <div className={styles.desktopMenuLangage}>
-          <div className={styles.desktopMenu}>
-            <button onClick={() => navigate('/home')} className={getLinkClass('/home', 'medium')}>
-              {t('home.home')}
-            </button>
-            <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
-              {t('trips.trips')}
-            </button>
-            <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
-              {t('activities.activities')}
-            </button>
-            <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
-              {t('login.login')}
-            </button>
+            <div className={styles.desktopMenu}>
+              <button onClick={() => navigate('/home')} className={getLinkClass('/home', 'medium')}>
+                {t('home.home')}
+              </button>
+
+              {/* Conditionally render links based on authentication and role */}
+              {isAuthenticated && (
+                <>
+                  <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                    {t('trips.trips')}
+                  </button>
+                  <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
+                    {t('activities.activities')}
+                  </button>
+
+                  {/* Display admin-only link */}
+                  {userRole === 'admin' && (
+                    <button onClick={() => navigate('/admin')} className={getLinkClass('/admin', 'medium')}>
+                      {t('admin.admin')}
+                    </button>
+                  )}
+                </>
+              )}
+
+              {!isAuthenticated ? (
+                <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
+                  {t('login.login')}
+                </button>
+              ) : (
+                <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                  {t('logout.logout')}
+                </button>
+              )}
+            </div>
+
+            <div className={styles.languageSelector}>
+              <select value={i18n.language} onChange={handleLanguageChange}>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+              </select>
+            </div>
           </div>
-          <div className={styles.languageSelector}>
-            <select value={i18n.language} onChange={handleLanguageChange}>
-              <option value="en">English</option>
-              <option value="fr">Français</option>
-            </select>
-          </div>
-          </div>
+
           <div className={styles.mobileMenuButton}>
             <button onClick={toggleMenu} type="button">
               <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -92,22 +118,45 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Mobile menu */}
       {isOpen && (
         <div className={styles.mobileMenu}>
-            <button onClick={() => navigate('/home')} className={getLinkClass('/home', 'medium')}>
-              {t('home')}
-            </button>
-            <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
-              {t('trips')}
-            </button>
-            <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
-              {t('activities')}
-            </button>
-          <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
-            {t('login')}
+          <button onClick={() => navigate('/home')} className={getLinkClass('/home', 'medium')}>
+            {t('home')}
           </button>
+
+          {/* Mobile menu links based on auth status */}
+          {isAuthenticated && (
+            <>
+              <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                {t('trips')}
+              </button>
+              <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
+                {t('activities')}
+              </button>
+
+              {userRole === 'admin' && (
+                <button onClick={() => navigate('/admin')} className={getLinkClass('/admin', 'medium')}>
+                  {t('admin')}
+                </button>
+              )}
+            </>
+          )}
+
+          {!isAuthenticated ? (
+            <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
+              {t('login')}
+            </button>
+          ) : (
+            <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+              {t('logout')}
+            </button>
+          )}
         </div>
       )}
+
+      {/* Login Modal */}
       <LoginModal isOpen={isModalOpen} onClose={closeLoginModal} />
     </nav>
   );
