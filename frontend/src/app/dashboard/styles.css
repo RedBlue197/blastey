@@ -1,0 +1,14 @@
+.dashboard {
+    padding: 20px;
+  }
+  
+  .row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .row > div {
+    flex: 1;
+  }
+  
