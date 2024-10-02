@@ -1,5 +1,5 @@
 'use client'; // Ensure this component runs on the client side
-import { useEffect, useState ,Suspense } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import styles from './TripsList.module.css'; // Import your CSS module for styling
 import { fetchTrips } from '@/services/trip_api_handler';
 import FilterAndSearch from '../filter-and-search/FilterAndSearch';
@@ -26,16 +26,23 @@ const TripsList = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortOption, setSortOption] = useState<string>(''); // State for sort option
   const [filterOption, setFilterOption] = useState<string>(''); // State for filter option
+  const [page, setPage] = useState<number>(1); // Track current page
+  const [hasMoreTrips, setHasMoreTrips] = useState<boolean>(true); // Flag to check if more trips exist
+  const [loadingMore, setLoadingMore] = useState<boolean>(false); // Loading state for fetching more trips
 
-  const getTrips = async () => {
+  const getTrips = async (currentPage = 1) => {
     try {
-      const response = await fetchTrips();
+      const response = await fetchTrips(currentPage);
       if (response.status === 200) {
-        setTrips(response.data);
-        setFilteredTrips(response.data); // Initialize filtered trips with all trips
+        const newTrips = response.data;
+        if (newTrips.length === 0) {
+          setHasMoreTrips(false); // No more trips available
+        } else {
+          setTrips(prevTrips => [...prevTrips, ...newTrips]);
+          setFilteredTrips(prevTrips => [...prevTrips, ...newTrips]); // Append new trips to existing trips
+        }
       } else if (response.status === 404) {
-        setTrips([]);
-        setFilteredTrips([]); // No trips available
+        setHasMoreTrips(false);
       } else {
         console.error('Error fetching trips');
       }
@@ -43,8 +50,9 @@ const TripsList = () => {
       console.error('Error fetching trips:', error);
     }
   };
+
   useEffect(() => {
-    getTrips();
+    getTrips(); // Initial load
   }, []);
 
   useEffect(() => {
@@ -74,6 +82,13 @@ const TripsList = () => {
     setFilteredTrips(filtered);
   }, [searchQuery, sortOption, filterOption, trips]);
 
+  const handleShowMore = async () => {
+    setLoadingMore(true);
+    await getTrips(page + 1); // Fetch next page
+    setPage(prevPage => prevPage + 1); // Increment page
+    setLoadingMore(false);
+  };
+
   return (
     <Suspense fallback={<LoadingTripsList />}>
       <div className={styles.container}>
@@ -99,10 +114,17 @@ const TripsList = () => {
             ))}
           </div>
         )}
+
+        {/* Show More Button */}
+        {hasMoreTrips && !loadingMore && (
+          <button onClick={handleShowMore} className={styles.showMoreButton}>
+            Show More
+          </button>
+        )}
+        {loadingMore && <p>Loading more trips...</p>}
       </div>
     </Suspense>
   );
 };
 
 export default TripsList;
-

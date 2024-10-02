@@ -69,13 +69,6 @@ export default function Navbar() {
               {/* Conditionally render links based on authentication and role */}
               {isAuthenticated && (
                 <>
-                  <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
-                    {t('trips.trips')}
-                  </button>
-                  <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
-                    {t('activities.activities')}
-                  </button>
-
                   {/* Display admin-only link */}
                   {userRole === 'admin' && (
                     <button onClick={() => navigate('/admin')} className={getLinkClass('/admin', 'medium')}>
@@ -83,6 +76,13 @@ export default function Navbar() {
                     </button>
                   )}
                 </>
+              ) : (
+                <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                  {t('trips.trips')}
+                </button>
+                <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
+                  {t('activities.activities')}
+                </button>
               )}
 
               {!isAuthenticated ? (
@@ -128,21 +128,22 @@ export default function Navbar() {
 
           {/* Mobile menu links based on auth status */}
           {isAuthenticated && (
-            <>
-              <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
-                {t('trips')}
-              </button>
-              <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
-                {t('activities')}
-              </button>
-
-              {userRole === 'admin' && (
-                <button onClick={() => navigate('/admin')} className={getLinkClass('/admin', 'medium')}>
-                  {t('admin')}
+                <>
+                  {/* Display admin-only link */}
+                  {userRole === 'admin' && (
+                    <button onClick={() => navigate('/admin')} className={getLinkClass('/admin', 'medium')}>
+                      {t('admin.admin')}
+                    </button>
+                  )}
+                </>
+              ) : (
+                <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                  {t('trips.trips')}
+                </button>
+                <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
+                  {t('activities.activities')}
                 </button>
               )}
-            </>
-          )}
 
           {!isAuthenticated ? (
             <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
