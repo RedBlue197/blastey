@@ -1,11 +1,13 @@
-from fastapi import status, APIRouter, Query, UploadFile, File
+from fastapi import status, APIRouter, Query, UploadFile, File,Form,HTTPException
+from pydantic import ValidationError
+
 from dependencies.db_dependency import db_dependency
 from dependencies.auth_dependency import user_dependency
 from interfaces.trip_interface import TripInterface
 from schemas.trip_schema import CreateTripRequest, PatchTripRequest
 from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemResponse
 from utils.responses import success_response,error_response
-from typing import Optional
+from typing import Optional,List
 
 import uuid
 
@@ -78,35 +80,44 @@ async def get_trip_by_id(
 
 
 #----------------------------------------------------POST ENDPOINTS----------------------------------------------------
-
 @router.post("/create-trip", status_code=status.HTTP_201_CREATED)
 async def create_trip(
     db: db_dependency,
-    trip: CreateTripRequest,
-    image_files: list[UploadFile] = File(...),  # Accept multiple image files
+    trip: str = Form(...),  # Trip data as a JSON string
+    image_files: List[UploadFile] = File(...),  # Accept multiple image files
 ):
-
     try:
-        trip_obj = TripInterface(db=db).create_trip(trip, image_files)  # Pass image_files to create_trip
+        # Parse trip JSON string to Pydantic model
+        try:
+            trip_data = CreateTripRequest.model_validate_json(trip)  # Automatically validates the trip data
+        except ValidationError as ve:
+            raise HTTPException(status_code=422, detail=f"Invalid trip data: {ve.errors()}")
 
-        # Pydantic automatically transforms the SQLAlchemy object to a response model
+        # Validate image files (you can add your own logic for file validation)
+        for image in image_files:
+            if image.content_type not in ["image/jpeg", "image/png"]:
+                raise HTTPException(status_code=400, detail=f"Invalid file format: {image.filename}")
+
+        # Proceed to create the trip
+        trip_obj = TripInterface(db=db).create_trip(trip_data, image_files)  # Pass image_files to create_trip
+
         trip_response = CreateTripResponse.from_orm(trip_obj)
         if not trip_response:
             return error_response(
                 message="Failed to create trip",
-                error_code=404  
+                error_code=404
             )
         else:
             return success_response(
-                data=trip_response, 
+                data=trip_response,
                 message="Trip created"
             )
+
     except Exception as e:
         return error_response(
-            message="Failed to create trip : "+str(e),
+            message="Failed to create trip: " + str(e),
             error_code=500
         )
-
 #----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
 
 @router.patch("/update-trip/{trip_id}", status_code=status.HTTP_200_OK)

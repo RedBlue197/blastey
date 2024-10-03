@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import styles from './TripCard.module.css'; // Import the CSS module
 
 interface Trip {
   id: string;
@@ -16,21 +17,33 @@ interface Trip {
 
 const TripCard: React.FC<{ trip: Trip }> = ({ trip }) => {
   return (
-    <Link href={`/trips/${trip.id}`}>
-      <div className="tripCard">
-        <img src={trip.picture} alt={`${trip.name}'s picture`} className="picture" />
-        <div className="details">
+    <Link href={`/trips/${trip.id}`} className={styles.tripCard}>
+        <img src={trip.picture} alt={`${trip.name}'s picture`} className={styles.picture} />
+        <div className={styles.details}>
           <h2>{trip.title}</h2>
-          <p className="description">{trip.description}</p>
-          <p><strong>Traveller:</strong> {trip.name}</p>
-          <p><strong>Origin:</strong> {trip.origin}</p>
-          <p><strong>Destination:</strong> {trip.destination}</p>
-          <p><strong>Departure Date:</strong> {new Date(trip.departureDate).toLocaleDateString()}</p>
-          <p><strong>Arrival Date:</strong> {new Date(trip.arrivalDate).toLocaleDateString()}</p>
-          <p><strong>Rating:</strong> {trip.rating} / 5</p>
-          <p><strong>Price:</strong> ${trip.price}</p>
+          <p className={styles.description}>{trip.description}</p>
+          <p className={styles.detailsParagraph}>
+            <span className={styles.detailsStrong}>Traveller:</span> {trip.name}
+          </p>
+          <p className={styles.detailsParagraph}>
+            <span className={styles.detailsStrong}>Origin:</span> {trip.origin}
+          </p>
+          <p className={styles.detailsParagraph}>
+            <span className={styles.detailsStrong}>Destination:</span> {trip.destination}
+          </p>
+          <p className={styles.detailsParagraph}>
+            <span className={styles.detailsStrong}>Departure Date:</span> {new Date(trip.departureDate).toLocaleDateString()}
+          </p>
+          <p className={styles.detailsParagraph}>
+            <span className={styles.detailsStrong}>Arrival Date:</span> {new Date(trip.arrivalDate).toLocaleDateString()}
+          </p>
+          <p className={styles.detailsParagraph}>
+            <span className={styles.detailsStrong}>Rating:</span> {trip.rating} / 5
+          </p>
+          <p className={styles.detailsParagraph}>
+            <span className={styles.detailsStrong}>Price:</span> ${trip.price}
+          </p>
         </div>
-      </div>
     </Link>
   );
 };

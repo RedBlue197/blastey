@@ -73,7 +73,7 @@ newsletter_model.Base.metadata.create_all(bind=engine)
 trip_model.Base.metadata.create_all(bind=engine)
 
 app.add_middleware(LoggingMiddleware)
-#app.add_middleware(DecryptionMiddleware)
+# app.add_middleware(DecryptionMiddleware)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

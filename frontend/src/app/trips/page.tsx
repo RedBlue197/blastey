@@ -15,9 +15,9 @@ export const metadata: Metadata = {
 function Trips() {
   return (
     <main>
-      <Suspense fallback={<LoadingSuggestions />}>
+      {/* <Suspense fallback={<LoadingSuggestions />}>
         <Suggestions />
-      </Suspense>
+      </Suspense> */}
 
       <Suspense fallback={<LoadingTripsList />}>
         <TripsList />

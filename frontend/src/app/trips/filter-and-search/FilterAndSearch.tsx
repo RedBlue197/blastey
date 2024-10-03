@@ -1,5 +1,6 @@
 import { FaSearch } from 'react-icons/fa';
-import {Dropdown} from '@/app/components';
+import { Dropdown } from '@/app/components';
+import styles from './FilterAndSearch.module.css';
 
 interface FilterAndSearchProps {
   searchQuery: string;
@@ -19,22 +20,24 @@ const FilterAndSearch: React.FC<FilterAndSearchProps> = ({
   setFilterOption
 }) => {
   return (
-    <div className="filterSection">
-      <div className="searchContainer">
-        <FaSearch className="searchIcon" />
+    <div className={styles.filterSection}>
+      <div className={styles.searchContainer}>
         <input
           type="text"
           placeholder="Search by trip name or destination..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="searchBar"
+          className={styles.searchBar}
         />
+        <button onClick={() => console.log("Search triggered")} className={styles.searchButton}>
+          <FaSearch className={styles.searchIcon} />
+        </button>
       </div>
-      <div className="filterControls">
+      <div className={styles.filterControls}>
         <select
           value={filterOption}
           onChange={(e) => setFilterOption(e.target.value)}
-          className="filterSelect"
+          className={styles.filterSelect}
         >
           <option value="">All Destinations</option>
           <option value="New York">New York</option>
@@ -44,16 +47,13 @@ const FilterAndSearch: React.FC<FilterAndSearchProps> = ({
         <select
           value={sortOption}
           onChange={(e) => setSortOption(e.target.value)}
-          className="sortSelect"
+          className={styles.sortSelect}
         >
           <option value="">Sort By</option>
           <option value="price">Price: Low to High</option>
           <option value="rating">Rating: High to Low</option>
         </select>
-        <Dropdown options={[
-            "test",
-            "test"
-        ]} />
+        <Dropdown options={["test", "test"]} />
       </div>
     </div>
   );

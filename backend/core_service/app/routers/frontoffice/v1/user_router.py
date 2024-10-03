@@ -2,7 +2,7 @@
 
 from fastapi import status, APIRouter, Query,Request,Depends
 from dependencies.db_dependency import db_dependency
-from dependencies.auth_dependency import auth_bearer,get_current_user
+from dependencies.auth_dependency import auth_bearer,user_dependency
 
 import uuid
 
@@ -95,15 +95,21 @@ async def get_user_by_id(
 #API to create user
 @router.post("/create-user", status_code=status.HTTP_201_CREATED)
 async def create_user(
-    user: CreateUserRequest,
+    user_data: CreateUserRequest,
+    # user: user_dependency,
     db: db_dependency,  # Database dependency
-    current_user: dict = Depends(lambda: get_current_user(allowed_roles=[UserRole.ADMIN])),
-
 ):
+    
+    # if user['user_role'] not in ["host", "user"]:
+    #     return error_response(
+    #         message="Unauthorized Role",
+    #         error_code=401
+    #     )
+    
     user_interface = UserInterface(db)
     
     try:
-        db_user = user_interface.create_user(user)
+        db_user = user_interface.create_user(user_data)
         user_response = CreateUserResponse.from_orm(db_user)
         return success_response(
             message="User created successfully",

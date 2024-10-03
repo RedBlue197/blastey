@@ -4,7 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../../i18n';
 import LoginModal from '../login-modal/LoginModal';
-import { useAuth } from '@/context/AuthContext'; // Make sure this path is correct
+import { useAuth } from '@/context/AuthContext'; // Ensure this path is correct
 import styles from './Navbar.module.css';
 
 export default function Navbar() {
@@ -67,32 +67,29 @@ export default function Navbar() {
               </button>
 
               {/* Conditionally render links based on authentication and role */}
-              {isAuthenticated && (
+              {isAuthenticated ? (
                 <>
-                  {/* Display admin-only link */}
                   {userRole === 'admin' && (
                     <button onClick={() => navigate('/admin')} className={getLinkClass('/admin', 'medium')}>
                       {t('admin.admin')}
                     </button>
                   )}
+                  <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                    {t('logout.logout')}
+                  </button>
                 </>
               ) : (
-                <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
-                  {t('trips.trips')}
-                </button>
-                <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
-                  {t('activities.activities')}
-                </button>
-              )}
-
-              {!isAuthenticated ? (
-                <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
-                  {t('login.login')}
-                </button>
-              ) : (
-                <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
-                  {t('logout.logout')}
-                </button>
+                <>
+                  <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                    {t('trips.trips')}
+                  </button>
+                  <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
+                    {t('activities.activities')}
+                  </button>
+                  <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
+                    {t('login.login')}
+                  </button>
+                </>
               )}
             </div>
 
@@ -126,33 +123,29 @@ export default function Navbar() {
             {t('home')}
           </button>
 
-          {/* Mobile menu links based on auth status */}
-          {isAuthenticated && (
-                <>
-                  {/* Display admin-only link */}
-                  {userRole === 'admin' && (
-                    <button onClick={() => navigate('/admin')} className={getLinkClass('/admin', 'medium')}>
-                      {t('admin.admin')}
-                    </button>
-                  )}
-                </>
-              ) : (
-                <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
-                  {t('trips.trips')}
-                </button>
-                <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
-                  {t('activities.activities')}
+          {isAuthenticated ? (
+            <>
+              {userRole === 'admin' && (
+                <button onClick={() => navigate('/admin')} className={getLinkClass('/admin', 'medium')}>
+                  {t('admin.admin')}
                 </button>
               )}
-
-          {!isAuthenticated ? (
-            <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
-              {t('login')}
-            </button>
+              <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                {t('logout')}
+              </button>
+            </>
           ) : (
-            <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
-              {t('logout')}
-            </button>
+            <>
+              <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                {t('trips.trips')}
+              </button>
+              <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
+                {t('activities.activities')}
+              </button>
+              <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
+                {t('login')}
+              </button>
+            </>
           )}
         </div>
       )}
