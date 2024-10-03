@@ -1,10 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import {jwtDecode} from 'jwt-decode'; // Import jwt-decode
 
 interface AuthContextType {
     isAuthenticated: boolean;
     userRole: string | null;
-    login: (token: string, role: string) => void; // Include token in login
+    login: (token: string) => void;
     logout: () => void;
+}
+
+interface DecodedToken {
+    exp: number;
+    user_role: string;
+    // Add other token fields if necessary
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -14,29 +21,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [userRole, setUserRole] = useState<string | null>(null);
 
     useEffect(() => {
-        // Check localStorage for token and role
         const token = localStorage.getItem('token');
-        const role = localStorage.getItem('role'); // Assuming you store role in localStorage
 
         if (token) {
-            setIsAuthenticated(true);
-            setUserRole(role);
+            const decoded = jwtDecode<DecodedToken>(token); // Decode the token
+            // Check if the token is expired
+            if (decoded.exp * 1000 > Date.now()) {
+                setIsAuthenticated(true);
+                setUserRole(decoded.user_role); // Extract the user role from the decoded token
+            } else {
+                // Token is expired
+                logout();
+            }
         }
     }, []);
 
-    const login = (token: string, role: string) => {
-        setIsAuthenticated(true);
-        setUserRole(role);
-        // Store token and role in localStorage
-        localStorage.setItem('token', token);
-        localStorage.setItem('role', role);
+    const login = (token: string) => {
+        const decoded = jwtDecode<DecodedToken>(token);
+
+        // Check if the token is valid
+        if (decoded.exp * 1000 > Date.now()) {
+            setIsAuthenticated(true);
+            setUserRole(decoded.user_role); // Set user role from the token
+            localStorage.setItem('token', token);
+        } else {
+            console.error("Token is expired");
+        }
     };
 
     const logout = () => {
         setIsAuthenticated(false);
         setUserRole(null);
         localStorage.removeItem('token');
-        localStorage.removeItem('role');
     };
 
     return (

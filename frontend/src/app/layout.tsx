@@ -1,15 +1,12 @@
-// app/layout.tsx
-import type { Metadata } from "next";
+"use client";
+
 import { Inter } from "next/font/google";
 import RootLayout from "./components/RootLayout"; // Adjust the path as needed
-import './globals.css'
+import { AuthProvider } from "@/context/AuthContext"; // Import the AuthProvider
+import './globals.css';
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Blastey - Home",
-  description: "Blastey is the go-to marketplace for travelers and locals",
-};
 
 export default function AppLayout({
   children,
@@ -23,9 +20,12 @@ export default function AppLayout({
         {/* You can add other meta tags and links here */}
       </head>
       <body className={inter.className}>
-        <RootLayout>
-          {children}
-        </RootLayout>
+        {/* Wrap the RootLayout and children with AuthProvider */}
+        <AuthProvider>
+          <RootLayout>
+            {children}
+          </RootLayout>
+        </AuthProvider>
       </body>
     </html>
   );

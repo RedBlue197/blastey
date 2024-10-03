@@ -73,7 +73,7 @@ newsletter_model.Base.metadata.create_all(bind=engine)
 trip_model.Base.metadata.create_all(bind=engine)
 
 app.add_middleware(LoggingMiddleware)
-app.add_middleware(DecryptionMiddleware)
+#app.add_middleware(DecryptionMiddleware)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -111,25 +111,69 @@ if include_backoffice_routers:
 @app.on_event("startup")
 async def startup():
     print("Starting up")
-    db = SessionLocal()
 
-    # check if the user table is empty
-    user = db.query(user_model.User).first()
-    if user:
-        print("User table is not empty")
-        return
-    # Create a test user
-    user = user_model.User(
-        user_first_name="hamza",
-        user_last_name="test",
-        user_hashed_password=bcrypt_context.hash("3ss5fe71"),
-        user_email="hamzagoubraim@gmail.com"
+    try:
+        db = SessionLocal()
+
+        # check if the user table is empty
+        user = db.query(user_model.User).first()
+        if user:
+            print("User table is not empty")
+            return
+        # Create a test user
+        user = user_model.User(
+            user_first_name="hamza",
+            user_last_name="test",
+            user_hashed_password=bcrypt_context.hash("3ss5fe71"),
+            user_email="hamzagoubraim@gmail.com"
+            )
+        
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+        #create a host user
+        host = user_model.User(
+            user_first_name="hamza",
+            user_last_name="test",
+            user_hashed_password=bcrypt_context.hash("3ss5fe71"),
+            user_email="hamzahost@gmail.com",
+            user_role=user_model.UserRole.HOST
+            )
+        db.add(host)
+        db.commit()
+        db.refresh(host)
+
+        #create a test trip
+        trip = trip_model.Trip(
+            trip_title="test trip",
+            trip_description="test trip description",
+            trip_origin="test origin",
+            trip_destination="test destination",
+            host_id=host.user_id
         )
-    
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    db.close()
+        db.add(trip)
+        db.commit()
+        db.refresh(trip)
+
+        #create a test trip item
+        trip_item = trip_model.TripItem(
+            trip_item_name="test trip item",
+            trip_item_description="test trip item description",
+            trip_item_category=trip_model.TripItemCategoryEnum.ELECTRONICS,
+            trip_item_address="test address",
+            trip_item_traveler_reward=20.0,
+            trip_item_price=100.0,
+            trip_item_image_url="test image url",
+            trip_id=trip.trip_id
+        )
+        db.add(trip_item)
+        db.commit()
+        db.refresh(trip_item)
+
+        db.close()
+    except Exception as e:
+        print(f"Error: {e}")
 
 @app.get("/")
 async def read_root():
