@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createOrUpdateTrip } from '@/services/trip_api_handler';
+import { createOrUpdateTrip } from '@/services/internal_services/trip_api_handler';
 import styles from './TripFormModal.module.css';
 
 interface TripFormModalProps {
