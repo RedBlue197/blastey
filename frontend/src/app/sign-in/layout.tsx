@@ -6,8 +6,8 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sign In - Seftly",
-  description: "Sign in to your account on YourAppName.",
+  title: "Sign In - Blastey",
+  description: "Sign in to your account on Blastey.",
 };
 
 interface SignInLayoutProps {
