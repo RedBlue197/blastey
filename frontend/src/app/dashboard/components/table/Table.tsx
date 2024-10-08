@@ -14,7 +14,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           <thead>
             <tr>
               {columns.map((col, index) => (
-                <th key={index}>{col}</th>
+                <th key={index} className={styles.th}>{col}</th>
               ))}
             </tr>
           </thead>
@@ -22,7 +22,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
             {data.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 {row.map((cell, cellIndex) => (
-                  <td key={cellIndex}>{cell}</td>
+                  <td key={cellIndex} className={styles.td}>{cell}</td>
                 ))}
               </tr>
             ))}

@@ -10,19 +10,18 @@ interface Trip {
   departureDate: string;
   returnDate: string;
   price: number;
+  imageUrl: string; // Add image field
 }
 
 const TripCard: React.FC<{ trip: Trip }> = ({ trip }) => {
   return (
     <Link href={`/trips/${trip.id}`}>
       <div className={styles.card}>
-        <h2>{trip.title}</h2>
-        <p>{trip.description}</p>
-        <p><strong>Origin:</strong> {trip.origin}</p>
-        <p><strong>Destination:</strong> {trip.destination}</p>
-        <p><strong>Departure Date:</strong> {new Date(trip.departureDate).toLocaleDateString()}</p>
-        <p><strong>Return Date:</strong> {new Date(trip.returnDate).toLocaleDateString()}</p>
-        <p><strong>Price:</strong> ${trip.price}</p>
+        <img src={trip.imageUrl} alt={trip.title} className={styles.image} />
+        <div className={styles.details}>
+          <h2 className={styles.title}>{trip.title}</h2>
+
+        </div>
       </div>
     </Link>
   );

@@ -3,7 +3,8 @@
 import { useState, ChangeEvent } from "react";
 // import { signIn } from "next-auth/react"; // Uncomment for actual sign-in
 import styles from "./LoginModal.module.css"; // Import the CSS module
-import {fetchToken} from "@/services/auth_api_handler"
+import {fetchToken} from "@/services/internal_services/auth_api_handler"
+import Toast from '../toast/Toast';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -15,6 +16,13 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [view, setView] = useState<"login" | "signUp" | "emailSignIn" | "forgotPassword">("login");
+
+  const [showToast, setShowToast] = useState(false);
+
+  const triggerToast = () => {
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 100000); // Adjust based on your need
+  };
 
   const handleSignIn = async (provider: string) => {
     try {
@@ -38,6 +46,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               if (response.status === 200) {
                 localStorage.setItem('token', response.data);
                 console.log("Successfully connected")
+                onClose();
+                window.location.reload(); // Refresh the page
+                triggerToast();
+
               }
               else if (response.status ===401) {
                 console.error("Wrong credantials")
@@ -81,7 +93,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   if (!isOpen) return null;
 
   return (
+    
     <div className={styles.overlay} onClick={onClose}>
+      {showToast && <Toast type="success" message="Operation successful!" />}
+
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <button className={styles.closeButton} onClick={onClose}>
           &times;

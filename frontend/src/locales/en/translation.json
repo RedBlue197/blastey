@@ -1,4 +1,18 @@
 {
+  "navbar": {
+    "activities": "Activities",
+    "dashboard": "Dashboard",
+    "home": "Home",
+    "login": "Login",
+    "logout": "Logout",
+    "manage-trips": "Manage Trips",
+    "manage-activities": "Manage Activities",
+    "offers": "Offers",
+    "orders": "Orders",
+    "profile": "Profile",
+    "trips": "Trips"
+    
+  },
   "common": {
     "welcome": "Welcome to our application",
     "signIn": "Sign In",

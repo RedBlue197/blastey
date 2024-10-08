@@ -2,8 +2,8 @@
 import { useEffect, useState, Suspense } from 'react';
 import styles from './TripManagement.module.css'; // Custom CSS module
 import { fetchTrips, deactivateTrip, createOrUpdateTrip } from '@/services/internal_services/trip_api_handler';
-import TripCard from '../trip-card/TripCard';  // Displays trip details
-import TripFormModal from '../trip-form-modal/TripFormModal'; // Form for create/update
+import TripCard from './trip-card/TripCard';  // Displays trip details
+import TripFormModal from './trip-form-modal/TripFormModal'; // Form for create/update
 
 interface Trip {
   id: string;

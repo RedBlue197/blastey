@@ -34,33 +34,34 @@ const TripFormModal: React.FC<TripFormModalProps> = ({ trip, closeModal, refresh
   return (
     <div className={styles.modal}>
       <form onSubmit={handleSubmit}>
-        <h2>{trip ? 'Update Trip' : 'Create New Trip'}</h2>
-        
-        <label>Title</label>
-        <input type="text" name="title" value={formData.title} onChange={handleChange} required />
-        
-        <label>Description</label>
-        <textarea name="description" value={formData.description} onChange={handleChange} />
-        
-        <label>Origin</label>
-        <input type="text" name="origin" value={formData.origin} onChange={handleChange} />
-        
-        <label>Destination</label>
-        <input type="text" name="destination" value={formData.destination} onChange={handleChange} />
-        
-        <label>Departure Date</label>
-        <input type="date" name="departureDate" value={formData.departureDate} onChange={handleChange} />
-        
-        <label>Return Date</label>
-        <input type="date" name="returnDate" value={formData.returnDate} onChange={handleChange} />
-        
-        <label>Price</label>
-        <input type="number" name="price" value={formData.price} onChange={handleChange} />
+      <h2 className={styles.heading}>{trip ? 'Update Trip' : 'Create New Trip'}</h2>
 
-        <div className={styles.buttons}>
-          <button type="submit">Save</button>
-          <button type="button" onClick={closeModal}>Cancel</button>
-        </div>
+<label className={styles.label}>Title</label>
+<input type="text" name="title" value={formData.title} onChange={handleChange} required className={styles.input} />
+
+<label className={styles.label}>Description</label>
+<textarea name="description" value={formData.description} onChange={handleChange} className={styles.textarea} />
+
+<label className={styles.label}>Origin</label>
+<input type="text" name="origin" value={formData.origin} onChange={handleChange} className={styles.input} />
+
+<label className={styles.label}>Destination</label>
+<input type="text" name="destination" value={formData.destination} onChange={handleChange} className={styles.input} />
+
+<label className={styles.label}>Departure Date</label>
+<input type="date" name="departureDate" value={formData.departureDate} onChange={handleChange} className={styles.dateInput} />
+
+<label className={styles.label}>Return Date</label>
+<input type="date" name="returnDate" value={formData.returnDate} onChange={handleChange} className={styles.dateInput} />
+
+<label className={styles.label}>Price</label>
+<input type="number" name="price" value={formData.price} onChange={handleChange} className={styles.numberInput} />
+
+<div className={styles.buttons}>
+  <button type="submit" className={styles.button}>Save</button>
+  <button type="button" onClick={closeModal} className={`${styles.button} ${styles.cancelButton}`}>Cancel</button>
+</div>
+
       </form>
     </div>
   );

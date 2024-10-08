@@ -75,7 +75,16 @@ export default function Navbar() {
                     </button>
                   )}
                   <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
-                    {t('logout.logout')}
+                    {t('navbar.dashboard')}
+                  </button>
+                  <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                    {t('navbar.manage-trips')}
+                  </button>
+                  <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                    {t('navbar.profile')}
+                  </button>
+                  <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                    {t('navbar.logout')}
                   </button>
                 </>
               ) : (
@@ -120,7 +129,7 @@ export default function Navbar() {
       {isOpen && (
         <div className={styles.mobileMenu}>
           <button onClick={() => navigate('/home')} className={getLinkClass('/home', 'medium')}>
-            {t('home')}
+            {t('navbar.home')}
           </button>
 
           {isAuthenticated ? (
@@ -131,19 +140,28 @@ export default function Navbar() {
                 </button>
               )}
               <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
-                {t('logout')}
+                {t('navbar.dashboard')}
+              </button>
+              <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                {t('navbar.manage-trips')}
+              </button>
+              <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                {t('navbar.profile')}
+              </button>
+              <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                {t('navbar.logout')}
               </button>
             </>
           ) : (
             <>
               <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
-                {t('trips.trips')}
+                {t('navbar.trips')}
               </button>
               <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
                 {t('activities.activities')}
               </button>
               <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
-                {t('login')}
+                {t('navbar.login')}
               </button>
             </>
           )}

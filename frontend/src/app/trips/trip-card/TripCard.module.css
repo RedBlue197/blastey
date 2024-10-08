@@ -1,55 +1,100 @@
-/* TripCard.module.css */
-
 .tripCard {
-    display: flex;
-    flex-direction: row;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin: 16px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    background-color: #fff;
-  }
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #fff;
+}
+
+.tripCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.picture {
+  width: 800px;
+  height: 350px;
+  object-fit: cover;
+}
+
+.details {
+  padding: 16px;
+}
+
+.details h2 {
+  font-size: 1.5rem;
+  margin: 0 0 8px;
+}
+
+.description {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.detailsStrong {
+  font-weight: bold;
+}
+
+.detailsParagraph {
+  margin: 4px 0;
+}
+
+/* Buttons container */
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+/* Button styles */
+.whatsappButton {
+  background-color: #25d366;
+  color: white;
+  width: 60%;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  transition: background-color 0.2s;
+}
+
+.whatsappButton:hover {
+  background-color: #20c659;
   
-  .tripCard:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.detailsButton {
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  width: 30%;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  transition: background-color 0.2s;
+}
+
+.detailsButton:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .tripCard {
+    flex-direction: column;
   }
-  
+
   .picture {
-    width: 800px;
-    height: 350px;
-    object-fit: cover;
+    width: 100%;
+    height: auto;
   }
-  
-  .details {
-    padding: 16px;
-  }
-  
-  .details h2 {
-    font-size: 1.5rem;
-    margin: 0 0 8px;
-  }
-  
-  .description {
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 8px;
-  }
-  
-  .detailsStrong {
-    font-weight: bold;
-  }
-  
-  .detailsParagraph {
-    margin: 4px 0;
-  }
-  
-  /* Responsive styles */
-  @media (max-width: 768px) {
-    .tripCard {
-      margin: 8px;
-    }
-  }
-  
+}
