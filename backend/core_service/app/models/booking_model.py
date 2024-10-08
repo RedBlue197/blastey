@@ -35,10 +35,14 @@ class BookingItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Updated
 
     booking_item_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     booking_id = Column(UUID(as_uuid=True), ForeignKey("bookings.booking_id", ondelete="CASCADE"), nullable=False)
-    booking_item_type= Column(Enum(BookingItemType), default=BookingItemType.ACTIVITY, nullable=False)
+    booking_item_type = Column(Enum(BookingItemType), default=BookingItemType.TRIP, nullable=False)
     booking_item_name = Column(String, nullable=False)
-    booking_item_quantity = Column(Numeric(precision=10, scale=2), nullable=False,default=1)
+    booking_item_quantity = Column(Numeric(precision=10, scale=2), nullable=False, default=1)
     booking_item_price = Column(Numeric(precision=10, scale=2), nullable=False)
+
+    # Link to TripOpening
+    trip_opening_id = Column(UUID(as_uuid=True), ForeignKey("trip_openings.trip_opening_id"), nullable=True)
+
 
     @staticmethod
     def generate_booking_number(session):

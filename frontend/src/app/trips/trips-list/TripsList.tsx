@@ -1,7 +1,7 @@
 'use client'; // Ensure this component runs on the client side
 import { useEffect, useState, Suspense } from 'react';
 import styles from './TripsList.module.css'; // Import your CSS module for styling
-import { fetchTrips } from '@/services/trip_api_handler';
+import { fetchTrips } from '@/services/internal_services/trip_api_handler';
 import FilterAndSearch from '../filter-and-search/FilterAndSearch';
 import TripCard from '../trip-card/TripCard';
 import LoadingTripsList from './loading/LoadingTripsList'; // Import the loading fallback
