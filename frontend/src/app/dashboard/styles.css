@@ -4,17 +4,28 @@
 
 .row {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  margin: 0 -16px;
+  gap: 16px;
 }
 
 .card {
-  flex: 1 1 calc(33.33% - 32px); /* Three cards in a row, accounting for margin */
+  flex: 1 1 calc(33.33% - 32px); /* Three cards per row for larger screens */
   margin: 16px;
-  min-width: 250px; /* Set a minimum width to prevent cards from becoming too small */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow for better visibility */
+  min-width: 250px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  background-color: white; /* Example background color */
+  background-color: white;
   border-radius: 8px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column; /* Stacks cards vertically on smaller screens */
+  }
+
+  .card {
+    flex: 1 1 100%; /* Cards take full width in column layout */
+    margin: 16px 0;
+  }
 }
