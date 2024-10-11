@@ -1,6 +1,6 @@
 // pages/checkout/page.tsx
 import { useRouter } from 'next/router';
-import PassengersPage from './passengers/PassengersPage';
+import GuestsPage from './guests/GuestsPage';
 import ServicesPage from './services/ServicesPage';
 import PaymentPage from './payment/PaymentPage';
 import ConfirmationPage from './confirmation/ConfirmationPage';
@@ -13,15 +13,15 @@ const CheckoutPage = () => {
   useEffect(() => {
     // If no step is provided in the URL, default to the passengers step
     if (!step) {
-      router.push('/checkout?step=passengers');
+      router.push('/checkout?step=guests');
     }
   }, [step, router]);
 
   // Conditional rendering based on the step in the URL query
   const renderStep = () => {
     switch (step) {
-      case 'passengers':
-        return <PassengersPage />;
+      case 'guests':
+        return <GuestsPage />;
       case 'services':
         return <ServicesPage />;
       case 'payment':
@@ -29,7 +29,7 @@ const CheckoutPage = () => {
       case 'confirmation':
         return <ConfirmationPage />;
       default:
-        return <PassengersPage />;
+        return <GuestsPage />;
     }
   };
 

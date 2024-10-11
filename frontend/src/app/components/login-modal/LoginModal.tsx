@@ -4,7 +4,8 @@ import { useState, ChangeEvent } from "react";
 // import { signIn } from "next-auth/react"; // Uncomment for actual sign-in
 import styles from "./LoginModal.module.css"; // Import the CSS module
 import {fetchToken} from "@/services/internal_services/auth_api_handler"
-import Toast from '../toast/Toast';
+import { Toast } from '@/app/components';
+import { useToast } from "@/hooks/useToast"; // Import the custom hook
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -16,13 +17,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [view, setView] = useState<"login" | "signUp" | "emailSignIn" | "forgotPassword">("login");
-
-  const [showToast, setShowToast] = useState(false);
-
-  const triggerToast = () => {
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 100000); // Adjust based on your need
-  };
+  const { showToast, toastType, toastMessage, triggerToast } = useToast(); // Destructure from the custom hook
 
   const handleSignIn = async (provider: string) => {
     try {
@@ -48,16 +43,20 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 console.log("Successfully connected")
                 onClose();
                 window.location.reload(); // Refresh the page
-                triggerToast();
+                triggerToast("success", "Successfully signed in!"); // Trigger success toast
 
               }
               else if (response.status ===401) {
                 console.error("Wrong credantials")
+                triggerToast("error", "Wrong credentials. Please try again.");
+
               }
             })
       
     } catch (error) {
       setError("Sign-in failed. Please try again.");
+      triggerToast("error", "Wrong credentials. Please try again.");
+
     }
   };
 
@@ -95,7 +94,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   return (
     
     <div className={styles.overlay} onClick={onClose}>
-      {showToast && <Toast type="success" message="Operation successful!" />}
+      {showToast && <Toast type={toastType} message={toastMessage} />} {/* Conditionally render the Toast */}
 
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <button className={styles.closeButton} onClick={onClose}>

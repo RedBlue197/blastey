@@ -1,9 +1,9 @@
 'use client';
-import { useEffect, useState, Suspense } from 'react';
-import styles from './TripManagement.module.css'; // Custom CSS module
-import { fetchTrips, deactivateTrip, createOrUpdateTrip } from '@/services/internal_services/trip_api_handler';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';  // Import useRouter for navigation
+import styles from './TripManagement.module.css'; 
+import { fetchTrips, deactivateTrip } from '@/services/internal_services/trip_api_handler';
 import TripCard from './trip-card/TripCard';  // Displays trip details
-import TripFormModal from './trip-form-modal/TripFormModal'; // Form for create/update
 
 interface Trip {
   id: string;
@@ -19,8 +19,7 @@ interface Trip {
 
 const TripManagementPage = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
-  const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null); // For update form
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const router = useRouter(); // Initialize the router for page navigation
 
   const fetchAllTrips = async () => {
     const response = await fetchTrips();  // Get trips from API
@@ -34,13 +33,11 @@ const TripManagementPage = () => {
   }, []);
 
   const handleCreateTrip = () => {
-    setSelectedTrip(null); // Empty form for new trip
-    setIsModalOpen(true);  // Open the modal
+    router.push('/trips/create');  // Navigate to create trip page
   };
 
-  const handleUpdateTrip = (trip: Trip) => {
-    setSelectedTrip(trip);  // Populate form for update
-    setIsModalOpen(true);
+  const handleUpdateTrip = (tripId: string) => {
+    router.push(`/trips/update/${tripId}`);  // Navigate to update trip page with tripId
   };
 
   const handleDeactivateTrip = async (tripId: string) => {
@@ -65,7 +62,7 @@ const TripManagementPage = () => {
           trips.map((trip) => (
             <div key={trip.id} className={styles.tripCard}>
               <TripCard trip={trip} />
-              <button onClick={() => handleUpdateTrip(trip)} className={styles.updateButton}>
+              <button onClick={() => handleUpdateTrip(trip.id)} className={styles.updateButton}>
                 Update
               </button>
               <button onClick={() => handleDeactivateTrip(trip.id)} className={styles.deactivateButton}>
@@ -75,15 +72,6 @@ const TripManagementPage = () => {
           ))
         )}
       </div>
-
-      {/* Modal for creating/updating a trip */}
-      {isModalOpen && (
-        <TripFormModal 
-          trip={selectedTrip} 
-          closeModal={() => setIsModalOpen(false)} 
-          refreshTrips={fetchAllTrips}
-        />
-      )}
     </div>
   );
 };
