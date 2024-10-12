@@ -22,14 +22,14 @@
   
   /* Active tab */
   .tab.active {
-    background-color: #38b6ff; /* Lighter color for active tab */
+    background-color: #00bf63; /* Lighter color for active tab */
     color: #ffffff; /* Ensure text is white on active tab */
     font-weight: 600; /* Make active tab text slightly bolder */
   }
   
   /* Hover effect for inactive tabs */
   .tab:not(.active):hover {
-    background-color: #45b4f4; /* Darker shade for hover */
+    background-color: #8ec0a8; /* Darker shade for hover */
   }
   
   /* Responsive styling for smaller screens */
