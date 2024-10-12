@@ -1,55 +1,83 @@
 .toast {
-    position: fixed;
-    top: 20px;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  max-width: 25%; /* For desktops */
+  width: 90%; /* Ensures full width on small screens */
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  animation: fadein 0.7s, fadeout 7s ease-in-out forwards;
+  z-index: 1000; /* Ensure toast is above other elements */
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeout {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.icon {
+  margin-right: 8px;
+  font-size: 1.5rem;
+}
+
+.message {
+  font-size: 1rem;
+  color: white;
+}
+
+/* Success Toast */
+.success {
+  background-color: #28a745;
+}
+
+/* Error Toast */
+.error {
+  background-color: #dc3545;
+}
+
+/* Warning Toast */
+.warning {
+  background-color: #ffc107;
+}
+
+/* Info Toast */
+.info {
+  background-color: #17a2b8;
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+  .toast {
+    max-width: 90%; /* Adjust max width for smaller screens */
     left: 50%;
     transform: translateX(-50%);
-    min-width: 200px;
-    max-width: 25%;
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    animation: fadein 0.7s, fadeout 7s ease-in-out forwards;
   }
-  
-  @keyframes fadein {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  @keyframes fadeout {
-    from { opacity: 1; }
-    to { opacity: 0; }
-  }
-  
-  .icon {
-    margin-right: 8px;
-    font-size: 1.5rem;
-  }
-  
+
   .message {
-    font-size: 1rem;
-    color: white;
+    font-size: 0.9rem; /* Slightly reduce the font size for mobile */
   }
-  
-  /* Success Toast */
-  .success {
-    background-color: #28a745;
+
+  .icon {
+    font-size: 1.2rem; /* Adjust icon size for smaller screens */
   }
-  
-  /* Error Toast */
-  .error {
-    background-color: #dc3545;
+}
+
+@media (max-width: 480px) {
+  .toast {
+    width: 95%; /* Take nearly the full width for very small screens */
   }
-  
-  /* Warning Toast */
-  .warning {
-    background-color: #ffc107;
+
+  .message {
+    font-size: 0.85rem; /* Further reduce font size for smaller devices */
   }
-  
-  /* Info Toast */
-  .info {
-    background-color: #17a2b8;
-  }
-  
+}

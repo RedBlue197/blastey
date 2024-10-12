@@ -1,4 +1,4 @@
-// pages/protected.tsx (Example of a protected page)
+// pages/protected.tsx
 
 "use client";
 import useAuthRedirect from '@/hooks/useAuthRedirect';
@@ -6,6 +6,7 @@ import React from 'react';
 import Card from './components/card/Card';
 import Graph from './components/graph/Graph';
 import Table from './components/table/Table';
+import Calendar from './components/calendar/Calendar'; // Assuming you have a Calendar component
 import styles from './styles.css';
 
 const Dashboard: React.FC = () => {
@@ -20,15 +21,26 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className={styles.dashboard}>
+      {/* First row of Cards */}
       <div className={styles.row}>
         <Card title="Total Sales" content="$20,000" />
         <Card title="New Users" content="150" />
         <Card title="Total Orders" content="200" />
       </div>
+
+      {/* Row for Graphs */}
       <div className={styles.row}>
         <Graph />
+        <Graph />
       </div>
-      <div className={styles.row}>
+
+      {/* Row for Calendar */}
+      <div className={styles.calendarRow}>
+        <Calendar />
+      </div>
+
+      {/* Row for Table */}
+      <div className={styles.tableRow}>
         <Table columns={columns} data={data} />
       </div>
     </div>
@@ -36,4 +48,3 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
-  
