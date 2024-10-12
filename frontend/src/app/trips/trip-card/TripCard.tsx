@@ -48,12 +48,12 @@ const TripCard: React.FC<{ trip: Trip }> = ({ trip }) => {
         </p>
         {/* Add buttons */}
         <div className={styles.buttonsContainer}>
-          <a href={whatsappLink} target="_blank" className={styles.whatsappButton}>
-            Contact via WhatsApp
-          </a>
-          <Link href={`/trips/${trip.id}`} className={styles.detailsButton}>
+        <Link href={`/trips/${trip.id}`} className={`btn-secondary ${styles.detailsButton}`}>
             View Details
           </Link>
+          <a href={whatsappLink} target="_blank" className={`btn-primary ${styles.whatsappButton}`}>
+            Contact via WhatsApp
+          </a>
         </div>
       </div>
     </div>

@@ -6,7 +6,6 @@ import React from 'react';
 import Card from './components/card/Card';
 import Graph from './components/graph/Graph';
 import Table from './components/table/Table';
-import Calendar from './components/calendar/Calendar'; // Assuming you have a Calendar component
 import styles from './styles.css';
 
 const Dashboard: React.FC = () => {
@@ -35,9 +34,9 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Row for Calendar */}
-      <div className={styles.calendarRow}>
+      {/* <div className={styles.calendarRow}>
         <Calendar />
-      </div>
+      </div> */}
 
       {/* Row for Table */}
       <div className={styles.tableRow}>

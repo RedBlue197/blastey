@@ -4,7 +4,8 @@
 /* slick-carousel styles */
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+
 
 :root {
   --foreground-rgb: 51, 51, 51; /* Dark Slate Grey for general text */
@@ -22,16 +23,18 @@
 
 
 body {
-  color: rgb(var(--foreground-rgb)); /* Updated for Dark Slate Grey */
+  font-family: 'Tajawal', sans-serif;
+  color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
-    rgb(var(--background-start-rgb)); /* Light Sand to White gradient */
+    rgb(var(--background-start-rgb));
   min-height: 100vh;
   margin: 0;
 }
+
 
 
 .main-content {
@@ -41,8 +44,48 @@ body {
 }
 
 
+
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
+
+
+/* globals.css */
+/* globals.css */
+@layer components {
+  /* Primary WhatsApp Button */
+  .btn-primary {
+    @apply bg-[#25d366] text-white font-bold text-center rounded-lg transition duration-200;
+    width: 60%;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-family: 'Tajawal', sans-serif;
+
+  }
+
+  .btn-primary:hover {
+    @apply bg-[#1ebf57]; /* Darker green on hover */
+    font-family: 'Tajawal', sans-serif;
+
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    @apply bg-white text-[#25d366] font-bold text-center rounded-lg border-2 border-[#25d366] transition duration-200;
+    width: 60%;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-family: 'Tajawal', sans-serif;
+
+  }
+
+  .btn-secondary:hover {
+    @apply bg-[#25d366] text-white; /* Inverts colors on hover */
+    font-family: 'Tajawal', sans-serif;
+
+  }
+}
+

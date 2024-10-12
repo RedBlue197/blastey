@@ -49,12 +49,13 @@ class TripInterface(BaseInterface[Trip]):
         # Since total count is part of each row, extract it from the first result
         if trips_query:
             total_count = trips_query[0].total_count
-            Trips = [trip for trip, _ in trips_query]
+            trips = [trip for trip, _ in trips_query]
         else:
             total_count = 0
-            Trips = []
+            trips = []
 
-        return Trips, total_count
+        return {"trips": trips}, total_count
+
     
     def get_trip_by_id(self, trip_id: uuid.UUID):
         return self.db.query(Trip).filter(

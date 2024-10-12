@@ -53,16 +53,7 @@
 
 /* Button styles */
 .whatsappButton {
-  background-color: #25d366;
-  color: white;
   width: 60%;
-  text-align: center;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: bold;
-  display: inline-block;
-  transition: background-color 0.2s;
 }
 
 .whatsappButton:hover {
@@ -71,20 +62,8 @@
 }
 
 .detailsButton {
-  background-color: #007bff;
-  color: white;
   text-align: center;
   width: 30%;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: bold;
-  display: inline-block;
-  transition: background-color 0.2s;
-}
-
-.detailsButton:hover {
-  background-color: #0056b3;
 }
 
 /* Responsive styles */

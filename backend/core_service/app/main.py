@@ -7,7 +7,7 @@ from slowapi.util import get_remote_address
 from slowapi import Limiter
 
 from routers.frontoffice.v1 import activity_router as activity_router
-from utils.responses import success_response
+from utils.responses import api_response
 
 from middleware.logging_middleware import LoggingMiddleware
 from middleware.decryption_middleware import DecryptionMiddleware
@@ -73,7 +73,7 @@ newsletter_model.Base.metadata.create_all(bind=engine)
 trip_model.Base.metadata.create_all(bind=engine)
 
 app.add_middleware(LoggingMiddleware)
-app.add_middleware(DecryptionMiddleware)
+# app.add_middleware(DecryptionMiddleware)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -119,38 +119,29 @@ async def startup():
         user = db.query(user_model.User).first()
         if user:
             print("User table is not empty")
-            return
         # Create a test user
-        user = user_model.User(
-            user_first_name="hamza",
-            user_last_name="test",
-            user_hashed_password=bcrypt_context.hash("3ss5fe71"),
-            user_email="hamzagoubraim@gmail.com"
-            )
-        
-        db.add(user)
-        db.commit()
-        db.refresh(user)
-
-        #create a host user
-        host = user_model.User(
-            user_first_name="hamza",
-            user_last_name="test",
-            user_hashed_password=bcrypt_context.hash("3ss5fe71"),
-            user_email="hamzahost@gmail.com",
-            user_role=user_model.UserRole.HOST
-            )
-        db.add(host)
-        db.commit()
-        db.refresh(host)
-
+        else:
+            user = user_model.User(
+                user_first_name="hamza",
+                user_last_name="test",
+                user_hashed_password=bcrypt_context.hash("3ss5fe71"),
+                user_email="hamzagoubraim@gmail.com"
+                )
+            
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+        first_trip = db.query(trip_model.Trip).first()
+        if first_trip:
+            print("Trip table is not empty")
+            return
         #create a test trip
         trip = trip_model.Trip(
             trip_title="test trip",
             trip_description="test trip description",
             trip_origin="test origin",
             trip_destination="test destination",
-            host_id=host.user_id
+            host_id=user.user_id
         )
         db.add(trip)
         db.commit()
@@ -171,12 +162,23 @@ async def startup():
         db.commit()
         db.refresh(trip_item)
 
+        # create trip opening
+        trip_opening = trip_model.TripOpening(
+            trip_id=trip.trip_id,
+            trip_opening_start_date="2022-01-01",
+            trip_opening_end_date="2022-01-10",
+            trip_opening_total_availability=10,
+        )
+        db.add(trip_opening)
+        db.commit()
+        db.refresh(trip_opening)
+
         db.close()
     except Exception as e:
         print(f"Error: {e}")
 
 @app.get("/")
 async def read_root():
-    return success_response({
+    return api_response({
         "message": "Welcome to Blastey Core API"
     })

@@ -4,12 +4,10 @@ from datetime import timedelta
 from config import settings
 from fastapi import APIRouter, HTTPException, status
 from dependencies.db_dependency import db_dependency
-from dependencies.auth_dependency import auth_dependency
 
 from schemas.auth_schema import LoginRequest
-from responses.auth_response import GetTokenResponse
 
-from utils.responses import success_response
+from utils.responses import api_response
 
 
 
@@ -34,7 +32,8 @@ async def login_for_access_token(login_request: LoginRequest,db:db_dependency):
         "user_role": user.user_role.value
     }
     token= create_access_token(data,timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
-    return success_response(
+    return api_response(
     data=token,
     status=200
 )
+

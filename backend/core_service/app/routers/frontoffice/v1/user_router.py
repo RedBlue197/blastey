@@ -14,7 +14,7 @@ from schemas.user_schema import CreateUserRequest
 
 from responses.user_response import GetUserByIdResponse,GetUserResponse,CreateUserResponse
 
-from utils.responses import success_response,error_response
+from utils.responses import api_response
 
 from main import limiter
 
@@ -50,14 +50,14 @@ async def get_users(
 
     # Handle response
     if not users:
-        return error_response(
+        return api_response(
             message="No users found",
             error_code=404
         )
     else:
         users_response = [GetUserByIdResponse.from_orm(user) for user in users]
 
-        return success_response(
+        return api_response(
             data=GetUserResponse(data=users_response),
             total_count=total_count,
             current_page=page,
@@ -79,13 +79,13 @@ async def get_user_by_id(
 
     # Handle response
     if not user:
-        return error_response(
+        return api_response(
             message="No users found",
             error_code=404
         )
     else:
         user_response=GetUserByIdResponse.from_orm(user)
-        return success_response(
+        return api_response(
             data=user_response,
 
         )
@@ -101,7 +101,7 @@ async def create_user(
 ):
     
     # if user['user_role'] not in ["host", "user"]:
-    #     return error_response(
+    #     return api_response(
     #         message="Unauthorized Role",
     #         error_code=401
     #     )
@@ -111,12 +111,12 @@ async def create_user(
     try:
         db_user = user_interface.create_user(user_data)
         user_response = CreateUserResponse.from_orm(db_user)
-        return success_response(
+        return api_response(
             message="User created successfully",
             data=user_response,
         )
     except Exception as e:
-        return error_response(
+        return api_response(
             message="User creation failed: " + str(e),
             error_code=500
         )

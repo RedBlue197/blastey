@@ -23,6 +23,8 @@ class GetTripsResponse(BaseModel):
 
     class Config:
         orm_mode = True
+        from_attributes = True  # This is the key setting
+
  
 class GetTripByIdResponse(BaseModel):
     trip_id: uuid.UUID

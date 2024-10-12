@@ -2,7 +2,7 @@ from fastapi import status, APIRouter, Query, HTTPException, Request
 from dependencies.db_dependency import db_dependency
 from models.activity_model import Activity, ActivityItem
 from schemas.activity_schema import CreateActivityRequest
-from utils.responses import success_response
+from utils.responses import api_response
 from utils.extract_user import extract_user_id
 
 import uuid
@@ -37,7 +37,7 @@ async def get_activities(
     total_pages = (total_count + items_per_page - 1) // items_per_page
 
     if len(activities) == 0:
-        return success_response(
+        return api_response(
             message="No activities found",
             total_count=total_count,
             current_page=page,
@@ -46,7 +46,7 @@ async def get_activities(
             cacheable=True
         )
     else:
-        return success_response(
+        return api_response(
             data=activities,
             total_count=total_count,
             current_page=page,
@@ -65,9 +65,9 @@ async def get_activity_by_id(
         Activity.is_deleted==False,
     ).first()
     if activity:
-        return success_response(data=activity, message="Activity found")
+        return api_response(data=activity, message="Activity found")
     else:
-        return success_response(message="Activity not found")
+        return api_response(message="Activity not found")
 
 #----------------------------------------------------POST ENDPOINTS----------------------------------------------------
 @router.post("/create-activity", status_code=status.HTTP_201_CREATED)
@@ -112,7 +112,7 @@ async def create_activity(
         "activity": create_activity_model,
         "activity_items": activity_items
     }
-    return success_response(data=data, message="activity created successfully")
+    return api_response(data=data, message="activity created successfully")
 
 #----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
 
@@ -147,9 +147,9 @@ async def create_activity(
 #         data={
 #             "activity": activity,
 #         }
-#         return success_response(data=data, message="activity updated successfully")
+#         return api_response(data=data, message="activity updated successfully")
 #     else:
-#         return success_response(message="activity not found")
+#         return api_response(message="activity not found")
     
 # @router.patch("/update-activity-item", status_code=status.HTTP_200_OK)
 # async def update_activity_item(
@@ -182,9 +182,9 @@ async def create_activity(
 #         data={
 #             "activity_item": activity_item,
 #         }
-#         return success_response(data=data, message="activity item updated successfully")
+#         return api_response(data=data, message="activity item updated successfully")
 #     else:
-#         return success_response(message="activity item not found")
+#         return api_response(message="activity item not found")
 
 # #----------------------------------------------------DELETE ENDPOINTS----------------------------------------------------
 
@@ -215,9 +215,9 @@ async def create_activity(
 #         db.commit()
 #         db.refresh(activity)
 #         db.close()
-#         return success_response(message="activity deleted successfully")
+#         return api_response(message="activity deleted successfully")
 #     else:
-#         return success_response(message="activity not found")
+#         return api_response(message="activity not found")
     
 # @router.delete("/delete-activity-item", status_code=status.HTTP_200_OK)
 # async def delete_activity_item(
@@ -245,6 +245,6 @@ async def create_activity(
 #         db.commit()
 #         db.refresh(activity_item)
 #         db.close()
-#         return success_response(message="activity item deleted successfully")
+#         return api_response(message="activity item deleted successfully")
 #     else:
-#         return success_response(message="activity item not found")
+#         return api_response(message="activity item not found")

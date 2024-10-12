@@ -6,7 +6,7 @@ from schemas.address_schema import CreateAddressRequest
 
 import uuid
 
-from utils.responses import success_response
+from utils.responses import api_response
 
 router = APIRouter(
     prefix="/core/frontoffice/v1/addresses",
@@ -38,7 +38,7 @@ async def get_address_by_user_id(
     total_pages = (total_count + items_per_page - 1) // items_per_page
 
     if len(addresses) == 0:
-        return success_response(
+        return api_response(
             message="No addresses found",
             total_count=total_count,
             current_page=page,
@@ -46,7 +46,7 @@ async def get_address_by_user_id(
             items_per_page=items_per_page
         )
     else:
-        return success_response(
+        return api_response(
             data=addresses,
             total_count=total_count,
             current_page=page,
@@ -64,7 +64,7 @@ async def create_address(
     # Check if the address already exists
     address = db.query(Address).filter(Address.user_id==address.user_id).first()
     if address:
-        return success_response(
+        return api_response(
             message="Address already exists",
             data=address
         )
@@ -86,5 +86,5 @@ async def create_address(
     db.commit()
     db.refresh(create_address_model)
     db.close()
-    return success_response(data=create_address_model, message="Address created successfully")
+    return api_response(data=create_address_model, message="Address created successfully")
 

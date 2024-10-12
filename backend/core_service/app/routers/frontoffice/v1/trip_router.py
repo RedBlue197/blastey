@@ -6,7 +6,7 @@ from dependencies.auth_dependency import user_dependency
 from interfaces.trip_interface import TripInterface
 from schemas.trip_schema import CreateTripRequest, PatchTripRequest
 from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemResponse
-from utils.responses import success_response,error_response
+from utils.responses import api_response
 from typing import Optional,List
 
 import uuid
@@ -21,17 +21,18 @@ router = APIRouter(
 #API to get all trips
 @router.get("/", status_code=status.HTTP_200_OK)
 async def get_trips(
-    user: user_dependency,
+    # user: user_dependency,
     db: db_dependency,
     page: int = Query(1, ge=1),
     items_per_page: int = Query(10, le=100),
 ):
     #check role of user
-    if user['user_role'] not in ["admin", "user"]:
-        return error_response(
-            message="Unauthorized Role",
-            error_code=401
-        )
+    # if user['user_role'] not in ["admin", "user"]:
+    #     return api_response(
+    #         message="Unauthorized Role",
+    #         error_code=401
+    #     )
+    
     # Calculate pagination offsets
     offset = (page - 1) * items_per_page
     limit = items_per_page
@@ -44,18 +45,21 @@ async def get_trips(
 
     # Handle response
     if not trips:
-        return error_response(
+        return api_response(
+            success=False,
             message="No trips found",
-            error_code=404
+            status_code=404
         )
     else:
-        trips_response=GetTripsResponse.from_orm(trips)
-        return success_response(
+        trips_response = GetTripsResponse.model_validate(trips, from_attributes=True)
+        return api_response(
+            message="Trips found",
             data=trips_response,
             total_count=total_count,
             current_page=page,
             total_pages=total_pages,
-            items_per_page=items_per_page
+            items_per_page=items_per_page,
+            status_code=200
         )
 
 #API to get a specific trip by id
@@ -68,12 +72,12 @@ async def get_trip_by_id(
     trip = TripInterface(db=db).get_trip_by_id(trip_id)
     if trip:
         trip_response=GetTripByIdResponse.from_orm(trip)
-        return success_response(
+        return api_response(
             data=trip_response, 
-            message="Trip found"
+            message="Trip found",
             )
     else:
-        return error_response(
+        return api_response(
             message="Trip not found"
             ,error_code=404
             )
@@ -103,20 +107,20 @@ async def create_trip(
 
         trip_response = CreateTripResponse.from_orm(trip_obj)
         if not trip_response:
-            return error_response(
+            return api_response(
                 message="Failed to create trip",
-                error_code=404
+                status_code=404
             )
         else:
-            return success_response(
+            return api_response(
                 data=trip_response,
                 message="Trip created"
             )
 
     except Exception as e:
-        return error_response(
+        return api_response(
             message="Failed to create trip: " + str(e),
-            error_code=500
+            status_code=500
         )
 #----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
 
@@ -132,7 +136,7 @@ async def patch_trip(
         trip_obj = TripInterface(db=db).patch_trip(trip_id, trip_update, image_files)
 
         if not trip_obj:
-            return error_response(
+            return api_response(
                 message="Trip not found",
                 error_code=404  
             )
@@ -141,12 +145,34 @@ async def patch_trip(
         trip_response = CreateTripResponse.from_orm(trip_obj)
         trip_response.activity_items = [CreateTripItemResponse.from_orm(item) for item in trip_obj.items]
 
-        return success_response(
+        return api_response(
             data=trip_response, 
             message="Trip updated"
         )
     except Exception as e:
-        return error_response(
+        return api_response(
             message=f"Failed to update trip: {str(e)}",
             error_code=500
         )
+    
+
+#----------------------------------------------------DELETE ENDPOINTS----------------------------------------------------
+@router.delete("/delete-all-trips", status_code=status.HTTP_200_OK)
+async def delete_all_trips(
+    user: user_dependency,
+    db: db_dependency
+):
+    
+    #check role of user
+    # if user['user_role'] not in ["admin"]:
+    #     return api_response(
+    #         message="Unauthorized Role",
+    #         error_code=401
+    #     )
+    
+    # Delete all trips
+    TripInterface(db=db).delete_all_trips()
+
+    return api_response(
+        message="All trips deleted"
+    )
