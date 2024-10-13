@@ -34,12 +34,12 @@ const TripCard: React.FC<{ trip: Trip }> = ({ trip }) => {
         <p className={styles.detailsParagraph}>
           <span className={styles.detailsStrong}>Destination:</span> {trip.destination}
         </p>
-        <p className={styles.detailsParagraph}>
+        {/* <p className={styles.detailsParagraph}>
           <span className={styles.detailsStrong}>Departure Date:</span> {new Date(trip.departureDate).toLocaleDateString()}
         </p>
         <p className={styles.detailsParagraph}>
           <span className={styles.detailsStrong}>Arrival Date:</span> {new Date(trip.arrivalDate).toLocaleDateString()}
-        </p>
+        </p> */}
         <p className={styles.detailsParagraph}>
           <span className={styles.detailsStrong}>Rating:</span> {trip.rating} / 5
         </p>

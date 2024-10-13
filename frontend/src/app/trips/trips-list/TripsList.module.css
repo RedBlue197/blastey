@@ -43,6 +43,20 @@
   border-radius: 4px; /* Rounded corners */
 }
 
+.showMoreButton {
+  width: 200px; /* Fixed width for desktop */
+  margin-top: 16px;
+  padding: 10px 20px;
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+
+.showMoreButton:disabled {
+  opacity: 0.6; /* Make button look disabled */
+  cursor: not-allowed; /* Change cursor to show it's not clickable */
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .filterSection {
@@ -65,6 +79,10 @@
   .filterSelect,
   .sortSelect {
     width: 100%; /* Full width for dropdowns */
+  }
+  .showMoreButton {
+    width: 100%; /* Full width on mobile */
+    align-self: stretch; /* Make the button fill the container */
   }
 }
 

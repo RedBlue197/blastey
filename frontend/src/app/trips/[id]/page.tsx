@@ -19,7 +19,7 @@ interface TripDetailProps {
   trip: Trip;
 }
 
-const TripDetail = ({ trip }: TripDetailProps) => {
+const TripDetails = ({ trip }: TripDetailProps) => {
   if (!trip) {
     return <div>Trip not found!</div>;
   }
@@ -57,4 +57,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default TripDetail;
+export default TripDetails;

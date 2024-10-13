@@ -1,11 +1,12 @@
 .tripCard {
   display: flex;
+  height: 300px;
+  width: 100%;
   flex-direction: row;
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin: 16px;
   transition: transform 0.2s, box-shadow 0.2s;
   background-color: #fff;
 }
@@ -16,13 +17,13 @@
 }
 
 .picture {
-  width: 800px;
-  height: 350px;
-  object-fit: cover;
+  width: 45%;
+  height: 100%;
 }
 
 .details {
-  padding: 16px;
+  padding: 20px;
+  flex: 1;
 }
 
 .details h2 {
@@ -48,32 +49,55 @@
 .buttonsContainer {
   display: flex;
   justify-content: space-between;
-  margin-top: 16px;
+  margin-top: 8px;
 }
 
 /* Button styles */
 .whatsappButton {
-  width: 60%;
+  width: 45%;
 }
 
 .whatsappButton:hover {
   background-color: #20c659;
-  
 }
 
 .detailsButton {
   text-align: center;
-  width: 30%;
+  width: 45%;
 }
+
 
 /* Responsive styles */
 @media (max-width: 768px) {
   .tripCard {
     flex-direction: column;
+    height: auto;
   }
 
   .picture {
     width: 100%;
-    height: auto;
+    height: 200px; /* Adjust height for mobile view */
+    object-fit: cover; /* Ensures image covers the space */
+  }
+
+  .details {
+    padding: 15px;
+  }
+
+  .details h2 {
+    font-size: 1.25rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+
+  .buttonsContainer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .whatsappButton, .detailsButton {
+    width: 100%; /* Full width for buttons on mobile */
   }
 }

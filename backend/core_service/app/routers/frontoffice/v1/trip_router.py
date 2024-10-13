@@ -48,7 +48,7 @@ async def get_trips(
         return api_response(
             success=False,
             message="No trips found",
-            status_code=404
+            status_code=200
         )
     else:
         trips_response = GetTripsResponse.model_validate(trips, from_attributes=True)
@@ -75,6 +75,7 @@ async def get_trip_by_id(
         return api_response(
             data=trip_response, 
             message="Trip found",
+            status_code=200
             )
     else:
         return api_response(

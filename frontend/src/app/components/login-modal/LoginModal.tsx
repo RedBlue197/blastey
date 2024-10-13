@@ -38,7 +38,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       const result = await fetchToken(
               signInData,null
             ).then((response)=>{
-              if (response.status === 200) {
+              if (response.status_code === 200) {
                 localStorage.setItem('token', response.data);
                 console.log("Successfully connected")
                 onClose();
@@ -46,7 +46,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 triggerToast("success", "Successfully signed in!"); // Trigger success toast
 
               }
-              else if (response.status ===401) {
+              else if (response.status_code ===401) {
                 console.error("Wrong credantials")
                 triggerToast("error", "Wrong credentials. Please try again.");
 

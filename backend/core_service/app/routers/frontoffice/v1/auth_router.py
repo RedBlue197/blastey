@@ -34,6 +34,6 @@ async def login_for_access_token(login_request: LoginRequest,db:db_dependency):
     token= create_access_token(data,timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
     return api_response(
     data=token,
-    status=200
+    status_code=200
 )
 

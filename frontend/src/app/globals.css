@@ -57,6 +57,17 @@ body {
 /* globals.css */
 @layer components {
   /* Primary WhatsApp Button */
+
+  .page-title {
+    @apply text-3xl font-bold text-center text-[#333]; /* Tailwind utilities */
+    margin-bottom: 24px; /* Adjust margin as needed */
+  }
+
+  .section-title {
+    @apply text-2xl font-semibold text-left text-[#333];
+    margin-bottom: 16px;
+  }
+  
   .btn-primary {
     @apply bg-[#25d366] text-white font-bold text-center rounded-lg transition duration-200;
     width: 60%;

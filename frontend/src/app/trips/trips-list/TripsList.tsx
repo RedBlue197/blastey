@@ -45,7 +45,7 @@ const dummyTrips: Trip[] = [
     arrivalDate: '2024-08-22T00:00:00Z',
     rating: 4.8,
     title: 'Relaxing Beach Vacation',
-    description: 'Relax on the beautiful beaches of Miami and enjoy the sun.',
+    description: 'Enjoy sunbathing, water sports, and beach parties in Miami.',
     price: 1200,
   },
   {
@@ -65,8 +65,8 @@ const dummyTrips: Trip[] = [
 
 const TripsList = () => {
   const [trips, setTrips] = useState<Trip[]>(dummyTrips); // Set initial state to dummy data
-  const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [filteredTrips, setFilteredTrips] = useState<Trip[]>(dummyTrips); // Initialize filtered trips to dummy data
+  const [searchQuery, setSearchQuery] = useState<string>(''); // State for search query
   const [sortOption, setSortOption] = useState<string>(''); // State for sort option
   const [filterOption, setFilterOption] = useState<string>(''); // State for filter option
   const [page, setPage] = useState<number>(1); // Track current page
@@ -81,8 +81,8 @@ const TripsList = () => {
         if (newTrips.length === 0) {
           setHasMoreTrips(false); // No more trips available
         } else {
-          setTrips(prevTrips => [...prevTrips, ...newTrips]);
-          setFilteredTrips(prevTrips => [...prevTrips, ...newTrips]); // Append new trips to existing trips
+          setTrips(prevTrips => [...prevTrips, ...newTrips]); // Append new trips to existing ones
+          setFilteredTrips(prevTrips => [...prevTrips, ...newTrips]); // Append new trips to filtered trips
         }
       } else if (response.status === 404) {
         setHasMoreTrips(false);
@@ -95,9 +95,10 @@ const TripsList = () => {
   };
 
   useEffect(() => {
-    getTrips(); // Initial load
+    getTrips(); // Fetch trips on component mount
   }, []);
 
+  // Filter and sort trips when searchQuery, sortOption, or filterOption change
   useEffect(() => {
     let filtered = trips.filter(trip =>
       trip.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -135,8 +136,8 @@ const TripsList = () => {
   return (
     <Suspense fallback={<LoadingTripsList />}>
       <div className={styles.container}>
-        <h1>Traveller Trips</h1>
-
+      <h1 className="page-title">Traveller Trips</h1>
+      <h2 className="section-title">Modify Your Search</h2>
         {/* Filter and Search Section */}
         <FilterAndSearch
           searchQuery={searchQuery}
@@ -161,12 +162,13 @@ const TripsList = () => {
         </Suspense>
 
         {/* Show More Button */}
-        {hasMoreTrips && !loadingMore && (
-          <button onClick={handleShowMore} className={styles.showMoreButton}>
-            Show More
-          </button>
-        )}
-        {loadingMore && <p>Loading more trips...</p>}
+        <button 
+          onClick={handleShowMore} 
+          className={`btn-secondary ${styles.showMoreButton}`} 
+          disabled={loadingMore} // Disable button when loading
+        >
+          {loadingMore ? 'Loading...' : 'Show More'} {/* Show loading state or button text */}
+        </button>
       </div>
     </Suspense>
   );
