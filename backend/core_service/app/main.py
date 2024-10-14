@@ -111,71 +111,76 @@ if include_backoffice_routers:
 @app.on_event("startup")
 async def startup():
     print("Starting up")
-
+    
     try:
-        db = SessionLocal()
-
-        # check if the user table is empty
-        user = db.query(user_model.User).first()
-        if user:
-            print("User table is not empty")
-        # Create a test user
-        else:
-            user = user_model.User(
-                user_first_name="hamza",
-                user_last_name="test",
-                user_hashed_password=bcrypt_context.hash("3ss5fe71"),
-                user_email="hamzagoubraim@gmail.com"
+        # Use context manager to handle session management
+        with SessionLocal() as db:
+            # Check if the user table is empty
+            user = db.query(user_model.User).first()
+            if user:
+                print("User table is not empty")
+            else:
+                # Create a test user
+                user = user_model.User(
+                    user_first_name="hamza",
+                    user_last_name="test",
+                    user_hashed_password=bcrypt_context.hash("3ss5fe71"),
+                    user_email="hamzagoubraim@gmail.com"
                 )
+                db.add(user)
+                db.commit()
+                db.refresh(user)
+
+            # Check if the trip table is empty
+            first_trip = db.query(trip_model.Trip).first()
+            if first_trip:
+                print("Trip table is not empty")
+                return
             
-            db.add(user)
+            # Create a test trip
+            trip = trip_model.Trip(
+                trip_title="test trip",
+                trip_description="test trip description",
+                trip_origin="test origin",
+                trip_destination="test destination",
+                host_id=user.user_id
+            )
+            db.add(trip)
             db.commit()
-            db.refresh(user)
-        first_trip = db.query(trip_model.Trip).first()
-        if first_trip:
-            print("Trip table is not empty")
-            return
-        #create a test trip
-        trip = trip_model.Trip(
-            trip_title="test trip",
-            trip_description="test trip description",
-            trip_origin="test origin",
-            trip_destination="test destination",
-            host_id=user.user_id
-        )
-        db.add(trip)
-        db.commit()
-        db.refresh(trip)
+            db.refresh(trip)
 
-        #create a test trip item
-        trip_item = trip_model.TripItem(
-            trip_item_name="test trip item",
-            trip_item_description="test trip item description",
-            trip_item_category=trip_model.TripItemCategoryEnum.ELECTRONICS,
-            trip_item_address="test address",
-            trip_item_traveler_reward=20.0,
-            trip_item_price=100.0,
-            trip_item_image_url="test image url",
-            trip_id=trip.trip_id
-        )
-        db.add(trip_item)
-        db.commit()
-        db.refresh(trip_item)
+            # Create a test trip item
+            trip_item = trip_model.TripItem(
+                trip_item_name="test trip item",
+                trip_item_description="test trip item description",
+                trip_item_category=trip_model.TripItemCategoryEnum.OTHER,  # Changed to valid enum value
+                trip_item_address="test address",
+                trip_item_traveler_reward=20.0,
+                trip_item_price=100.0,
+                trip_item_image_url="test image url",
+                trip_id=trip.trip_id
+            )
+            db.add(trip_item)
+            db.commit()
+            db.refresh(trip_item)
 
-        # create trip opening
-        trip_opening = trip_model.TripOpening(
-            trip_id=trip.trip_id,
-            trip_opening_start_date="2022-01-01",
-            trip_opening_end_date="2022-01-10",
-            trip_opening_total_availability=10,
-        )
-        db.add(trip_opening)
-        db.commit()
-        db.refresh(trip_opening)
+            # Create a trip opening with valid datetime objects
+            trip_opening = trip_model.TripOpening(
+                trip_id=trip.trip_id,
+                trip_opening_start_date=datetime(2022, 1, 1),
+                trip_opening_end_date=datetime(2022, 1, 10),
+                trip_opening_total_availability=10,
+                trip_opening_price=200.0  # Added price as it's required
+            )
+            db.add(trip_opening)
+            db.commit()
+            db.refresh(trip_opening)
 
-        db.close()
+        print("Startup completed successfully")
+    
     except Exception as e:
         print(f"Error: {e}")
+    
 
 @app.get("/")
 async def read_root():

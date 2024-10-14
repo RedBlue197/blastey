@@ -48,12 +48,19 @@ class TripInterface(BaseInterface[Trip]):
 
         # Get host data for each trip
         for trip, total_count in trips_query:
-            trip.user = self.db.query(User).filter(User.user_id == trip.host_id).first()
+            trip.user = self.db.query(User).filter(
+                User.user_id == trip.host_id,
+                User.is_deleted == False,
+                User.status == True
+                ).first()
 
         # Get lowest trip opening price
         for trip, total_count in trips_query:
             trip.trip_lowest_trip_opening_price = self.db.query(func.min(TripOpening.trip_opening_price)).filter(
-                TripOpening.trip_id == trip.trip_id)
+                TripOpening.trip_id == trip.trip_id,
+                TripOpening.is_deleted == False,
+                TripOpening.status == True
+                )
             
         
         # Since total count is part of each row, extract it from the first result
