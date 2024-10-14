@@ -3,12 +3,12 @@ import { makeAPIRequest } from './api'; // Adjust the import path
 import { endpoints } from './endpoints'; // Adjust the import path
 import { microservices } from './microservices';
 
-export async function fetchTrips() {
+export async function fetchTrips(page: number, limit: number) {
   try {
     // Make API request
     const response = await makeAPIRequest<{ result: any[] }>(
       microservices.CORE, // Replace with your actual microservice name
-      endpoints.trips.GET_TRIPS, // Endpoint
+      endpoints.trips.GET_TRIPS+"?page="+page.toString+"&items_per_page="+limit.toString, // Endpoint
       {
         withCredentials: true, // Use withCredentials to send the token in the request
         version: 'v1', // Provide necessary options
@@ -28,8 +28,6 @@ export async function fetchTrips() {
     return error;
   }
 }
-
-//978f9fbe-82ea-4cba-b180-e9ae7cde3470
 
 
 // function to get a specific trip by trip id

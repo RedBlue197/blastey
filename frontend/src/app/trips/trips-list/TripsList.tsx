@@ -72,19 +72,20 @@ const TripsList = () => {
   const [page, setPage] = useState<number>(1); // Track current page
   const [hasMoreTrips, setHasMoreTrips] = useState<boolean>(true); // Flag to check if more trips exist
   const [loadingMore, setLoadingMore] = useState<boolean>(false); // Loading state for fetching more trips
+  const [limit,setLimit]=useState<number>(10);
 
-  const getTrips = async (currentPage = 1) => {
+  const getTrips = async (page = 1) => {
     try {
-      const response = await fetchTrips(currentPage);
-      if (response.status === 200) {
+      const response = await fetchTrips(page,limit);
+      if (response.status_code === 200) {
         const newTrips = response.data;
         if (newTrips.length === 0) {
           setHasMoreTrips(false); // No more trips available
         } else {
-          setTrips(prevTrips => [...prevTrips, ...newTrips]); // Append new trips to existing ones
+          setTrips(prevTrips => [...prevTrips, ...newTrips]); // Append ntrips to existing ones
           setFilteredTrips(prevTrips => [...prevTrips, ...newTrips]); // Append new trips to filtered trips
         }
-      } else if (response.status === 404) {
+      } else if (response.status_code === 404) {
         setHasMoreTrips(false);
       } else {
         console.error('Error fetching trips');
