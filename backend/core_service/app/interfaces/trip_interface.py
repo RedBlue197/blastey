@@ -52,7 +52,7 @@ class TripInterface(BaseInterface[Trip]):
 
         # Get lowest trip opening price
         for trip, total_count in trips_query:
-            trip.lowest_trip_opening_price = self.db.query(func.min(TripOpening.trip_opening_price)).filter(
+            trip.trip_lowest_trip_opening_price = self.db.query(func.min(TripOpening.trip_opening_price)).filter(
                 TripOpening.trip_id == trip.trip_id)
             
         
