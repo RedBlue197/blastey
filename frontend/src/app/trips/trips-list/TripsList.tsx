@@ -74,7 +74,7 @@ const TripsList = () => {
   const [loadingMore, setLoadingMore] = useState<boolean>(false); // Loading state for fetching more trips
   const [limit,setLimit]=useState<number>(10);
 
-  const getTrips = async (page = 1) => {
+  const getTrips = async (page) => {
     try {
       const response = await fetchTrips(page,limit);
       if (response.status_code === 200) {
@@ -96,8 +96,8 @@ const TripsList = () => {
   };
 
   useEffect(() => {
-    getTrips(); // Fetch trips on component mount
-  }, []);
+    getTrips(page); // Fetch trips on component mount
+  }, [page]);
 
   // Filter and sort trips when searchQuery, sortOption, or filterOption change
   useEffect(() => {
