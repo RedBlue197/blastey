@@ -19,6 +19,8 @@ from database import engine, SessionLocal
 
 from config import get_settings
 
+from datetime import datetime
+
 settings = get_settings()
 
 import psycopg2
@@ -125,7 +127,8 @@ async def startup():
                     user_first_name="hamza",
                     user_last_name="test",
                     user_hashed_password=bcrypt_context.hash("3ss5fe71"),
-                    user_email="hamzagoubraim@gmail.com"
+                    user_email="hamzagoubraim@gmail.com",
+                    user_name="hamza",
                 )
                 db.add(user)
                 db.commit()
@@ -170,7 +173,7 @@ async def startup():
                 trip_opening_start_date=datetime(2022, 1, 1),
                 trip_opening_end_date=datetime(2022, 1, 10),
                 trip_opening_total_availability=10,
-                trip_opening_price=200.0  # Added price as it's required
+                trip_opening_price=200. # Added price as it's required
             )
             db.add(trip_opening)
             db.commit()

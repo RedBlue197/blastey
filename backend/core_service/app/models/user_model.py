@@ -26,7 +26,7 @@ class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     user_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4,index=True)
     user_email = Column(String, unique=True, nullable=False)
     user_hashed_password = Column(String, nullable=False)
-    user_name = Column(String, nullable=False)
+    user_name = Column(String, nullable=True)
     user_first_name = Column(String, nullable=False)
     user_last_name = Column(String, nullable=False)
     user_phone_number = Column(String, nullable=True)

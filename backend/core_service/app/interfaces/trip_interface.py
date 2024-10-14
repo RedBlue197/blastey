@@ -11,7 +11,8 @@ import uuid
 
 from typing import List,Optional
 
-from models.trip_model import Trip, TripItem, TripImages
+from models.trip_model import Trip, TripItem, TripImages, TripOpening
+from models.user_model import User
 
 from schemas.trip_schema import CreateTripRequest
 from schemas.trip_schema import PatchTripRequest, PatchTripItemRequest
@@ -23,7 +24,6 @@ class TripInterface(BaseInterface[Trip]):
     def __init__(self, db: Session):
         super().__init__(db, Trip, 'trip_id')
 
-    # Add more specific queries for Trip model
     def get_trips_with_pagination(self, offset: int, limit: int):
         total_count_query = (
             self.db.query(func.count(Trip.trip_id))
@@ -31,10 +31,9 @@ class TripInterface(BaseInterface[Trip]):
                 Trip.is_deleted == False,
                 Trip.status == True
             )
-            .scalar_subquery()  # Executes count as part of the same query
+            .scalar_subquery()
         )
-        
-        # Main query to get paginated Trips and total count
+
         trips_query = (
             self.db.query(Trip, total_count_query.label('total_count'))
             .filter(
@@ -46,26 +45,25 @@ class TripInterface(BaseInterface[Trip]):
             .all()
         )
 
-        # Get host data for each trip
         for trip, total_count in trips_query:
-            trip.user = self.db.query(User).filter(
+            # Get host data
+            trip.host = self.db.query(User).filter(
                 User.user_id == trip.host_id,
                 User.is_deleted == False,
                 User.status == True
-                ).first()
+            ).first()
 
-        # Get lowest trip opening price
-        for trip, total_count in trips_query:
-            trip.trip_lowest_trip_opening_price = self.db.query(func.min(TripOpening.trip_opening_price)).filter(
+            # Get lowest trip opening price
+            lowest_price = self.db.query(func.min(TripOpening.trip_opening_price)).filter(
                 TripOpening.trip_id == trip.trip_id,
                 TripOpening.is_deleted == False,
                 TripOpening.status == True
-                )
+            ).scalar()
             
-        
-        # Since total count is part of each row, extract it from the first result
+            trip.trip_lowest_trip_opening_price = lowest_price if lowest_price is not None else 0
+
         if trips_query:
-            total_count = trips_query[0].total_count
+            total_count = trips_query[0][1]  # Get total_count from the first result
             trips = [trip for trip, _ in trips_query]
         else:
             total_count = 0

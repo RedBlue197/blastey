@@ -71,7 +71,7 @@ async def get_trip_by_id(
 ):
     trip = TripInterface(db=db).get_trip_by_id(trip_id)
     if trip:
-        trip_response=GetTripByIdResponse.from_orm(trip)
+        trip_response=GetTripByIdResponse.model_validate(trip, from_attributes=True)
         return api_response(
             data=trip_response, 
             message="Trip found",
