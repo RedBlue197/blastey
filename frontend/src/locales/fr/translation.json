@@ -1,7 +1,49 @@
 {
-  "welcome": "Bienvenue dans notre application",
-  "signIn": "Se connecter",
-  "email": "Email",
-  "password": "Mot de passe",
-  "home":"Acceuil"
+  "navbar": {
+    "activities": "Activités",
+    "dashboard": "Tableau de bord",
+    "home": "Accueil",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "manage-trips": "Gérer les voyages",
+    "manage-activities": "Gérer les activités",
+    "offers": "Offres",
+    "orders": "Commandes",
+    "profile": "Profil",
+    "trips": "Voyages"
+  },
+  "common": {
+    "welcome": "Bienvenue dans notre application",
+    "signIn": "Se connecter",
+    "email": "Email",
+    "password": "Mot de passe",
+    "home": "Accueil",
+    "offers": "Offres",
+    "orders": "Commandes"
+  },
+  "home": {
+    "home": "Accueil",
+    "greeting": "Bienvenue sur la page d'accueil",
+    "description": "C'est ici que vous pouvez trouver vos offres et vos commandes."
+  },
+  "trips": {
+    "trips": "Voyages",
+    "tripHistory": "Historique de vos voyages",
+    "trackTrip": "Suivez votre voyage"
+  },
+  "activities": {
+    "activities": "Activités",
+    "activityHistory": "Historique de vos activités",
+    "trackActivity": "Suivez votre activité"
+  },
+  "login": {
+    "login": "Connexion",
+    "email": "Email",
+    "password": "Mot de passe",
+    "signIn": "Se connecter"
+  },
+  "orders": {
+    "orderHistory": "Historique de vos commandes",
+    "trackOrder": "Suivez votre commande"
+  }
 }

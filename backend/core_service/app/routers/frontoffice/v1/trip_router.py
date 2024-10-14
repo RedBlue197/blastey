@@ -21,18 +21,18 @@ router = APIRouter(
 #API to get all trips
 @router.get("/", status_code=status.HTTP_200_OK)
 async def get_trips(
-    # user: user_dependency,
+    user: user_dependency,
     db: db_dependency,
     page: int = Query(1, ge=1),
     items_per_page: int = Query(10, le=100),
 ):
     #check role of user
-    # if user['user_role'] not in ["admin", "user"]:
-    #     return api_response(
-    #         message="Unauthorized Role",
-    #         error_code=401
-    #     )
-    
+    if user['user_role'] not in ["admin", "user"]:
+        return api_response(
+            message="Unauthorized Role",
+            error_code=401
+        )
+
     # Calculate pagination offsets
     offset = (page - 1) * items_per_page
     limit = items_per_page
@@ -48,7 +48,7 @@ async def get_trips(
         return api_response(
             success=False,
             message="No trips found",
-            status_code=200
+            status_code=204
         )
     else:
         trips_response = GetTripsResponse.model_validate(trips, from_attributes=True)
