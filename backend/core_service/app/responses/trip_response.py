@@ -22,6 +22,7 @@ class GetTripResponse(BaseModel):
     trip_upvote: Optional[int] = None
     trip_downvote: Optional[int] = None
     trip_lowest_trip_opening_price:float
+    host_id: uuid.UUID
     host: GetTripHostResponse
 
 
