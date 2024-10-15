@@ -148,7 +148,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             </div>
             <div className={styles.terms}>
               <p>
-                By using Seftly, you agree to <a href="/terms" className={styles.link}>Seftly's Terms of Service</a> and <a href="/privacy" className={styles.link}>Privacy Policy</a>.
+                By using Blastey, you agree to <a href="/terms" className={styles.link}>Blastey's Terms of Service</a> and <a href="/privacy" className={styles.link}>Privacy Policy</a>.
               </p>
             </div>
           </>
@@ -189,7 +189,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             </div>
             <div className={styles.terms}>
               <p>
-                By using Seftly, you agree to <a href="/terms" className={styles.link}>Seftly's Terms of Service</a> and <a href="/privacy" className={styles.link}>Privacy Policy</a>.
+                By using Blastey, you agree to <a href="/terms" className={styles.link}>Blastey's Terms of Service</a> and <a href="/privacy" className={styles.link}>Privacy Policy</a>.
               </p>
             </div>
           </>
@@ -226,7 +226,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             </div>
             <div className={styles.terms}>
               <p>
-                By using Seftly, you agree to <a href="/terms" className={styles.link}>Seftly's Terms of Service</a> and <a href="/privacy" className={styles.link}>Privacy Policy</a>.
+                By using Blastey, you agree to <a href="/terms" className={styles.link}>Blastey's Terms of Service</a> and <a href="/privacy" className={styles.link}>Privacy Policy</a>.
               </p>
             </div>
           </>
@@ -256,7 +256,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             </div>
             <div className={styles.terms}>
               <p>
-                By using Seftly, you agree to <a href="/terms" className={styles.link}>Seftly's Terms of Service</a> and <a href="/privacy" className={styles.link}>Privacy Policy</a>.
+                By using Blastey, you agree to <a href="/terms" className={styles.link}>Blastey's Terms of Service</a> and <a href="/privacy" className={styles.link}>Privacy Policy</a>.
               </p>
             </div>
           </>
