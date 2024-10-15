@@ -16,7 +16,7 @@ class DevSettings(BaseSettings):
 
     ENV: str = "development"
 
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080
     HS256_ALGORITHM: str = "HS256"
 
     DATABASE_URL: str = os.getenv("DEV_DATABASE_URL", "postgresql://postgres:3SS5fe71@localhost:5432/db_blastey")

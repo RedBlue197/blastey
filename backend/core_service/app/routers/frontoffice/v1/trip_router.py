@@ -3,11 +3,18 @@ from pydantic import ValidationError
 
 from dependencies.db_dependency import db_dependency
 from dependencies.auth_dependency import user_dependency
+
 from interfaces.trip_interface import TripInterface
+
 from schemas.trip_schema import CreateTripRequest, PatchTripRequest
+
 from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemResponse
+
 from utils.responses import api_response
+
 from typing import Optional,List
+
+from main import limiter
 
 import uuid
 
@@ -18,21 +25,15 @@ router = APIRouter(
 
 #----------------------------------------------------GET ENDPOINTS----------------------------------------------------
 
+
 #API to get all trips
 @router.get("/", status_code=status.HTTP_200_OK)
+@limiter.limit("10/minute")
 async def get_trips(
-    user: user_dependency,
     db: db_dependency,
     page: int = Query(1, ge=1),
     items_per_page: int = Query(10, le=100),
 ):
-    #check role of user
-    if user['user_role'] not in ["admin", "user"]:
-        return api_response(
-            message="Unauthorized Role",
-            error_code=401
-        )
-
     # Calculate pagination offsets
     offset = (page - 1) * items_per_page
     limit = items_per_page
@@ -87,10 +88,16 @@ async def get_trip_by_id(
 #----------------------------------------------------POST ENDPOINTS----------------------------------------------------
 @router.post("/create-trip", status_code=status.HTTP_201_CREATED)
 async def create_trip(
+    user: user_dependency,
     db: db_dependency,
     trip: str = Form(...),  # Trip data as a JSON string
     image_files: List[UploadFile] = File(...),  # Accept multiple image files
 ):
+    if user['user_role'] not in ["admin", "host"]:
+        return api_response(
+            message="Unauthorized Role",
+            status_code=403
+        )
     try:
         # Parse trip JSON string to Pydantic model
         try:
@@ -106,16 +113,17 @@ async def create_trip(
         # Proceed to create the trip
         trip_obj = TripInterface(db=db).create_trip(trip_data, image_files)  # Pass image_files to create_trip
 
-        trip_response = CreateTripResponse.from_orm(trip_obj)
+        trip_response = CreateTripResponse.model_validate(trip_obj, from_attributes=True)
         if not trip_response:
             return api_response(
                 message="Failed to create trip",
-                status_code=404
+                status_code=500
             )
         else:
             return api_response(
                 data=trip_response,
-                message="Trip created"
+                message="Trip created",
+                status_code=201
             )
 
     except Exception as e:
@@ -127,11 +135,24 @@ async def create_trip(
 
 @router.patch("/update-trip/{trip_id}", status_code=status.HTTP_200_OK)
 async def patch_trip(
-    trip_id: uuid.UUID, 
+    user: user_dependency,
+    trip_id: uuid.UUID,
     db: db_dependency, 
     trip_update: PatchTripRequest,
     image_files: Optional[list[UploadFile]] = File(None),  # Image files are optional
 ):
+    if user['user_role'] not in ["admin", "host"]:
+        return api_response(
+            message="Unauthorized Role",
+            status_code=403
+        )
+    
+    if user.user_id != trip_update.host_id:
+        return api_response(
+            message="Unauthorized request",
+            status_code=403
+        )
+
     try:
         # Update trip in the database through the interface
         trip_obj = TripInterface(db=db).patch_trip(trip_id, trip_update, image_files)
@@ -139,7 +160,7 @@ async def patch_trip(
         if not trip_obj:
             return api_response(
                 message="Trip not found",
-                error_code=404  
+                status_code=404  
             )
 
         # Transform the updated trip object into response
@@ -148,12 +169,13 @@ async def patch_trip(
 
         return api_response(
             data=trip_response, 
-            message="Trip updated"
+            message="Trip updated",
+            status_code=204
         )
     except Exception as e:
         return api_response(
             message=f"Failed to update trip: {str(e)}",
-            error_code=500
+            status_code=500
         )
     
 

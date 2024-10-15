@@ -30,7 +30,6 @@ class  Trip(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixi
     trip_origin=Column(String, nullable=True)
     trip_destination=Column(String, nullable=True)
     trip_link_url=Column(String, nullable=True)
-    trip_image=Column(String, nullable=True)
     trip_upvote=Column(Integer, nullable=True)
     trip_downvote=Column(Integer, nullable=True)
 
@@ -49,7 +48,7 @@ class TripItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByM
     trip_item_traveler_reward = Column(Numeric(precision=10, scale=2), nullable=True)  # Reward for the traveler
     trip_item_type=Column(Enum(TripItemTypeEnum),default=TripItemTypeEnum.INCLUDED)
     trip_item_price=Column(Float, nullable=True) 
-    trip_item_image_url = Column(String, nullable=False)
+    trip_item_image = Column(String, nullable=False)
 
     #Foreign Keys
     trip_id = Column(UUID(as_uuid=True), ForeignKey("trips.trip_id", ondelete="CASCADE"), nullable=False)
@@ -81,7 +80,7 @@ class TripRatingImages(Base,TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Upd
 
     trip_rating_image_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     trip_rating_id = Column(UUID(as_uuid=True), ForeignKey("trip_ratings.trip_rating_id", ondelete="CASCADE"), nullable=False)
-    trip_rating_image_url = Column(Text, nullable=False)
+    trip_rating_image = Column(Text, nullable=False)
 
 
 
@@ -121,7 +120,7 @@ class TripOpeningItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Upd
     trip_opening_item_total_booking=Column(Integer, nullable=True)
 
     trip_opening_item_price=Column(Float, nullable=True) 
-    trip_opening_item_image_url = Column(String, nullable=False)
+    trip_opening_item_image = Column(String, nullable=False)
 
     # Foreign Keys
     trip_opening_id = Column(UUID(as_uuid=True), ForeignKey("trip_openings.trip_opening_id", ondelete="CASCADE"), nullable=False)

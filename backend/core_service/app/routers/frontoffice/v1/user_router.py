@@ -96,16 +96,9 @@ async def get_user_by_id(
 @router.post("/create-user", status_code=status.HTTP_201_CREATED)
 async def create_user(
     user_data: CreateUserRequest,
-    # user: user_dependency,
+    user: user_dependency,
     db: db_dependency,  # Database dependency
 ):
-    
-    # if user['user_role'] not in ["host", "user"]:
-    #     return api_response(
-    #         message="Unauthorized Role",
-    #         error_code=401
-    #     )
-    
     user_interface = UserInterface(db)
     
     try:

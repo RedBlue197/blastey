@@ -29,6 +29,7 @@ class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     user_name = Column(String, nullable=True)
     user_first_name = Column(String, nullable=False)
     user_last_name = Column(String, nullable=False)
+    user_country_code= Column(String,nullable=True)
     user_phone_number = Column(String, nullable=True)
     user_address = Column(String, nullable=True)
     user_city = Column(String, nullable=True)
