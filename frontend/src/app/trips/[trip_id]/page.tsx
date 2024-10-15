@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { Trip } from '@/types/trip'; // Importing Trip interface
 import { fetchTripById } from '@/services/internal_services/trip_api_handler'; // Assuming you're fetching trip from your internal service
+import { UUID } from 'crypto';
 
 interface TripDetailProps {
   trip: Trip;
@@ -85,11 +86,11 @@ const TripDetails = ({ trip }: TripDetailProps) => {
 
 // This will fetch the trip data on each request (for server-side rendering)
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.params as { id: string }; // Type for id param
+  const { trip_id } = context.params as { trip_id: UUID }; // Type for id param
 
   try {
     // Fetch the trip details using your API handler (use your own API service logic)
-    const trip = await fetchTripById(id);
+    const trip = await fetchTripById(trip_id);
 
     if (!trip) {
       return {
