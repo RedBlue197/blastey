@@ -6,9 +6,9 @@ import { microservices } from './microservices';
 export async function fetchTrips(page: number, limit: number) {
   try {
     // Make API request
-    const response = await makeAPIRequest<{ result: any[] }>(
+    const response = await makeAPIRequest<{ data: any[] }>(
       microservices.CORE, // Replace with your actual microservice name
-      endpoints.trips.GET_TRIPS+"?page="+page.toString+"&items_per_page="+limit.toString, // Endpoint
+      endpoints.trips.GET_TRIPS+"?page="+page.toString()+"&items_per_page="+limit.toString(), // Endpoint
       {
         withCredentials: true, // Use withCredentials to send the token in the request
         version: 'v1', // Provide necessary options
@@ -16,12 +16,11 @@ export async function fetchTrips(page: number, limit: number) {
     );
 
     // Check if the response was successful and has expected data
-    if (!response || !response.result) {
+    if (!response || !response.data) {
       throw new Error('No trips found or invalid response structure');
     }
 
-    console.log('Trips fetched successfully:', response.result);
-    return response.result; // Return the fetched trips if needed elsewhere
+    return response; // Return the fetched trips if needed elsewhere
 
   } catch (error: any) {
     // Log the full error details to get more information
@@ -32,25 +31,24 @@ export async function fetchTrips(page: number, limit: number) {
 
 // function to get a specific trip by trip id
 
-export async function fetchTripById(token: string | null, tripId: UUID) {
+export async function fetchTripById(tripId: UUID) {
   try {
     // Make API request
-    const response = await makeAPIRequest<{ result: any }>(
+    const response = await makeAPIRequest<{ data: any }>(
       microservices.CORE, // Replace with your actual microservice name
       endpoints.trips.GET_TRIP_BY_ID+tripId, // Endpoint
       {
+        withCredentials: true, // Use withCredentials to send the token in the request
         version: 'v1', // Provide necessary options
-        token, // Include the token if available
       }
     );
 
     // Check if the response was successful and has expected data
-    if (!response || !response.result) {
+    if (!response || !response.data) {
       throw new Error('No trips found or invalid response structure');
     }
 
-    console.log('Trips fetched successfully:', response.result);
-    return response.result; // Return the fetched trips if needed elsewhere
+    return response; // Return the fetched trips if needed elsewhere
 
   } catch (error: any) {
     // Log the full error details to get more information

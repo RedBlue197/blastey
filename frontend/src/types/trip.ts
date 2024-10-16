@@ -16,7 +16,10 @@ export interface Trip {
     trip_origin: string;
     trip_destination: string;
     trip_image: string;
-    contactPhone: string;
     host: Host;
+    trip_lowest_trip_opening_price: number;
+    trip_downvotes: number;
+    trip_upvotes: number;
+    trip_link_url: string;
   }
   

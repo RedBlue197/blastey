@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import styles from './TripCard.module.css'; // Import the CSS module
 import { Trip } from '@/types/trip';  // Adjust the import path as needed
+import { FaArrowRight, FaMapMarkerAlt } from 'react-icons/fa'; // Import the arrow and map marker icons
 import trackEvent from"@/utils/track_event"
 
 const TripCard: React.FC<{ trip: Trip }> = ({ trip }) => {
@@ -25,14 +26,13 @@ const TripCard: React.FC<{ trip: Trip }> = ({ trip }) => {
       <div className={styles.details}>
         <h2>{trip.trip_title}</h2>
         <p className={styles.description}>{trip.trip_description}</p>
+        <div className={styles.tripInfo}>
+          <p className={styles.detailsParagraph}>{trip.trip_origin}</p>
+          <FaArrowRight className={styles.arrowIcon} /> {/* Arrow icon */}
+          <p className={styles.detailsParagraph}>{trip.trip_destination}</p>
+        </div>
         <p className={styles.detailsParagraph}>
-          <span className={styles.detailsStrong}>Origin:</span> {trip.trip_origin}
-        </p>
-        <p className={styles.detailsParagraph}>
-          <span className={styles.detailsStrong}>Destination:</span> {trip.trip_destination}
-        </p>
-        <p className={styles.detailsParagraph}>
-          <span className={styles.detailsStrong}>From:</span> ${trip.price}
+          <span className={styles.detailsStrong}>From:</span> ${trip.trip_lowest_trip_opening_price}
         </p>
         {/* Add buttons */}
         <div className={styles.buttonsContainer}>

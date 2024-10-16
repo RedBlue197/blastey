@@ -74,6 +74,9 @@ export default function Navbar() {
                       {t('admin.admin')}
                     </button>
                   )}
+                  <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                    {t('navbar.trips')}
+                  </button>
                   <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
                     {t('navbar.dashboard')}
                   </button>
@@ -139,6 +142,9 @@ export default function Navbar() {
                   {t('admin.admin')}
                 </button>
               )}
+              <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                {t('navbar.trips')}
+              </button>
               <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
                 {t('navbar.dashboard')}
               </button>

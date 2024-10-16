@@ -1,6 +1,6 @@
 .tripCard {
   display: flex;
-  height: 300px;
+  height: 230px;
   width: 100%;
   flex-direction: row;
   border: 1px solid #ddd;
@@ -44,6 +44,25 @@
 .detailsParagraph {
   margin: 4px 0;
 }
+.tripInfo {
+  display: flex;
+  align-items: center; /* Center align items vertically */
+  justify-content: flex-start; /* Align items to the start of the flex container */
+  margin: 4px 0; /* Add margin to the top and bottom */
+}
+
+.icon {
+  color: #00bf63; /* Customize the icon color */
+  font-size: 20px; /* Adjust the size of the icons */
+  margin-right: 5px; /* Space out the icon from the text */
+}
+
+.arrowIcon {
+  margin: 0 10px; /* Space out the arrow icon from the text */
+  color: #00bf63; /* Customize the color of the arrow icon */
+  font-size: 20px; /* Adjust the size of the arrow */
+}
+
 
 /* Buttons container */
 .buttonsContainer {

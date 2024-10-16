@@ -1,122 +1,88 @@
-'use client'; // Ensure this component runs on the client side
+"use client";
 import { useEffect, useState, Suspense } from 'react';
-import styles from './TripsList.module.css'; // Import your CSS module for styling
+import styles from './TripsList.module.css';
 import { fetchTrips } from '@/services/internal_services/trip_api_handler';
 import FilterAndSearch from '../filter-and-search/FilterAndSearch';
 import TripCard from '../trip-card/TripCard';
-import LoadingTripsList from './loading/LoadingTripsList'; // Import the loading fallback
-
-interface Trip {
-  id: string;
-  name: string;
-  picture: string;
-  origin: string;
-  destination: string;
-  departureDate: string;
-  arrivalDate: string;
-  rating: number;
-  title: string;
-  description: string;
-  price: number;
-}
-
-// Dummy Data for Trips
-const dummyTrips: Trip[] = [
-  {
-    id: '1',
-    name: 'Summer Adventure',
-    picture: 'https://picsum.photos/350/800',
-    origin: 'Los Angeles',
-    destination: 'New York',
-    departureDate: '2024-07-01T00:00:00Z',
-    arrivalDate: '2024-07-07T00:00:00Z',
-    rating: 4.5,
-    title: 'Exciting Summer Trip to NYC',
-    description: 'Explore the vibrant city life, visit famous landmarks, and enjoy local cuisines.',
-    price: 1500,
-  },
-  {
-    id: '2',
-    name: 'Beach Getaway',
-    picture: 'https://picsum.photos/350/800',
-    origin: 'San Francisco',
-    destination: 'Miami',
-    departureDate: '2024-08-15T00:00:00Z',
-    arrivalDate: '2024-08-22T00:00:00Z',
-    rating: 4.8,
-    title: 'Relaxing Beach Vacation',
-    description: 'Enjoy sunbathing, water sports, and beach parties in Miami.',
-    price: 1200,
-  },
-  {
-    id: '3',
-    name: 'Cultural Journey',
-    picture: 'https://picsum.photos/350/800',
-    origin: 'Chicago',
-    destination: 'Washington, D.C.',
-    departureDate: '2024-09-10T00:00:00Z',
-    arrivalDate: '2024-09-17T00:00:00Z',
-    rating: 4.7,
-    title: 'Discover the History of the U.S.',
-    description: 'Visit museums, monuments, and immerse yourself in American history.',
-    price: 800,
-  },
-];
+import LoadingTripsList from './loading/LoadingTripsList';
+import { Trip } from '@/types/trip';
 
 const TripsList = () => {
-  const [trips, setTrips] = useState<Trip[]>(dummyTrips); // Set initial state to dummy data
-  const [filteredTrips, setFilteredTrips] = useState<Trip[]>(dummyTrips); // Initialize filtered trips to dummy data
-  const [searchQuery, setSearchQuery] = useState<string>(''); // State for search query
-  const [sortOption, setSortOption] = useState<string>(''); // State for sort option
-  const [filterOption, setFilterOption] = useState<string>(''); // State for filter option
-  const [page, setPage] = useState<number>(1); // Track current page
-  const [hasMoreTrips, setHasMoreTrips] = useState<boolean>(true); // Flag to check if more trips exist
-  const [loadingMore, setLoadingMore] = useState<boolean>(false); // Loading state for fetching more trips
-  const [limit,setLimit]=useState<number>(10);
-
-  const getTrips = async (page) => {
+  const [trips, setTrips] = useState<Trip[]>([]);
+  const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [sortOption, setSortOption] = useState<string>('');
+  const [filterOption, setFilterOption] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
+  const [hasMoreTrips, setHasMoreTrips] = useState<boolean>(true);
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
+  const [limit, setLimit] = useState<number>(10);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  
+  const getTrips = async (page: number) => {
+    console.log('Fetching trips on function...');
     try {
-      const response = await fetchTrips(page,limit);
+      const response = await fetchTrips(page, limit);
       if (response.status_code === 200) {
-        const newTrips = response.data;
-        if (newTrips.length === 0) {
-          setHasMoreTrips(false); // No more trips available
-        } else {
-          setTrips(prevTrips => [...prevTrips, ...newTrips]); // Append ntrips to existing ones
-          setFilteredTrips(prevTrips => [...prevTrips, ...newTrips]); // Append new trips to filtered trips
+        const newTrips = response.data.trips;
+        const totalPages = response.pagination.total_pages;
+        console.log('Total pages:', totalPages);
+        if (page >= totalPages) {
+          setHasMoreTrips(false);
+          setTotalPages(totalPages);
         }
-      } else if (response.status_code === 404) {
-        setHasMoreTrips(false);
+
+        // Filter out trips that are already in the state
+        const uniqueTrips = newTrips.filter(newTrip => 
+          !trips.some(existingTrip => existingTrip.trip_id === newTrip.trip_id)
+        );
+
+        if (uniqueTrips.length === 0) {
+          setHasMoreTrips(false);
+        } else {
+          setTrips(prevTrips => [...prevTrips, ...uniqueTrips]);
+          setFilteredTrips(prevTrips => [...prevTrips, ...uniqueTrips]);
+        }
       } else {
-        console.error('Error fetching trips');
+        setHasMoreTrips(false);
       }
     } catch (error) {
       console.error('Error fetching trips:', error);
     }
   };
 
+  // Fetch trips on initial render
   useEffect(() => {
-    getTrips(page); // Fetch trips on component mount
-  }, [page]);
+    console.log('Fetching trips...');
+    getTrips(page); // Fetch the first page of trips when the component mounts
+  }, []); // Empty dependency array ensures this runs only once
 
-  // Filter and sort trips when searchQuery, sortOption, or filterOption change
+  // Fetch trips only when the page changes
+  const handleShowMore = async () => {
+    setLoadingMore(true);
+    await getTrips(page + 1); // Fetch next page of trips
+    setPage(prevPage => prevPage + 1); // Increment the page state
+    setLoadingMore(false);
+  };
+
+  // Filter and sort trips when search, sort, or filter options change
   useEffect(() => {
     let filtered = trips.filter(trip =>
-      trip.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      trip.destination.toLowerCase().includes(searchQuery.toLowerCase())
+      trip.trip_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      trip.trip_destination.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     if (filterOption) {
       filtered = filtered.filter(trip =>
-        trip.origin.toLowerCase() === filterOption.toLowerCase() ||
-        trip.destination.toLowerCase() === filterOption.toLowerCase()
+        trip.trip_origin.toLowerCase() === filterOption.toLowerCase() ||
+        trip.trip_destination.toLowerCase() === filterOption.toLowerCase()
       );
     }
 
     if (sortOption) {
       filtered.sort((a, b) => {
         if (sortOption === 'price') {
-          return a.price - b.price;
+          return a.trip_lowest_trip_opening_price - b.trip_lowest_trip_opening_price;
         } else if (sortOption === 'rating') {
           return b.rating - a.rating;
         }
@@ -125,21 +91,14 @@ const TripsList = () => {
     }
 
     setFilteredTrips(filtered);
-  }, [searchQuery, sortOption, filterOption, trips]);
-
-  const handleShowMore = async () => {
-    setLoadingMore(true);
-    await getTrips(page + 1); // Fetch next page
-    setPage(prevPage => prevPage + 1); // Increment page
-    setLoadingMore(false);
-  };
+  }, [searchQuery, sortOption, filterOption,trips]);
 
   return (
     <Suspense fallback={<LoadingTripsList />}>
       <div className={styles.container}>
-      <h1 className="page-title">Traveller Trips</h1>
-      <h2 className="section-title">Modify Your Search</h2>
-        {/* Filter and Search Section */}
+        <h1 className="page-title">Traveller Trips</h1>
+        <h2 className="section-title">Modify Your Search</h2>
+
         <FilterAndSearch
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -149,27 +108,25 @@ const TripsList = () => {
           setFilterOption={setFilterOption}
         />
 
-        {/* Trip List */}
-        <Suspense fallback={<LoadingTripsList />}>
-          {filteredTrips.length === 0 ? (
-            <p>No trips are available.</p>
-          ) : (
-            <div className={styles.tripList}>
-              {filteredTrips.map(trip => (
-                <TripCard key={trip.id} trip={trip} />
-              ))}
-            </div>
-          )}
-        </Suspense>
+        {filteredTrips.length === 0 ? (
+          <p>No trips are available.</p>
+        ) : (
+          <div className={styles.tripList}>
+            {filteredTrips.map(trip => (
+              <TripCard key={trip.trip_id} trip={trip} />
+            ))}
+          </div>
+        )}
 
-        {/* Show More Button */}
-        <button 
-          onClick={handleShowMore} 
-          className={`btn-secondary ${styles.showMoreButton}`} 
-          disabled={loadingMore} // Disable button when loading
-        >
-          {loadingMore ? 'Loading...' : 'Show More'} {/* Show loading state or button text */}
-        </button>
+        {hasMoreTrips && (
+          <button
+            onClick={handleShowMore}
+            className={`btn-secondary ${styles.showMoreButton}`}
+            disabled={loadingMore}
+          >
+            {loadingMore ? 'Loading...' : 'Show More'}
+          </button>
+        )}
       </div>
     </Suspense>
   );
