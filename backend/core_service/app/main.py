@@ -91,10 +91,10 @@ app.add_middleware(
 )
 
 # Flags to enable/disable routers
-include_backoffice_routers = True
+include_frontoffice_routers = True
 
 # Include routers
-if include_backoffice_routers:
+if include_frontoffice_routers:
     from routers.frontoffice.v1 import (
         user_router as frontoffice_user_router,
         address_router as frontoffice_address_router,
@@ -102,7 +102,7 @@ if include_backoffice_routers:
         trip_router as trip_router,
         auth_router as auth_router
     )
-if include_backoffice_routers:
+if include_frontoffice_routers:
     app.include_router(frontoffice_user_router.router)
     app.include_router(frontoffice_address_router.router)
     app.include_router(activity_router.router)

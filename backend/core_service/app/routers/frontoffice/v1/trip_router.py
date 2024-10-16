@@ -1,4 +1,4 @@
-from fastapi import status, APIRouter, Query, UploadFile, File,Form,HTTPException
+from fastapi import status, APIRouter, Query, UploadFile, File,Form,HTTPException,Request
 from pydantic import ValidationError
 
 from dependencies.db_dependency import db_dependency
@@ -28,8 +28,9 @@ router = APIRouter(
 
 #API to get all trips
 @router.get("/", status_code=status.HTTP_200_OK)
-@limiter.limit("10/minute")
+@limiter.limit("5/minute")
 async def get_trips(
+    request: Request,
     db: db_dependency,
     page: int = Query(1, ge=1),
     items_per_page: int = Query(10, le=100),
@@ -38,30 +39,39 @@ async def get_trips(
     offset = (page - 1) * items_per_page
     limit = items_per_page
 
-    # Query  with pagination using the interface
+    # Query trips with pagination using the interface
     trips, total_count = TripInterface(db=db).get_trips_with_pagination(offset, limit)
 
     # Calculate total pages
     total_pages = (total_count + items_per_page - 1) // items_per_page
 
-    # Handle response
+    # Handle response for empty trips
     if not trips:
         return api_response(
-            success=False,
+            success=True,
             message="No trips found",
-            status_code=204
-        )
-    else:
-        trips_response = GetTripsResponse.model_validate(trips, from_attributes=True)
-        return api_response(
-            message="Trips found",
-            data=trips_response,
-            total_count=total_count,
+            data=[],
+            total_count=0,
             current_page=page,
-            total_pages=total_pages,
+            total_pages=0,
             items_per_page=items_per_page,
             status_code=200
         )
+    
+    # Validate response
+    trips_response = GetTripsResponse.model_validate(trips, from_attributes=True)
+
+    # Return paginated trips data
+    return api_response(
+        message="Trips found",
+        data=trips_response,
+        total_count=total_count,
+        current_page=page,
+        total_pages=total_pages,
+        items_per_page=items_per_page,
+        status_code=200
+    )
+
 
 #API to get a specific trip by id
 @router.get("/{trip_id}",response_model=GetTripByIdResponse, status_code=status.HTTP_200_OK)

@@ -8,13 +8,14 @@ const TripCard: React.FC<{ trip: Trip }> = ({ trip }) => {
   const whatsappLink = `https://wa.me/${trip.contactPhone}?text=Hello! I'm interested in your trip to ${trip.trip_destination}.`;
 
   const TrackViewDetails = () => {
-    trackEvent("trip_view_details", {
+    trackEvent("user_engagement", {
       trip_id: trip.trip_id,
       trip_title: trip.trip_title,
   });
+};
 
   const TrackContactWhatsapp = () => {
-    trackEvent("trip_contact_whatsapp", {
+    trackEvent("user_engagement", {
       trip_id: trip.trip_id,
       trip_title: trip.trip_title,
   });
