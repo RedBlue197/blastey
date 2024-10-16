@@ -104,7 +104,7 @@ class TripInterface(BaseInterface[Trip]):
             self.db.add(new_trip)
 
             # Loop through each trip item and validate
-            for trip_item in trip.activity_items:
+            for trip_item in trip.trip_items:
                 new_trip_item = TripItem(
                     trip_item_id=uuid.uuid4(),
                     trip_id=trip_id,
@@ -166,12 +166,12 @@ class TripInterface(BaseInterface[Trip]):
             # Apply the partial update for trip fields
             update_data = trip_update.dict(exclude_unset=True)
             for field, value in update_data.items():
-                if field != "activity_items":  # Skip trip items for now
+                if field != "trip_items":  # Skip trip items for now
                     setattr(trip_obj, field, value)
 
             # Handle trip items if they are provided in the update request
-            if trip_update.activity_items:
-                self.update_trip_items(trip_obj, trip_update.activity_items)
+            if trip_update.trip_items:
+                self.update_trip_items(trip_obj, trip_update.trip_items)
 
             # Handle image files if any
             if image_files:
@@ -190,15 +190,15 @@ class TripInterface(BaseInterface[Trip]):
 
     def update_trip_items(self, trip_obj, updated_items: list[PatchTripItemRequest]):
         # Fetch existing trip items
-        existing_items = {item.id: item for item in trip_obj.items}
+        existing_items = {item.trip_item_id: item for item in trip_obj.items}
 
         for item_data in updated_items:
             item_dict = item_data.dict(exclude_unset=True)
             
             # Check if the item already exists (by some unique identifier like ID)
-            if "id" in item_dict and item_dict["id"] in existing_items:
+            if "trip_item_id" in item_dict and item_dict["trip_item_id"] in existing_items:
                 # Update the existing trip item
-                existing_item = existing_items[item_dict["id"]]
+                existing_item = existing_items[item_dict["trip_item_id"]]
                 for field, value in item_dict.items():
                     setattr(existing_item, field, value)
             else:

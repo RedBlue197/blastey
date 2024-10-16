@@ -17,7 +17,7 @@ class CreateTripItemRequest(BaseModel):
     trip_item_price: Optional[float] = Field(None, ge=0, description="Price of the trip item")
 
 class CreateTripRequest(BaseModel):
-    activity_items: List[CreateTripItemRequest] = Field(..., min_items=1, description="List of trip items")
+    trip_items: List[CreateTripItemRequest] = Field(..., min_items=1, description="List of trip items")
     trip_images: Optional[List[CreateTripItemImageRequest]] = Field(None, description="List of trip images")
     trip_title: str = Field(..., min_length=1, max_length=200, description="Title of the trip")
     trip_description: Optional[str] = Field(None, max_length=1000, description="Description of the trip")
@@ -41,9 +41,12 @@ class PatchTripItemRequest(BaseModel):
     trip_item_traveler_reward: Optional[int] = Field(None, description="Traveler reward for the trip item")
     trip_item_type: Optional[TripItemTypeEnum] = Field(None, description="Type of the trip item")
     trip_item_price: Optional[float] = Field(None, ge=0, description="Price of the trip item")
+    trip_item_id: UUID4 = Field(..., description="Trip item ID")
+
 
 class PatchTripRequest(BaseModel):
-    activity_items: Optional[List[PatchTripItemRequest]] = Field(None, description="List of trip items")
+    trip_id: UUID4 = Field(..., description="Trip ID")
+    trip_items: Optional[List[PatchTripItemRequest]] = Field(None, description="List of trip items")
     trip_images: Optional[List[CreateTripItemImageRequest]] = Field(None, description="List of trip images")
     trip_title: Optional[str] = Field(None, min_length=1, max_length=200, description="Title of the trip")
     trip_description: Optional[str] = Field(None, max_length=1000, description="Description of the trip")

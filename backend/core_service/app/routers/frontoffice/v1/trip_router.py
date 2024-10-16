@@ -164,8 +164,7 @@ async def patch_trip(
             )
 
         # Transform the updated trip object into response
-        trip_response = CreateTripResponse.from_orm(trip_obj)
-        trip_response.activity_items = [CreateTripItemResponse.from_orm(item) for item in trip_obj.items]
+        trip_response = CreateTripResponse.model_validate(trip_obj, from_attributes=True)
 
         return api_response(
             data=trip_response, 

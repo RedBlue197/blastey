@@ -6,6 +6,7 @@ import styles from "./LoginModal.module.css"; // Import the CSS module
 import {fetchToken} from "@/services/internal_services/auth_api_handler"
 import { Toast } from '@/app/components';
 import { useToast } from "@/hooks/useToast"; // Import the custom hook
+import trackEvent from"@/utils/track_event"
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -41,6 +42,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               if (response.status_code === 200) {
                 localStorage.setItem('token', response.data);
                 console.log("Successfully connected")
+                trackEvent('button_click', { buttonName: 'Sign Up' });
                 onClose();
                 window.location.reload(); // Refresh the page
                 triggerToast("success", "Successfully signed in!"); // Trigger success toast
