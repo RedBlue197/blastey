@@ -5,7 +5,7 @@ import { fetchTripById } from '@/services/internal_services/trip_api_handler'; /
 import { UUID } from 'crypto';
 
 interface TripDetailProps {
-  params: { id: UUID };
+  params: { trip_id: UUID };
 }
 
 const TripDetails = ({ params }: TripDetailProps) => {
@@ -14,9 +14,9 @@ const TripDetails = ({ params }: TripDetailProps) => {
   const [loading, setLoading] = useState<boolean>(true); // Loading state
 
   useEffect(() => {
-    if (params.id) {
+    if (params.trip_id) {
       setLoading(true); // Set loading to true when fetching begins
-      fetchTripById(params.id)
+      fetchTripById(params.trip_id)
         .then((response) => {
           setTrip(response.data); // Directly set the fetched data into the trip state
           setLoading(false); // Set loading to false once data is fetched
@@ -27,7 +27,7 @@ const TripDetails = ({ params }: TripDetailProps) => {
           setLoading(false); // Stop loading on error
         });
     }
-  }, [params.id]); // Include params.id in the dependency array
+  }, [params.trip_id]); // Include params.id in the dependency array
 
   // Loading state
   if (loading) {

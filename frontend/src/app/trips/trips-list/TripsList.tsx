@@ -16,20 +16,22 @@ const TripsList = () => {
   const [page, setPage] = useState<number>(1);
   const [hasMoreTrips, setHasMoreTrips] = useState<boolean>(true);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit] = useState<number>(10); // Keep limit constant
   const [totalPages, setTotalPages] = useState<number>(0);
   
   const getTrips = async (page: number) => {
-    console.log('Fetching trips on function...');
+    console.log('Fetching trips...');
     try {
       const response = await fetchTrips(page, limit);
       if (response.status_code === 200) {
         const newTrips = response.data.trips;
         const totalPages = response.pagination.total_pages;
-        console.log('Total pages:', totalPages);
+
+        // Set total pages for future reference
+        setTotalPages(totalPages);
+
         if (page >= totalPages) {
           setHasMoreTrips(false);
-          setTotalPages(totalPages);
         }
 
         // Filter out trips that are already in the state
@@ -51,17 +53,17 @@ const TripsList = () => {
     }
   };
 
-  // Fetch trips on initial render
+  // Fetch trips on initial render (only once)
   useEffect(() => {
-    console.log('Fetching trips...');
-    getTrips(page); // Fetch the first page of trips when the component mounts
+    getTrips(page); 
   }, []); // Empty dependency array ensures this runs only once
 
-  // Fetch trips only when the page changes
+  // Fetch trips when "Show More" is clicked
   const handleShowMore = async () => {
     setLoadingMore(true);
-    await getTrips(page + 1); // Fetch next page of trips
-    setPage(prevPage => prevPage + 1); // Increment the page state
+    const nextPage = page + 1; // Calculate the next page to fetch
+    await getTrips(nextPage);
+    setPage(nextPage); // Update the page state after fetch
     setLoadingMore(false);
   };
 
@@ -91,7 +93,7 @@ const TripsList = () => {
     }
 
     setFilteredTrips(filtered);
-  }, [searchQuery, sortOption, filterOption,trips]);
+  }, [searchQuery, sortOption, filterOption, trips]);
 
   return (
     <Suspense fallback={<LoadingTripsList />}>

@@ -1,71 +1,122 @@
-.card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    padding: 20px;
-    margin: 15px;
-    text-align: left;
-    display: flex;
-    flex-direction: row;
-    cursor: pointer;
+.tripCard {
+  display: flex;
+  height: 230px;
+  width: 100%;
+  flex-direction: row;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #fff;
+}
+
+.tripCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.picture {
+  width: 45%;
+  height: 100%;
+}
+
+.details {
+  padding: 20px;
+  flex: 1;
+}
+
+.details h2 {
+  font-size: 1.5rem;
+  margin: 0 0 8px;
+}
+
+.description {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.detailsStrong {
+  font-weight: bold;
+}
+
+.detailsParagraph {
+  margin: 4px 0;
+}
+.tripInfo {
+  display: flex;
+  align-items: center; /* Center align items vertically */
+  justify-content: flex-start; /* Align items to the start of the flex container */
+  margin: 4px 0; /* Add margin to the top and bottom */
+}
+
+.icon {
+  color: #00bf63; /* Customize the icon color */
+  font-size: 20px; /* Adjust the size of the icons */
+  margin-right: 5px; /* Space out the icon from the text */
+}
+
+.arrowIcon {
+  margin: 0 10px; /* Space out the arrow icon from the text */
+  color: #00bf63; /* Customize the color of the arrow icon */
+  font-size: 20px; /* Adjust the size of the arrow */
+}
+
+
+/* Buttons container */
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+/* Button styles */
+.whatsappButton {
+  width: 45%;
+}
+
+.whatsappButton:hover {
+  background-color: #20c659;
+}
+
+.detailsButton {
+  text-align: center;
+  width: 45%;
+}
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .tripCard {
+    flex-direction: column;
+    height: auto;
   }
-  
-  .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+  .picture {
+    width: 100%;
+    height: 200px; /* Adjust height for mobile view */
+    object-fit: cover; /* Ensures image covers the space */
   }
-  
-  .image {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    margin-right: 20px;
-  }
-  
+
   .details {
-    flex: 1;
+    padding: 15px;
   }
-  
-  .title {
-    color: #00bf63;
-    margin-bottom: 10px;
-    font-size: 1.6rem;
+
+  .details h2 {
+    font-size: 1.25rem;
   }
-  
-  .description,
-  .detail {
-    color: #333;
-    font-size: 1rem;
-    margin: 8px 0;
+
+  .description {
+    font-size: 0.9rem;
   }
-  
-  .detail strong {
-    color: #ff914d;
+
+  .buttonsContainer {
+    flex-direction: column;
+    gap: 10px;
   }
-  
-  @media (max-width: 768px) {
-    .card {
-      flex-direction: column; /* Stack image and details in a column */
-      text-align: center;
-      padding: 15px;
-      margin: 10px;
-    }
-  
-    .image {
-      width: 100%;
-      height: auto; /* Adjust image for mobile */
-      margin-right: 0;
-      margin-bottom: 15px; /* Add space below the image */
-    }
-  
-    .title {
-      font-size: 1.4rem;
-    }
-  
-    .description,
-    .detail {
-      font-size: 0.9rem;
-    }
+
+  .whatsappButton, .detailsButton {
+    width: 100%; /* Full width for buttons on mobile */
   }
-  
+}

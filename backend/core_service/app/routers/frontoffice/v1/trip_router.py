@@ -94,6 +94,58 @@ async def get_trip_by_id(
             ,error_code=404
             )
 
+#API to get all trips by host id
+@router.get("/by-host-id/", status_code=status.HTTP_200_OK)
+async def get_trips_by_host_id(
+    user: user_dependency,
+    db: db_dependency,
+    page: int = Query(1, ge=1),
+    items_per_page: int = Query(10, le=100),
+
+):
+    if user['user_role'] not in ["admin", "host","user"]:
+        return api_response(
+            message="Unauthorized Role",
+            status_code=403
+        )
+    
+# Calculate pagination offsets
+    offset = (page - 1) * items_per_page
+    limit = items_per_page
+
+    # Query trips with pagination using the interface
+    trips, total_count = TripInterface(db=db).get_trips_by_user_id_with_pagination(user['user_id'],offset, limit)
+
+    # Calculate total pages
+    total_pages = (total_count + items_per_page - 1) // items_per_page
+
+    # Handle response for empty trips
+    if not trips:
+        return api_response(
+            success=True,
+            message="No trips found",
+            data=[],
+            total_count=0,
+            current_page=page,
+            total_pages=0,
+            items_per_page=items_per_page,
+            status_code=200
+        )
+    
+    # Validate response
+    trips_response = GetTripsResponse.model_validate(trips, from_attributes=True)
+
+    # Return paginated trips data
+    return api_response(
+        message="Trips found",
+        data=trips_response,
+        total_count=total_count,
+        current_page=page,
+        total_pages=total_pages,
+        items_per_page=items_per_page,
+        status_code=200
+    )
+
 
 #----------------------------------------------------POST ENDPOINTS----------------------------------------------------
 @router.post("/create-trip", status_code=status.HTTP_201_CREATED)

@@ -77,6 +77,52 @@ class TripInterface(BaseInterface[Trip]):
             Trip.is_deleted == False,
             Trip.trip_id == trip_id
             ).first()
+    
+    def get_trips_by_user_id_with_pagination(self, user_id: uuid.UUID, offset: int, limit: int):
+        total_count_query = (
+            self.db.query(func.count(Trip.trip_id))
+            .filter(
+                Trip.is_deleted == False,
+                Trip.host_id == user_id
+            )
+            .scalar_subquery()
+        )
+
+        trips_query = (
+            self.db.query(Trip, total_count_query.label('total_count'))
+            .filter(
+                Trip.is_deleted == False,
+                Trip.host_id == user_id
+            )
+            .offset(offset)
+            .limit(limit)
+            .all()
+        )
+
+        for trip, total_count in trips_query:
+            # Get host data
+            trip.host = self.db.query(User).filter(
+                User.user_id == trip.host_id,
+                User.is_deleted == False,
+                User.status == True
+            ).first()
+
+            # Get lowest trip opening price
+            lowest_price = self.db.query(func.min(TripOpening.trip_opening_price)).filter(
+                TripOpening.trip_id == trip.trip_id,
+                TripOpening.is_deleted == False,
+            ).scalar()
+            
+            trip.trip_lowest_trip_opening_price = lowest_price if lowest_price is not None else 0
+
+        if trips_query:
+            total_count = trips_query[0][1]
+            trips = [trip for trip, _ in trips_query]
+        else:
+            total_count = 0
+            trips = []
+        
+        return {"trips": trips}, total_count
 
     
     def create_trip(self, trip: CreateTripRequest, image_files: List[UploadFile]):
