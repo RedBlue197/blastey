@@ -1,27 +1,45 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './PrimaryButton.module.css';
 
 interface PrimaryButtonProps {
   label: string;
-  onClick?: () => void;
+  onClick?: () => Promise<void> | void;  // Support async functions
   disabled?: boolean;
-  loading?: boolean;  // New prop for loading state
 }
 
-const PrimaryButton: React.FC<PrimaryButtonProps> = ({ label, onClick, disabled = false, loading = false }) => {
+const PrimaryButton: React.FC<PrimaryButtonProps> = ({ label, onClick, disabled = false }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    if (onClick) {
+      setLoading(true);
+      try {
+        await onClick();  // Handle async actions
+      } finally {
+        setLoading(false);  // Stop loading after action completes
+      }
+    }
+  };
+
   return (
     <button 
-      className={styles.primaryButton} 
-      onClick={onClick} 
+      className={`${styles.primaryButton} ${loading ? styles.loading : ''}`} 
+      onClick={handleClick} 
       disabled={disabled || loading} // Disable when loading or explicitly disabled
     >
-    
-      <span className={styles.primaryButtonText}>
-        {label}
-      </span>
-      {loading && <div className={styles.spinner}></div>}  {/* Show spinner when loading */}
+      {loading ? (
+        <div className={styles.dotsContainer}>
+          <div className={styles.dot}></div>
+          <div className={styles.dot}></div>
+          <div className={styles.dot}></div>
+        </div>
+      ) : (
+        <span className={styles.primaryButtonText}>
+          {label}
+        </span>
+      )}
     </button>
   );
 };

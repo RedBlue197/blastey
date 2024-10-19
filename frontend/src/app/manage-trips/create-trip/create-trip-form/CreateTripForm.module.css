@@ -3,7 +3,6 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-
 }
 
 /* Title styles */
@@ -17,6 +16,7 @@
 
 /* Form general styles */
 .form {
+  padding: 2rem;
   display: flex;
   flex-direction: column;
 }
@@ -126,38 +126,31 @@
   font-size: 1.25rem; /* Adjust size if needed */
 }
 
-
 /* Flex layout for input pairs (like date and price fields) */
 .flexRow {
   display: flex;
   justify-content: space-between;
+  gap: 1rem; /* Adjust spacing between form groups */
 }
 
 .flexRow .formGroup {
   width: 48%;
 }
 
-.submitButton {
-  width: 48%;
+/* Remove button styles */
+.removeIcon {
+  cursor: pointer;
+  color: red;
+  margin-left: 1rem;
+  font-size: 1.25rem;
+  transition: color 0.3s ease;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .flexRow {
-    flex-direction: column;
-  }
-  
-  .flexRow .formGroup {
-    width: 100%;
-  }
-
-  .submitButton {
-    width: 100%;
-    margin-top: 1rem;
-  }
+.removeIcon:hover {
+  color: #cc0000;
 }
 
-/* Additional styles for dynamic elements */
+/* Dynamic section styling */
 .dynamicSection {
   background-color: #f4f4f4;
   padding: 1rem;
@@ -169,4 +162,20 @@
   font-size: 1.25rem;
   color: #333;
   margin-bottom: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .flexRow {
+    flex-direction: column;
+  }
+
+  .flexRow .formGroup {
+    width: 100%;
+  }
+
+  .submitButton {
+    width: 100%;
+    margin-top: 1rem;
+  }
 }

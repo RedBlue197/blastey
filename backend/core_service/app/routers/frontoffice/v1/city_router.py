@@ -29,7 +29,7 @@ router = APIRouter(
 @limiter.limit("5/minute")
 async def get_cities(
     request: Request,
-    user: user_dependency,
+    # user: user_dependency,
     db: db_dependency,
     search: Optional[str] = Query(None),
 ):
@@ -39,7 +39,7 @@ async def get_cities(
     cities_response = GetCitiesResponse.model_validate(cities, from_attributes=True)
 
     # Handle response for empty cities
-    if not cities:
+    if not cities_response:
         return api_response(
             success=True,
             message="No cities found",

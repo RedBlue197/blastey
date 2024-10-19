@@ -1,50 +1,77 @@
+/* Base button styles */
 .primaryButton {
-    background-color: #00bf63; /* Primary Color */
-    color: white; /* Text color */
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+  background-color: #00bf63;
+  color: white;
+  width: 60%;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+}
+
+.primaryButton:hover {
+  background-color: #00a653;
+}
+
+.primaryButton.loading {
+  background-color: #999; /* Change color to indicate loading state */
+  cursor: not-allowed; /* Disable interaction during loading */
+  width: 60%;
+  padding: 10px 20px;
+  height: 50px;
+
+}
+
+/* Text styles for the button */
+.primaryButtonText {
+  font-size: 1rem;
+}
+
+/* Dots container for loading state */
+.dotsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 2rem; /* Adjust size based on dot spacing */
+}
+
+/* Styles for each dot in the loading state */
+.dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: white;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+/* Keyframes for the dot animation */
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
   }
-  
-  .primaryButton:hover {
-    background-color: #00a355;
-    transform: translateY(-2px);
+  40% {
+    transform: scale(1);
   }
-  
-  .primaryButton:active {
-    transform: translateY(0);
-  }
-  
-  .primaryButton:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-  
-  .primaryButtonText {
-    font-family: 'Tajawal', sans-serif;
-    letter-spacing: 1px;
-  }
-  
-  .spinner {
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top: 3px solid white;
-    width: 16px;
-    height: 16px;
-    animation: spin 1s linear infinite;
-    margin-left: 10px;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
+}
+
+/* Delays for each dot to create staggered effect */
+.dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0s;
+}

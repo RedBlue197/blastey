@@ -60,6 +60,7 @@ import models.user_model as user_model
 import models.activity_model as activity_model
 import models.newsletter_model as newsletter_model
 import models.trip_model as trip_model
+import models.city_model as city_model
 
 
 #Creating tables
@@ -73,6 +74,7 @@ address_model.Base.metadata.create_all(bind=engine)
 activity_model.Base.metadata.create_all(bind=engine)
 newsletter_model.Base.metadata.create_all(bind=engine)
 trip_model.Base.metadata.create_all(bind=engine)
+city_model.Base.metadata.create_all(bind=engine)
 
 app.add_middleware(LoggingMiddleware)
 app.add_middleware(DecryptionMiddleware)
@@ -100,7 +102,8 @@ if include_frontoffice_routers:
         address_router as frontoffice_address_router,
         activity_router as activity_router,
         trip_router as trip_router,
-        auth_router as auth_router
+        auth_router as auth_router,
+        city_router as city_router
     )
 if include_frontoffice_routers:
     app.include_router(frontoffice_user_router.router)
@@ -108,6 +111,7 @@ if include_frontoffice_routers:
     app.include_router(activity_router.router)
     app.include_router(trip_router.router)
     app.include_router(auth_router.router)
+    app.include_router(city_router.router)
     
 
 @app.on_event("startup")
