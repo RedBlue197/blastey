@@ -1,0 +1,57 @@
+.linkButton {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #00bf63;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .linkButton:hover {
+    text-decoration: underline;
+  }
+  
+  .linkButton:disabled,
+  .linkButton[aria-disabled="true"] {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .buttonText {
+    display: flex;
+    align-items: center;
+  }
+  
+  .iconContainer {
+    margin-right: 0.5rem;
+  }
+  
+  .dotsContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #fff;
+    border-radius: 50%;
+    margin: 0 0.125rem;
+    animation: bounce 1.5s infinite ease-in-out;
+  }
+  
+  @keyframes bounce {
+    0%, 80%, 100% {
+      transform: scale(0.6);
+    }
+    40% {
+      transform: scale(1);
+    }
+  }
+  

@@ -13,15 +13,15 @@ const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
         <div key={index} className={styles.step}>
           <div
             className={`${styles.circle} ${
-              index <= currentStep ? styles.active : ''
-            }`}
+              index < currentStep ? styles.active : ''
+            } ${index === currentStep ? styles.currentStep : ''}`} 
           >
             {index + 1}
           </div>
           <p
             className={`${styles.stepLabel} ${
-              index <= currentStep ? styles.activeLabel : ''
-            }`}
+              index < currentStep ? styles.activeLabel : ''
+            } ${index === currentStep ? styles.currentLabel : ''}`}
           >
             {step}
           </p>

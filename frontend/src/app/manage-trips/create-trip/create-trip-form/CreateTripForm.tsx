@@ -82,7 +82,7 @@ const CreateTripForm = () => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.container}>
-          <h2 className={styles.pageTitle}>Create a New Trip</h2>
+          <h2 className={'page-title'}>Create a New Trip</h2>
 
           <Stepper steps={steps} currentStep={currentStep} />
 

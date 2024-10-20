@@ -11,19 +11,30 @@ const TripImagesForm = () => {
   });
 
   return (
-    <div>
-      <h2>Trip Images</h2>
+    <div className={styles.sectionBig}>
+      <h2 className="section-title">Trip Images</h2>
       {tripImagesFields.map((image, index) => (
         <div key={image.id} className={styles.formGroup}>
-          <label>Image URL</label>
-          <input {...register(`trip_images.${index}.trip_image_url`)} />
-          <label>
-            <input type="checkbox" {...register(`trip_images.${index}.trip_image_is_primary`)} />
+          <label className={styles.formLabel}>Image URL</label>
+          <input 
+            className={styles.formInput} 
+            {...register(`trip_images.${index}.trip_image_url`, { required: 'Image URL is required' })} 
+          />
+          
+          <label className={styles.formLabel}>
+            <input 
+              type="checkbox" 
+              {...register(`trip_images.${index}.trip_image_is_primary`)} 
+            />{' '}
             Is Primary Image
           </label>
         </div>
       ))}
-      <button type="button" onClick={() => appendTripImage({ trip_image_url: '', trip_image_is_primary: true })}>
+      <button 
+        className={styles.formButton} 
+        type="button" 
+        onClick={() => appendTripImage({ trip_image_url: '', trip_image_is_primary: false })}
+      >
         Add Trip Image
       </button>
     </div>

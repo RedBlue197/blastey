@@ -109,7 +109,7 @@
 
 /* Dynamic section for trip items */
 .dynamicSection {
-  background-color: #ffffff;
+  background-color: #ffffff ;
   padding: 1rem;
   border-radius: 4px;
   margin-bottom: 1.5rem;

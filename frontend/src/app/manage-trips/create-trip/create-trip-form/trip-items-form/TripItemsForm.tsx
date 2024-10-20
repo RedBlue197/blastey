@@ -2,7 +2,8 @@
 
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { useState } from 'react';
-import { FaChevronUp, FaChevronDown, FaTrash } from 'react-icons/fa';
+import { FaChevronUp, FaChevronDown, FaPlus  } from 'react-icons/fa';
+import LinkWithIconButton from '@/app/components/button/LinkWithIconButton';
 import styles from './TripItemsForm.module.css';
 
 const TripItemsForm = () => {
@@ -23,23 +24,7 @@ const TripItemsForm = () => {
 
   return (
     <div className={styles.sectionBig}>
-      <button
-        type="button"
-        className={styles.addButton}
-        onClick={() =>
-          appendActivityItem({
-            trip_item_name: '',
-            trip_item_category: '',
-            trip_item_type: '',
-            trip_item_address: '',
-            trip_item_traveler_reward: '',
-            trip_item_price: '',
-          })
-        }
-      >
-        Add Trip Item
-      </button>
-
+      <h2 className='section-title'>Enter trip items details</h2>
       {activityItemsFields.map((item, index) => (
         <div key={item.id} className={styles.formGroup}>
           <div className={styles.sectionTitle}>
@@ -100,7 +85,23 @@ const TripItemsForm = () => {
           )}
         </div>
       ))}
+      <LinkWithIconButton
+    label="Add Trip Item"
+    icon={<FaPlus />}  // Adding the plus icon before the label
+    onClick={() =>
+      appendActivityItem({
+        trip_item_name: '',
+        trip_item_category: '',
+        trip_item_type: '',
+        trip_item_address: '',
+        trip_item_traveler_reward: '',
+        trip_item_price: '',
+      })
+    }
+  />
+
     </div>
+    
   );
 };
 

@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 25px;
 }
 
 .step {
@@ -57,4 +58,12 @@
   align-items: center;
   position: relative;
   width: 100px; /* Adjust this width to control the distance between the steps */
+}
+.currentStep {
+  background-color: #ff914d; /* Orange background for the current step */
+  color: white;
+}
+
+.currentLabel {
+  color: #ff914d; /* Orange text for the current step label */
 }
