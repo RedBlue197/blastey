@@ -1,12 +1,14 @@
 'use client';
 
-import { useForm, Controller, useFieldArray } from 'react-hook-form';
-import { useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
-import { FaChevronDown, FaChevronUp, FaTrash } from 'react-icons/fa';
-import { PrimaryButton } from '@/app/components'; // Import PrimaryButton component
+import { FormProvider, useForm } from 'react-hook-form';
+import { useState } from 'react';
+import TripDetailsForm from './trip-details-form/TripDetailsForm';
+import TripItemsForm from './trip-items-form/TripItemsForm';
+import TripOpeningsForm from './trip-openings-form/TripOpeningsForm';
+import TripImagesForm from './trip-images-form/TripImagesForm';
+import Stepper from './stepper/Stepper';
 import axios from 'axios';
-import styles from './CreateTripForm.module.css'; // Import your CSS module for styling
+import styles from './CreateTripForm.module.css';
 
 interface CreateTripFormInputs {
   trip_title: string;
@@ -22,12 +24,8 @@ interface CreateTripFormInputs {
   trip_price?: number;
   activity_items: {
     trip_item_name: string;
-    trip_item_description?: string;
     trip_item_category: string;
-    trip_item_address?: string;
-    trip_item_traveler_reward?: number;
     trip_item_type: string;
-    trip_item_price?: number;
   }[];
   trip_images?: { trip_image_url: string; trip_image_is_primary: boolean }[];
   trip_openings?: {
@@ -38,237 +36,88 @@ interface CreateTripFormInputs {
 }
 
 const CreateTripForm = () => {
-  const { register, handleSubmit, control, formState: { errors }, reset } = useForm<CreateTripFormInputs>({
+  const methods = useForm<CreateTripFormInputs>({
     defaultValues: {
       activity_items: [{ trip_item_name: '', trip_item_category: '', trip_item_type: '' }],
       trip_images: [{ trip_image_url: '', trip_image_is_primary: true }],
-      trip_openings: [{ trip_opening_date: '', trip_opening_price: 0, trip_opening_availability: 0 }]
-    }
+      trip_openings: [{ trip_opening_date: '', trip_opening_price: 0, trip_opening_availability: 0 }],
+    },
   });
-
-  const { fields: activityItemsFields, append: appendActivityItem, remove: removeActivityItem } = useFieldArray({
-    control,
-    name: 'activity_items'
-  });
-
-  const { fields: tripImagesFields, append: appendTripImage } = useFieldArray({
-    control,
-    name: 'trip_images'
-  });
-
-  const { fields: tripOpeningsFields, append: appendTripOpening, remove: removeTripOpening } = useFieldArray({
-    control,
-    name: 'trip_openings'
-  });
-
+  const { handleSubmit, reset } = methods;
   const [loading, setLoading] = useState(false);
-  const [isTripSectionOpen, setIsTripSectionOpen] = useState(true);
-  const [isItemsSectionOpen, setIsItemsSectionOpen] = useState(true);
-  const [isImagesSectionOpen, setIsImagesSectionOpen] = useState(true);
-  const [isOpeningsSectionOpen, setIsOpeningsSectionOpen] = useState(true);
-
-  const [cityOptions, setCityOptions] = useState([]);
-
-  // Separate states to handle dropdown for each trip item and trip opening
-  const [itemsDropdownOpen, setItemsDropdownOpen] = useState<boolean[]>([]);
-  const [openingsDropdownOpen, setOpeningsDropdownOpen] = useState<boolean[]>([]);
-
-  // Fetch cities with country from the backend
-  useEffect(() => {
-    async function fetchCities() {
-      try {
-        const response = await fetch('/api/cities');
-        const data = await response.json();
-        setCityOptions(data);
-      } catch (error) {
-        console.error('Error fetching cities:', error);
-      }
-    }
-
-    fetchCities();
-  }, []);
+  const [currentStep, setCurrentStep] = useState(0);
+  const steps = ['Trip Details', 'Trip Items', 'Trip Openings', 'Trip Images'];
 
   const onSubmit = async (data: CreateTripFormInputs) => {
     try {
       setLoading(true);
-      const hostId = uuidv4(); // Example: Generate host_id if not provided
-      const formData = {
-        ...data,
-        host_id: hostId, // Replace with actual host ID if needed
-      };
-
-      const response = await axios.post('/api/create-trip', formData); // Adjust API endpoint
+      const response = await axios.post('/api/create-trip', data);
       if (response.status === 201) {
         alert('Trip created successfully!');
-        reset(); // Reset form on success
+        reset();
+        setCurrentStep(0); // Reset to the first step
       } else {
         alert('Failed to create trip');
       }
     } catch (error) {
       console.error('Error creating trip:', error);
-      alert('An error occurred while creating the trip');
     } finally {
       setLoading(false);
     }
   };
 
-  const toggleItemDropdown = (index: number) => {
-    const updatedState = [...itemsDropdownOpen];
-    updatedState[index] = !updatedState[index];
-    setItemsDropdownOpen(updatedState);
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep((prevStep) => prevStep + 1);
+    }
   };
 
-  const toggleOpeningDropdown = (index: number) => {
-    const updatedState = [...openingsDropdownOpen];
-    updatedState[index] = !updatedState[index];
-    setOpeningsDropdownOpen(updatedState);
-  };
-
-  const simulateAsyncOperation = async () => {
-    // Simulate a network request or other async action
-    return new Promise(resolve => setTimeout(resolve, 3000));
+  const handlePrevious = () => {
+    if (currentStep > 0) {
+      setCurrentStep((prevStep) => prevStep - 1);
+    }
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={'page-title'}>Create New Trip</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-        
-        {/* Trip Section */}
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle} onClick={() => setIsTripSectionOpen(!isTripSectionOpen)}>
-            <span>Trip Details</span>
-            <span className={styles.dropdownIcon}>
-              {isTripSectionOpen ? <FaChevronUp /> : <FaChevronDown />}
-            </span>
-          </h2>
-          {isTripSectionOpen && (
-            <>
-              <div className={styles.formGroup}>
-                <label>Title</label>
-                <input {...register('trip_title', { required: 'Trip title is required', minLength: 1, maxLength: 200 })} />
-                {errors.trip_title && <p className={styles.error}>{errors.trip_title.message}</p>}
-              </div>
+    <FormProvider {...methods}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.container}>
+          <h2 className={styles.pageTitle}>Create a New Trip</h2>
 
-              <div className={styles.formGroup}>
-                <label>Description</label>
-                <textarea {...register('trip_description', { maxLength: 1000 })} />
-              </div>
+          <Stepper steps={steps} currentStep={currentStep} />
 
-              <div className={styles.formGroup}>
-                <label>Origin</label>
-                <select {...register('trip_origin', { required: true })}>
-                  <option value="">Select City</option>
-                  {cityOptions.map((city) => (
-                    <option key={city.id} value={`${city.country}, ${city.name}`}>
-                      {city.country}, {city.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+          {currentStep === 0 && <TripDetailsForm />}
+          {currentStep === 1 && <TripItemsForm />}
+          {currentStep === 2 && <TripOpeningsForm />}
+          {currentStep === 3 && <TripImagesForm />}
 
-              <div className={styles.formGroup}>
-                <label>Destination</label>
-                <select {...register('trip_destination', { required: true })}>
-                  <option value="">Select City</option>
-                  {cityOptions.map((city) => (
-                    <option key={city.id} value={`${city.country}, ${city.name}`}>
-                      {city.country}, {city.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Trip Items Section */}
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle} onClick={() => setIsItemsSectionOpen(!isItemsSectionOpen)}>
-            <span>Trip Items</span>
-            <span className={styles.dropdownIcon}>
-              {isItemsSectionOpen ? <FaChevronUp /> : <FaChevronDown />}
-            </span>
-          </h2>
-          {isItemsSectionOpen && (
-            <>
-              {activityItemsFields.map((item, index) => (
-                <div key={item.id} className={styles.formGroup}>
-                  <h3 onClick={() => toggleItemDropdown(index)} className={styles.itemDropdown}>
-                    Trip Item {index + 1} 
-                    <span>{itemsDropdownOpen[index] ? <FaChevronUp /> : <FaChevronDown />}</span>
-                    <FaTrash className={styles.removeIcon} onClick={() => removeActivityItem(index)} />
-                  </h3>
-                  {itemsDropdownOpen[index] && (
-                    <>
-                      <label>Trip Item Name</label>
-                      <input {...register(`activity_items.${index}.trip_item_name`, { required: true })} />
-                      <label>Trip Item Category</label>
-                      <input {...register(`activity_items.${index}.trip_item_category`, { required: true })} />
-                      <label>Trip Item Type</label>
-                      <input {...register(`activity_items.${index}.trip_item_type`, { required: true })} />
-                      <label>Trip Item Address</label>
-                      <input {...register(`activity_items.${index}.trip_item_address`)} />
-                      <label>Traveler Reward</label>
-                      <input type="number" {...register(`activity_items.${index}.trip_item_traveler_reward`)} />
-                      <label>Trip Item Price</label>
-                      <input type="number" step="0.01" {...register(`activity_items.${index}.trip_item_price`)} />
-                    </>
-                  )}
-                </div>
-              ))}
-              <button type="button" onClick={() => appendActivityItem({ trip_item_name: '', trip_item_category: '', trip_item_type: '' })}>
-                Add Trip Item
+          <div className={styles.stepNavigation}>
+            {currentStep > 0 && (
+              <button
+                type="button"
+                className={`btn-secondary ${styles.secondaryButton}`}
+                onClick={handlePrevious}
+              >
+                Previous
               </button>
-            </>
-          )}
-        </div>
-
-        {/* Trip Openings Section */}
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle} onClick={() => setIsOpeningsSectionOpen(!isOpeningsSectionOpen)}>
-            <span>Trip Openings</span>
-            <span className={styles.dropdownIcon}>
-              {isOpeningsSectionOpen ? <FaChevronUp /> : <FaChevronDown />}
-            </span>
-          </h2>
-          {isOpeningsSectionOpen && (
-            <>
-              {tripOpeningsFields.map((opening, index) => (
-                <div key={opening.id} className={styles.formGroup}>
-                  <h3 onClick={() => toggleOpeningDropdown(index)} className={styles.itemDropdown}>
-                    Trip Opening {index + 1} 
-                    <span>{openingsDropdownOpen[index] ? <FaChevronUp /> : <FaChevronDown />}</span>
-                    <FaTrash className={styles.removeIcon} onClick={() => removeTripOpening(index)} />
-                  </h3>
-                  {openingsDropdownOpen[index] && (
-                    <>
-                      <label>Opening Date</label>
-                      <input type="date" {...register(`trip_openings.${index}.trip_opening_date`, { required: true })} />
-                      <label>Opening Price</label>
-                      <input type="number" step="0.01" {...register(`trip_openings.${index}.trip_opening_price`, { required: true })} />
-                      <label>Opening Availability</label>
-                      <input type="number" {...register(`trip_openings.${index}.trip_opening_availability`, { required: true })} />
-                    </>
-                  )}
-                </div>
-              ))}
-              <button type="button" onClick={() => appendTripOpening({ trip_opening_date: '', trip_opening_price: 0, trip_opening_availability: 0 })}>
-                Add Trip Opening
+            )}
+            {currentStep < steps.length - 1 ? (
+              <button
+                type="button"
+                className={`btn-primary ${styles.primaryButton}`}
+                onClick={handleNext}
+              >
+                Next
               </button>
-            </>
-          )}
+            ) : (
+              <button type="submit" className={styles.primaryButton} disabled={loading}>
+                {loading ? 'Submitting...' : 'Submit'}
+              </button>
+            )}
+          </div>
         </div>
-
-        <div>
-        <PrimaryButton
-        label="Submit"
-        onClick={simulateAsyncOperation}
-        disabled={false}
-      />
-    </div>
       </form>
-    </div>
+    </FormProvider>
   );
 };
 
