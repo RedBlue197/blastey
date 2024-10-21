@@ -225,6 +225,9 @@ async def create_trip_openings(
             status_code=500
         )
 
+#[TO START] api to create trip images
+@router
+
 #----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
 
 @router.patch("/update-trip/{trip_id}", status_code=status.HTTP_200_OK)
@@ -270,7 +273,13 @@ async def patch_trip(
             message=f"Failed to update trip: {str(e)}",
             status_code=500
         )
-    
+
+#[TO START] api to patch trip items
+
+#[TO START] api to patch trip openings
+
+#[TO START] api to patch trip images
+
 
 #----------------------------------------------------DELETE ENDPOINTS----------------------------------------------------
 @router.delete("/delete-all-trips", status_code=status.HTTP_200_OK)
