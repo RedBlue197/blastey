@@ -5,6 +5,12 @@ from database import Base
 from models.base_model import TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin
 from enum import Enum as PyEnum
 
+class TripCreationStatusEnum(PyEnum):
+    DRAFT = "draft"
+    ON_GOING_TRIP_ITEM_CREATION = "trip_item_creation"
+    ON_GOING_TRIP_OPENING_CREATION = "trip_opening_creation"
+    ON_GOING_TRIP_IMAGES_CREATION = "trip_images_creation"
+    COMPLETED="completed"
 
 
 class TripItemCategoryEnum(PyEnum):
@@ -30,8 +36,11 @@ class  Trip(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixi
     trip_origin=Column(String, nullable=True)
     trip_destination=Column(String, nullable=True)
     trip_link_url=Column(String, nullable=True)
-    trip_upvote=Column(Integer, nullable=True)
-    trip_downvote=Column(Integer, nullable=True)
+    trip_upvote=Column(Integer, nullable=True,default=0)
+    trip_downvote=Column(Integer, nullable=True,default=0)
+    trip_base_price=Column(Float, nullable=True,default=0)
+    trip_base_reward=Column(Float, nullable=True,default=0)
+    trip_creation_status=Column(Enum(TripCreationStatusEnum),,default=TripCreationStatusEnum.DRAFT)
 
     #Foreign Keys
     host_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
@@ -93,7 +102,7 @@ class TripOpening(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Updated
     trip_opening_end_date = Column(DateTime, nullable=False)
     trip_opening_total_reward = Column(Numeric(precision=10, scale=2), nullable=True)  # Reward for the trip
     is_limited_availability = Column(Boolean, default=False)
-    trip_opening_total_availability = Column(Integer, nullable=False)
+    trip_opening_total_availability = Column(Integer, nullable=True)
     trip_opening_total_booking=Column(Integer, nullable=True)
     trip_opening_price = Column(Float, nullable=False)  # Price specific to this trip opening
 
@@ -106,21 +115,15 @@ class TripOpeningItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Upd
     __tablename__ = "trip_opening_items"
 
     trip_opening_item_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    trip_opening_item_name = Column(String, nullable=False)
-    trip_opening_item_description= Column(String, nullable=False)
-
-    trip_opening_item_category = Column(Enum(TripItemCategoryEnum), nullable=True)
-    trip_opening_item_address = Column(String, nullable=True)
 
     trip_opening_item_traveler_reward = Column(Numeric(precision=10, scale=2), nullable=True)  # Reward for the traveler
-    trip_opening_item_type=Column(Enum(TripItemTypeEnum),default=TripItemTypeEnum.INCLUDED)
 
     is_limited_availability = Column(Boolean, default=False)
     trip_opening_item_total_availability = Column(Integer, nullable=False)
     trip_opening_item_total_booking=Column(Integer, nullable=True)
 
     trip_opening_item_price=Column(Float, nullable=True) 
-    trip_opening_item_image = Column(String, nullable=False)
 
     # Foreign Keys
     trip_opening_id = Column(UUID(as_uuid=True), ForeignKey("trip_openings.trip_opening_id", ondelete="CASCADE"), nullable=False)
+    trip_item_id = Column(UUID(as_uuid=True), ForeignKey("trip_items.trip_item_id", ondelete="CASCADE"), nullable=False)

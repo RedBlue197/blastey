@@ -6,9 +6,9 @@ from dependencies.auth_dependency import user_dependency
 
 from interfaces.trip_interface import TripInterface
 
-from schemas.trip_schema import CreateTripRequest, PatchTripRequest
+from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest, PatchTripRequest
 
-from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemResponse
+from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemResponse,CreateTripOpeningsResponse
 
 from utils.responses import api_response
 
@@ -152,8 +152,7 @@ async def get_trips_by_host_id(
 async def create_trip(
     user: user_dependency,
     db: db_dependency,
-    trip: str = Form(...),  # Trip data as a JSON string
-    image_files: List[UploadFile] = File(...),  # Accept multiple image files
+    trip: CreateTripRequest
 ):
     if user['user_role'] not in ["admin", "host"]:
         return api_response(
@@ -161,38 +160,71 @@ async def create_trip(
             status_code=403
         )
     try:
-        # Parse trip JSON string to Pydantic model
-        try:
-            trip_data = CreateTripRequest.model_validate_json(trip)  # Automatically validates the trip data
-        except ValidationError as ve:
-            raise HTTPException(status_code=422, detail=f"Invalid trip data: {ve.errors()}")
-
-        # Validate image files (you can add your own logic for file validation)
-        for image in image_files:
-            if image.content_type not in ["image/jpeg", "image/png"]:
-                raise HTTPException(status_code=400, detail=f"Invalid file format: {image.filename}")
-
-        # Proceed to create the trip
-        trip_obj = TripInterface(db=db).create_trip(trip_data, image_files)  # Pass image_files to create_trip
-
+        trip_obj = TripInterface(db=db).create_trip(trip)
         trip_response = CreateTripResponse.model_validate(trip_obj, from_attributes=True)
-        if not trip_response:
-            return api_response(
-                message="Failed to create trip",
-                status_code=500
-            )
-        else:
-            return api_response(
-                data=trip_response,
-                message="Trip created",
-                status_code=201
-            )
-
+        return api_response(
+            data=trip_response,
+            message="Trip created",
+            status_code=201
+        )
     except Exception as e:
         return api_response(
             message="Failed to create trip: " + str(e),
             status_code=500
         )
+
+#API to create trip items, need to create the interface function creat_trip_items
+@router.post("/create-trip-items")
+async def create_trip_items(
+    user: user_dependency,
+    db: db_dependency,
+    trip_items: CreateTripItemsRequest
+):
+    if user['user_role'] not in ["admin", "host"]:
+        return api_response(
+            message="Unauthorized Role",
+            status_code=403
+        )
+    try:
+        trip_items_obj = TripInterface(db=db).create_trip_items(trip_items)
+        trip_items_response = CreateTripItemsResponse.model_validate(trip_items_obj, from_attributes=True)
+        return api_response(
+            data=trip_items_response,
+            message="Trip items created",
+            status_code=201
+        )
+    except Exception as e:
+        return api_response(
+            message="Failed to create trip items: " + str(e),
+            status_code=500
+        )
+
+#API to create trip openings and trips items, need to create the interface function creat_trip_openings
+@router.post("/create-trip-openings")
+async def create_trip_openings(
+    user: user_dependency,
+    db: db_dependency,
+    trip_openings: CreateTripOpeningsRequest
+):
+    if user['user_role'] not in ["admin", "host"]:
+        return api_response(
+            message="Unauthorized Role",
+            status_code=403
+        )
+    try:
+        trip_openings_obj = TripInterface(db=db).create_trip_openings_obj(trip_openings)
+        trip_openings_response = CreateTripOpeningsResponse.model_validate(trip_openings_obj, from_attributes=True)
+        return api_response(
+            data=trip_openings_response,
+            message="Trip openings created",
+            status_code=201
+        )
+    except Exception as e:
+        return api_response(
+            message="Failed to create trip: " + str(e),
+            status_code=500
+        )
+
 #----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
 
 @router.patch("/update-trip/{trip_id}", status_code=status.HTTP_200_OK)
