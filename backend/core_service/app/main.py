@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi_utils.tasks import repeat_every
 
 from slowapi.util import get_remote_address
 from slowapi import Limiter
@@ -188,6 +189,11 @@ async def startup():
     except Exception as e:
         print(f"Error: {e}")
     
+@repeat_every(seconds=60*60*24)  # Run daily
+async def update_expired_subscriptions():
+    # Query subscriptions where end_date < current date and status == 'active'
+    # Update those subscriptions to status 'expired'
+    pass
 
 @app.get("/")
 async def read_root():

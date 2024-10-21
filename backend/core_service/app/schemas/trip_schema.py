@@ -6,6 +6,14 @@ from typing import List, Optional
 class CreateTripItemImageRequest(BaseModel):
     trip_image_is_primary: bool = Field(..., description="Indicates if the image is primary")
 
+class CreateTripOpeningRequest(BaseModel):
+    trip_opening_start_date: Optional[datetime] = Field(None, description="Start date of the trip opening")
+    trip_opening_end_date : Optional[datetime] = Field(None, description="End date of the trip opening")
+    trip_opening_total_reward : Optional[int] = Field(None, description="Traveler reward for the trip item")
+    trip_opening_total_availability : 
+    trip_opening_total_booking :
+    trip_opening_price :
+
 class CreateTripItemRequest(BaseModel):
     trip_item_date: Optional[datetime] = Field(None, description="Date of the trip item")
     trip_item_name: str = Field(..., min_length=1, max_length=100, description="Name of the trip item")
@@ -46,7 +54,7 @@ class PatchTripRequest(BaseModel):
     trip_items: Optional[List[PatchTripItemRequest]] = Field(None, description="List of trip items")
     trip_images: Optional[List[CreateTripItemImageRequest]] = Field(None, description="List of trip images")
     trip_title: Optional[str] = Field(None, min_length=1, max_length=200, description="Title of the trip")
-    trip_description: Optional[str] = Field(None, max_length=1000, description="Description of the trip")
+    trip_description: Optional[str] = Field(None, max_length=2000, description="Description of the trip")
     trip_departure_date: Optional[datetime] = Field(None, description="Departure date of the trip")
     trip_return_date: Optional[datetime] = Field(None, description="Return date of the trip")
     trip_origin: Optional[str] = Field(None, max_length=100, description="Origin of the trip")

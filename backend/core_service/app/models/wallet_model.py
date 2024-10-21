@@ -22,13 +22,13 @@ class Wallet(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMix
     wallet_currency = Column(String, default="USD")
     wallet_type = Column(Enum(WalletTypeEnum), nullable=False, default=WalletTypeEnum.PLATFORM)
 
-class Transaction(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin, DeletedByMixin):
-    __tablename__ = "transactions"
+class WalletTransaction(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin, DeletedByMixin):
+    __tablename__ = "wallet_transactions"
 
-    transaction_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
-    transaction_ammount = Column(Integer, nullable=False)
-    transaction_description = Column(String, nullable=True)  # Optional description of the transaction
-    transaction_reference = Column(String, nullable=True)  # Optional reference of the transaction
+    wallet_transaction_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    wallet_transaction_ammount = Column(Integer, nullable=False)
+    wallet_transaction_description = Column(String, nullable=True)  # Optional description of the transaction
+    wallet_transaction_reference = Column(String, nullable=True)  # Optional reference of the transaction
 
     wallet_sender_id = Column(UUID(as_uuid=True), ForeignKey('wallets.wallet_id'), nullable=True)
     wallet_receiver_id = Column(UUID(as_uuid=True), ForeignKey('wallets.wallet_id'), nullable=True)
