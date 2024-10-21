@@ -84,14 +84,16 @@ const CreateTripForm = () => {
         <div className={styles.container}>
           <h2 className={'page-title'}>Create a New Trip</h2>
 
+          <div className={styles.stepNavigation}>
           <Stepper steps={steps} currentStep={currentStep} />
+          </div>
 
           {currentStep === 0 && <TripDetailsForm />}
           {currentStep === 1 && <TripItemsForm />}
           {currentStep === 2 && <TripOpeningsForm />}
           {currentStep === 3 && <TripImagesForm />}
 
-          <div className={styles.stepNavigation}>
+          <div className={styles.stepNavigationButton}>
             {currentStep > 0 && (
               <button
                 type="button"

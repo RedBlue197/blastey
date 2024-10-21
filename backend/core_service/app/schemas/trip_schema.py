@@ -16,7 +16,7 @@ class CreateTripOpeningItemRequest(BaseModel):
     trip_opening_item_type : TripItemTypeEnum = Field(..., description="Type of the trip opening item")
 
 
-class CreateTripOpeningRequest(BaseModel):
+class CreateTripOpeningsRequest(BaseModel):
     trip_opening_start_date: Optional[datetime] = Field(None, description="Start date of the trip opening")
     trip_opening_end_date : Optional[datetime] = Field(None, description="End date of the trip opening")
     trip_opening_total_reward : Optional[int] = Field(None, description="Traveler reward for the trip item")

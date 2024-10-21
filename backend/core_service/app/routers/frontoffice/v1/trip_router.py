@@ -6,9 +6,9 @@ from dependencies.auth_dependency import user_dependency
 
 from interfaces.trip_interface import TripInterface
 
-from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest, PatchTripRequest
+from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest,CreateTripOpeningsRequest, PatchTripRequest
 
-from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemResponse,CreateTripOpeningsResponse
+from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemsResponse,CreateTripOpeningsResponse
 
 from utils.responses import api_response
 
@@ -230,13 +230,11 @@ async def create_trip_openings(
 
 #----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
 
-@router.patch("/update-trip/{trip_id}", status_code=status.HTTP_200_OK)
+@router.patch("/update-trip", status_code=status.HTTP_200_OK)
 async def patch_trip(
     user: user_dependency,
-    trip_id: uuid.UUID,
     db: db_dependency, 
     trip_update: PatchTripRequest,
-    image_files: Optional[list[UploadFile]] = File(None),  # Image files are optional
 ):
     if user['user_role'] not in ["admin", "host"]:
         return api_response(
@@ -252,7 +250,7 @@ async def patch_trip(
 
     try:
         # Update trip in the database through the interface
-        trip_obj = TripInterface(db=db).patch_trip(trip_id, trip_update, image_files)
+        trip_obj = TripInterface(db=db).patch_trip(trip_update.trip_id, trip_update)
 
         if not trip_obj:
             return api_response(

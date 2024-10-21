@@ -40,7 +40,7 @@ class  Trip(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixi
     trip_downvote=Column(Integer, nullable=True,default=0)
     trip_base_price=Column(Float, nullable=True,default=0)
     trip_base_reward=Column(Float, nullable=True,default=0)
-    trip_creation_status=Column(Enum(TripCreationStatusEnum),,default=TripCreationStatusEnum.DRAFT)
+    trip_creation_status=Column(Enum(TripCreationStatusEnum),default=TripCreationStatusEnum.DRAFT)
 
     #Foreign Keys
     host_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)

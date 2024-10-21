@@ -58,6 +58,20 @@ body {
 @layer components {
   /* Primary WhatsApp Button */
 
+  .layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Full viewport height */
+  }
+  
+  .layout > * {
+    flex-shrink: 0; /* Ensure items don't shrink */
+  }
+  
+  .layout > :nth-child(2) {
+    flex-grow: 1; /* Allow main content to grow and take up the remaining space */
+  }
+
   .page-title {
     @apply text-3xl font-bold text-center text-[#333]; /* Tailwind utilities */
     margin-bottom: 24px; /* Adjust margin as needed */

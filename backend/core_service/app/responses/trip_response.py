@@ -49,6 +49,13 @@ class GetTripByIdResponse(BaseModel):
         orm_mode = True
         from_attributes = True
 
+class CreateTripOpeningsResponse(BaseModel):
+    trip_opening_id: uuid.UUID
+    trip_opening_start_date: datetime
+    trip_opening_end_date: datetime
+    trip_opening_total_availability: int
+    trip_opening_price: float
+    trip_id: uuid.UUID
         
 class CreateTripItemResponse(BaseModel):
     trip_item_date: Optional[datetime] = None
@@ -61,6 +68,11 @@ class CreateTripItemResponse(BaseModel):
     trip_item_price: Optional[float] = None
     trip_item_id: uuid.UUID
 
+class CreateTripItemsResponse(BaseModel):
+    trip_items: list[CreateTripItemResponse]
+
+    class Config:
+        orm_mode = True
 
 class CreateTripResponse(BaseModel):
     activity_items: list[CreateTripItemResponse]

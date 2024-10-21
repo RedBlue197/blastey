@@ -9,9 +9,10 @@ interface LinkWithIconButtonProps {
   onClick?: () => Promise<void> | void;
   href?: string;  // URL for the link behavior
   disabled?: boolean;
+  variant?: 'default' | 'success' | 'delete';  // Variant for different styles
 }
 
-const LinkWithIconButton: React.FC<LinkWithIconButtonProps> = ({ label, icon, onClick, href, disabled = false }) => {
+const LinkWithIconButton: React.FC<LinkWithIconButtonProps> = ({ label, icon, onClick, href, disabled = false, variant = 'default' }) => {
   const [loading, setLoading] = useState(false);
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>) => {
@@ -44,12 +45,19 @@ const LinkWithIconButton: React.FC<LinkWithIconButtonProps> = ({ label, icon, on
     </>
   );
 
+  // Apply variant styles
+  const variantClass = variant === 'success' 
+    ? styles.success 
+    : variant === 'delete' 
+    ? styles.delete 
+    : styles.default;
+
   // Render a link if href is provided, otherwise a button
   if (href) {
     return (
       <a
         href={href}
-        className={`${styles.linkButton} ${loading ? styles.loading : ''}`}
+        className={`${styles.linkButton} ${variantClass} ${loading ? styles.loading : ''}`}
         onClick={onClick ? handleClick : undefined}
         aria-disabled={disabled || loading}
       >
@@ -60,7 +68,7 @@ const LinkWithIconButton: React.FC<LinkWithIconButtonProps> = ({ label, icon, on
 
   return (
     <button
-      className={`${styles.linkButton} ${loading ? styles.loading : ''}`}
+      className={`${styles.linkButton} ${variantClass} ${loading ? styles.loading : ''}`}
       onClick={handleClick}
       disabled={disabled || loading}
     >

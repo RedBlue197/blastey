@@ -13,9 +13,11 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   }, [i18n.language]);
 
   return (
-    <>
+    < >
       <Navbar />
+      <div className={"layout"}>
       {children}
+      </div>
       <Footer />
     </>
   );

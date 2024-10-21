@@ -2,7 +2,8 @@
 
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import styles from './TripOpeningsForm.module.css';
-import { PrimaryButton } from '@/app/components';
+import { FaChevronUp, FaChevronDown, FaPlus  } from 'react-icons/fa';
+import LinkWithIconButton from '@/app/components/button/LinkWithIconButton';
 
 const TripOpeningsForm = () => {
   const { register, control, formState: { errors } } = useFormContext(); // Access the form context
@@ -48,10 +49,21 @@ const TripOpeningsForm = () => {
           )}
         </div>
       ))}
-      <PrimaryButton
-        label="Add Trip Opening"
-        type="button"
-        onClick={() => appendTripOpening({ trip_opening_date: '', trip_opening_price: 0, trip_opening_availability: 0 })}
+      <LinkWithIconButton
+        label="Add Trip opening"
+        icon={<FaPlus />}  // Adding the plus icon before the label
+        variant="success"
+        onClick={() => {
+          appendActivityItem({
+            trip_item_name: '',
+            trip_item_category: '',
+            trip_item_type: '',
+            trip_item_address: '',
+            trip_item_traveler_reward: '',
+            trip_item_price: '',
+          });
+          setItemsDropdownOpen((prev) => [...prev, false]); // Add new entry for the new item, default to closed
+        }}
       />
     </div>
   );
