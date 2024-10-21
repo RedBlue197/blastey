@@ -8,6 +8,7 @@ from models.base_model import TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, U
 from enum import Enum as PyEnum
 
 class BookingStatus(PyEnum):
+    INITIATED = "initiated"
     PENDING = "pending"
     CONFIRMED = "confirmed"
     CANCELLED = "cancelled"
@@ -28,7 +29,7 @@ class Booking(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMi
 
     # Foreign KeysBookingStatus
     client_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
-    merchant_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
+    host_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
 
 class BookingItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "booking_items"
