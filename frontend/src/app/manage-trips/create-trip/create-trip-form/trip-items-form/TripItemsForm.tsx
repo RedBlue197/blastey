@@ -5,6 +5,7 @@ import { useState, useRef } from 'react';
 import { FaChevronUp, FaChevronDown, FaPlus, FaTrash } from 'react-icons/fa';
 import LinkWithIconButton from '@/app/components/button/LinkWithIconButton';
 import styles from './TripItemsForm.module.css';
+import { TripItemCategory,TripItemType } from '@/types/trip'; // Adjust the path based on your file structure
 
 const TripItemsForm = () => {
   const { register, control } = useFormContext(); // Access the form context
@@ -47,7 +48,7 @@ const TripItemsForm = () => {
 
   return (
     <div className={styles.sectionBig}>
-      <h2 className="section-title">Enter trip items details</h2>
+      <h2 className="section-title">Enter Trip Items Details</h2>
       {activityItemsFields.map((item, index) => (
         <div 
           key={item.id} 
@@ -73,39 +74,36 @@ const TripItemsForm = () => {
                 {...register(`activity_items.${index}.trip_item_name`, { required: true })}
               />
 
-              <label className={styles.formLabel}>Trip Item Category</label>
-              <input
-                className={styles.formInput}
-                {...register(`activity_items.${index}.trip_item_category`, { required: true })}
-              />
+            <label className={styles.formLabel}>Trip Item Category</label>
+            <select
+              className={styles.formInput}
+              {...register('trip_item_category', {
+                required: 'Trip Item Category is required',
+              })}
+            >
+              <option value="">Select Category</option>
+              {Object.values(TripItemCategory).map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
 
               <label className={styles.formLabel}>Trip Item Type</label>
-              <input
-                className={styles.formInput}
-                {...register(`activity_items.${index}.trip_item_type`, { required: true })}
-              />
+              <select
+              className={styles.formInput}
+              {...register('trip_item_type', {
+                required: 'Trip Item type is required',
+              })}
+            >
+              <option value="">Select type</option>
+              {Object.values(TripItemType).map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
 
-              <label className={styles.formLabel}>Trip Item Address</label>
-              <input
-                className={styles.formInput}
-                {...register(`activity_items.${index}.trip_item_address`)}
-              />
-
-              <label className={styles.formLabel}>Traveler Reward</label>
-              <input
-                type="number"
-                className={styles.formInput}
-                {...register(`activity_items.${index}.trip_item_traveler_reward`)}
-              />
-
-              <label className={styles.formLabel}>Trip Item Price</label>
-              <input
-                type="number"
-                step="0.01"
-                className={styles.formInput}
-                {...register(`activity_items.${index}.trip_item_price`)}
-              />
-              
               {/* Delete Button */}
               <LinkWithIconButton
                 label="Delete"
@@ -129,9 +127,7 @@ const TripItemsForm = () => {
             trip_item_name: '',
             trip_item_category: '',
             trip_item_type: '',
-            trip_item_address: '',
-            trip_item_traveler_reward: '',
-            trip_item_price: '',
+            // Removed unnecessary fields as per CreateTripItemsInterface
           });
           setItemsDropdownOpen((prev) => [...prev, false]); // Add new entry for the new item, default to closed
         }}

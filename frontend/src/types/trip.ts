@@ -34,19 +34,33 @@ export interface CreateTripInterface {
     trip_base_reward?: number;
   }
 
-export interface CreateTripItems {
+
+export enum TripItemCategory {
+  ACTIVITY="activity",
+  FOOD="food",
+  TRANSPORTATION="transportation",
+  STAY="stay",
+  OTHER="other",
+  }
+export enum TripItemType {
+  INCLUDED="included",
+  OPTIONAL="optional",
+  EXCLUDED="excluded",
+}
+
+export interface CreateTripItemsInterface {
     trip_item_name: string;
     trip_item_description: string;
-    trip_item_category: string;
+    trip_item_category: TripItemCategory;
     trip_item_address: string;
     trip_item_traveler_reward: number;
-    trip_item_type: string;
+    trip_item_type: TripItemType;
     trip_item_price: number;
     trip_item_image: string;
     trip_id: UUID;
   }
 
-export interface CreateTripOpenings {
+export interface CreateTripOpeningsInterface {
     trip_opening_start_date: string;
     trip_opening_end_date: string;
     trip_opening_total_reward: number;
