@@ -11,7 +11,7 @@ import axios from 'axios';
 import styles from './CreateTripForm.module.css';
 import Toast from '@app/components/toast/Toast';
 
-import {createTrip} from "@/services/internal_services/trip_api_handler"
+import {createTrip,createTripItems,createTripOpenings} from "@/services/internal_services/trip_api_handler"
 
 interface CreateTripFormInputs {
   trip_title: string;
@@ -61,9 +61,9 @@ const CreateTripForm = () => {
       if (currentStep === 0) {
         response = await createTrip(getValues())
       } else if (currentStep === 1) {
-        response = await axios.post('/api/create-trip-items', getValues());
+        response = await createTripItems(getValues())
       } else if (currentStep === 2) {
-        response = await axios.post('/api/create-trip-openings', getValues());
+        response = await createTripOpenings(getValues())
       } else if (currentStep === 3) {
         response = await axios.post('/api/create-trip-images', getValues());
       }

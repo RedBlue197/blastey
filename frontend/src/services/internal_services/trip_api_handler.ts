@@ -2,7 +2,11 @@ import { UUID } from 'crypto';
 import { makeAPIRequest } from './api'; // Adjust the import path
 import { endpoints } from './endpoints'; // Adjust the import path
 import { microservices } from './microservices';
-import {CreateTrip} from "@/types/trip"
+import {
+  CreateTrip,
+  CreateTripItems,
+  CreateTripOpenings
+} from "@/types/trip"
 
 export async function fetchTrips(page: number, limit: number) {
   try {
@@ -96,6 +100,60 @@ export async function createTrip(create_trip_data:CreateTrip){
       {
         method: 'POST',
         data: create_trip_data,
+        withCredentials: true, // Use withCredentials to send the token in the request
+        version: 'v1', // Provide necessary options
+      }
+    );
+
+    // Check if the response was successful and has expected data
+    if (!response || !response.data) {
+      throw new Error('No trips found or invalid response structure');
+    }
+
+    return response; // Return the fetched trips if needed elsewhere
+
+  } catch (error: any) {
+    // Log the full error details to get more information
+    return error;
+  }
+}
+
+export async function createTripItems(create_trip_items_data:CreateTripItems){
+  try {
+    // Make API request
+    const response = await makeAPIRequest<{ data: any }>(
+      microservices.CORE, // Replace with your actual microservice name
+      endpoints.trips.CREATE.CREATE_TRIP_ITEMS, // Endpoint
+      {
+        method: 'POST',
+        data: create_trip_items_data,
+        withCredentials: true, // Use withCredentials to send the token in the request
+        version: 'v1', // Provide necessary options
+      }
+    );
+
+    // Check if the response was successful and has expected data
+    if (!response || !response.data) {
+      throw new Error('No trips found or invalid response structure');
+    }
+
+    return response; // Return the fetched trips if needed elsewhere
+
+  } catch (error: any) {
+    // Log the full error details to get more information
+    return error;
+  }
+}
+
+export async function createTripOpenings(create_trip_openings_data:CreateTripOpenings){
+  try {
+    // Make API request
+    const response = await makeAPIRequest<{ data: any }>(
+      microservices.CORE, // Replace with your actual microservice name
+      endpoints.trips.CREATE.CREATE_TRIP_OPENINGS, // Endpoint
+      {
+        method: 'POST',
+        data: create_trip_openings_data,
         withCredentials: true, // Use withCredentials to send the token in the request
         version: 'v1', // Provide necessary options
       }

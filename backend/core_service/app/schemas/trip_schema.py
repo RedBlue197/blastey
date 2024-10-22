@@ -33,7 +33,6 @@ class CreateTripOpeningsRequest(BaseModel):
     trip_opening_items: Optional[List[CreateTripOpeningItemRequest]] = Field(None, description="List of trip opening items")
 
 class CreateTripItemRequest(BaseModel):
-    trip_item_date: Optional[datetime] = Field(None, description="Date of the trip item")
     trip_item_name: str = Field(..., min_length=1, max_length=100, description="Name of the trip item")
     trip_item_description: Optional[str] = Field(None, max_length=500, description="Description of the trip item")
     trip_item_category: TripItemCategoryEnum = Field(..., description="Category of the trip item")
