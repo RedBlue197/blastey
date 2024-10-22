@@ -1,3 +1,4 @@
+/* Toast Container */
 .toast {
   position: fixed;
   top: 20px;
@@ -28,6 +29,23 @@
 .icon {
   margin-right: 8px;
   font-size: 1.5rem;
+}
+
+/* Icon Colors */
+.success .icon {
+  color: #fff; /* White icon for success toast */
+}
+
+.error .icon {
+  color: #fff; /* White icon for error toast */
+}
+
+.warning .icon {
+  color: #333; /* Darker icon for warning toast */
+}
+
+.info .icon {
+  color: #fff; /* White icon for info toast */
 }
 
 .message {

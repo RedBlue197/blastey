@@ -11,10 +11,10 @@ import uuid
 
 from typing import List,Optional
 
-from models.trip_model import Trip, TripItem, TripImages, TripOpening
+from models.trip_model import Trip, TripItem, TripOpening, TripOpeningItem
 from models.user_model import User
 
-from schemas.trip_schema import CreateTripRequest
+from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest,CreateTripOpeningsRequest
 from schemas.trip_schema import PatchTripRequest, PatchTripItemRequest
 
 from services.image_service import post_trip_images_on_gcs
@@ -125,27 +125,25 @@ class TripInterface(BaseInterface[Trip]):
         return {"trips": trips}, total_count
 
     #---------------------------------Create Functions----------------------------------------
-    def create_trip(self, trip: CreateTripRequest):
+    def create_trip(self, trip: CreateTripRequest,host_id:uuid.UUID):
         trip_id = uuid.uuid4()  # Generate a UUID for the trip
 
         # Upload images to GCS and get their public URLs
-        uploaded_images = post_trip_images_on_gcs(trip_id=str(trip_id), files=image_files)
 
         # Create the main Trip object
         new_trip = Trip(
             trip_id=trip_id,
-            trip_name=trip.trip_title,
+            trip_title=trip.trip_title,
             trip_description=trip.trip_description,
             trip_origin=trip.trip_origin,
             trip_destination=trip.trip_destination,
             trip_link_url=trip.trip_link_url,
-            trip_upvote=trip.trip_upvote,
-            trip_downvote=trip.trip_downvote,
             trip_base_price=trip.trip_base_price,
             trip_base_reward=trip.trip_base_reward,
-            trip_creation_status=trip.trip_creation_status,
+            created_by=host_id,
+            updated_by=host_id,
 
-            host_id=trip.host_id,
+            host_id=host_id,
         )
 
         try:
@@ -157,12 +155,7 @@ class TripInterface(BaseInterface[Trip]):
             self.db.refresh(new_trip)
 
             # Return a response with the created trip and images
-            return {
-                "trip_id": str(new_trip.trip_id),
-                "trip_name": new_trip.trip_title,
-                "trip_description": new_trip.trip_description,
-                "images": [{"uuid": img['uuid'], "url": img['public_url']} for img in uploaded_images]
-            }
+            return new_trip
 
         except Exception as e:
             # Rollback all changes if any error occurs

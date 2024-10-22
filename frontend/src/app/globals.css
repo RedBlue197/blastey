@@ -1,11 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* slick-carousel styles */
+
+/* Import slick-carousel styles */
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
 
+/* Import Tajawal font with different weights */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
 
 :root {
   --foreground-rgb: 51, 51, 51; /* Dark Slate Grey for general text */
@@ -21,7 +23,7 @@
   }
 }
 
-
+/* Apply Tajawal font globally */
 body {
   font-family: 'Tajawal', sans-serif;
   color: rgb(var(--foreground-rgb));
@@ -35,82 +37,76 @@ body {
   margin: 0;
 }
 
-
-
-.main-content {
-  background-color: #ffffff; /* White background for main content */
-  min-height: calc(100vh - 60px); /* Adjust based on footer height or other fixed elements */
-  padding: 20px; /* Add some padding */
+/* Set the default font weight globally */
+* {
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 400; /* Default to regular weight */
 }
 
+/* Specific styles for the main content */
+.main-content {
+  background-color: #ffffff;
+  min-height: calc(100vh - 60px); /* Adjust based on footer height or other fixed elements */
+  padding: 20px;
+}
 
-
-
+/* Utility class for balanced text wrap */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
 
-
-/* globals.css */
-/* globals.css */
+/* Custom components */
 @layer components {
-  /* Primary WhatsApp Button */
-
+  /* Layout setup */
   .layout {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Full viewport height */
+    min-height: 100vh;
   }
   
   .layout > * {
-    flex-shrink: 0; /* Ensure items don't shrink */
+    flex-shrink: 0;
   }
   
   .layout > :nth-child(2) {
-    flex-grow: 1; /* Allow main content to grow and take up the remaining space */
+    flex-grow: 1;
   }
 
+  /* Page title */
   .page-title {
-    @apply text-3xl font-bold text-center text-[#333]; /* Tailwind utilities */
-    margin-bottom: 24px; /* Adjust margin as needed */
+    @apply text-3xl font-bold text-center text-[#333];
+    margin-bottom: 24px;
   }
 
+  /* Section title */
   .section-title {
     @apply text-2xl font-semibold text-left text-[#333];
     margin-bottom: 16px;
   }
-  
+
+  /* Primary button */
   .btn-primary {
     @apply bg-[#25d366] text-white font-bold text-center rounded-lg transition duration-200;
     width: 60%;
     padding: 10px 20px;
     text-decoration: none;
-    font-family: 'Tajawal', sans-serif;
-
   }
 
   .btn-primary:hover {
-    @apply bg-[#1ebf57]; /* Darker green on hover */
-    font-family: 'Tajawal', sans-serif;
-
+    @apply bg-[#1ebf57];
   }
 
-  /* Secondary Button */
+  /* Secondary button */
   .btn-secondary {
     @apply bg-white text-[#25d366] font-bold text-center rounded-lg border-2 border-[#25d366] transition duration-200;
     width: 60%;
     padding: 10px 20px;
     text-decoration: none;
-    font-family: 'Tajawal', sans-serif;
-
   }
 
   .btn-secondary:hover {
-    @apply bg-[#25d366] text-white; /* Inverts colors on hover */
-    font-family: 'Tajawal', sans-serif;
-
+    @apply bg-[#25d366] text-white;
   }
 }
-

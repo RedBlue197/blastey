@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import TripDetailsForm from './trip-details-form/TripDetailsForm';
 import TripItemsForm from './trip-items-form/TripItemsForm';
@@ -9,9 +9,9 @@ import TripImagesForm from './trip-images-form/TripImagesForm';
 import Stepper from './stepper/Stepper';
 import axios from 'axios';
 import styles from './CreateTripForm.module.css';
-import Toast from '@app/components/toast/Toast';
-
-import {createTrip,createTripItems,createTripOpenings} from "@/services/internal_services/trip_api_handler"
+import Toast from '@/app/components/toast/Toast';
+import { CreateTripInterface } from '@/types/trip';
+import { createTrip, createTripItems, createTripOpenings } from "@/services/internal_services/trip_api_handler";
 
 interface CreateTripFormInputs {
   trip_title: string;
@@ -22,9 +22,8 @@ interface CreateTripFormInputs {
   trip_destination?: string;
   trip_total_availability?: number;
   trip_total_booking?: number;
-  host_id: string;
-  trip_link_url?: string;
-  trip_price?: number;
+  trip_base_price?: number;
+  trip_base_reward?: number;
   activity_items: {
     trip_item_name: string;
     trip_item_category: string;
@@ -50,7 +49,17 @@ const CreateTripForm = () => {
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [tripId, setTripId] = useState<string | null>(null); // State to store the trip_id
   const steps = ['Trip Details', 'Trip Items', 'Trip Openings', 'Trip Images'];
+
+  useEffect(() => {
+    if (toastMessage) {
+      const timer = setTimeout(() => {
+        setToastMessage(null); 
+      }, 3000);
+      return () => clearTimeout(timer); 
+    }
+  }, [toastMessage]);
 
   const handleNext = async () => {
     try {
@@ -59,16 +68,44 @@ const CreateTripForm = () => {
 
       // API call for each step
       if (currentStep === 0) {
-        response = await createTrip(getValues())
-      } else if (currentStep === 1) {
-        response = await createTripItems(getValues())
-      } else if (currentStep === 2) {
-        response = await createTripOpenings(getValues())
-      } else if (currentStep === 3) {
-        response = await axios.post('/api/create-trip-images', getValues());
+        const tripData: CreateTripInterface = {
+          trip_title: getValues('trip_title'),
+          trip_description: getValues('trip_description'),
+          trip_origin: getValues('trip_origin'),
+          trip_destination: getValues('trip_destination'),
+          trip_base_price: parseFloat(getValues('trip_base_price') || '0'), 
+          trip_base_reward: parseFloat(getValues('trip_base_reward') || '0'), 
+        };  
+
+        // Create the trip and capture the response, including trip_id
+        response = await createTrip(tripData);
+
+        // Check if the response is successful and store trip_id
+        if (response && response.status_code === 201) {
+          setTripId(response.data.trip_id); // Save the trip_id from response
+        }
+
+      } else if (currentStep === 1 && tripId) {
+        const tripItemsData = {
+          ...getValues(), 
+          trip_id: tripId, // Include trip_id
+        };
+        response = await createTripItems(tripItemsData);
+      } else if (currentStep === 2 && tripId) {
+        const tripOpeningsData = {
+          ...getValues(),
+          trip_id: tripId, // Include trip_id
+        };
+        response = await createTripOpenings(tripOpeningsData);
+      } else if (currentStep === 3 && tripId) {
+        const tripImagesData = {
+          ...getValues(),
+          trip_id: tripId, // Include trip_id
+        };
+        response = await axios.post('/api/create-trip-images', tripImagesData);
       }
 
-      if (response && response.status === 201) {
+      if (response && response.status_code === 201) {
         setToastMessage({ type: 'success', message: `Step ${currentStep + 1} completed successfully!` });
         if (currentStep < steps.length - 1) {
           setCurrentStep((prevStep) => prevStep + 1);
@@ -100,7 +137,6 @@ const CreateTripForm = () => {
             <Stepper steps={steps} currentStep={currentStep} />
           </div>
 
-          {/* Render form sections based on the current step */}
           {currentStep === 0 && <TripDetailsForm />}
           {currentStep === 1 && <TripItemsForm />}
           {currentStep === 2 && <TripOpeningsForm />}
@@ -138,7 +174,6 @@ const CreateTripForm = () => {
           </div>
         </div>
 
-        {/* Display the toast message */}
         {toastMessage && <Toast type={toastMessage.type} message={toastMessage.message} />}
       </form>
     </FormProvider>

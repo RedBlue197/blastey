@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel,UUID4
 import uuid
 from models.trip_model import TripItemCategoryEnum, TripItemTypeEnum, TripCreationStatusEnum
-from typing import Optional
+from typing import List, Optional
 from datetime import datetime
 
 #-------------------------------------GET SCHEMAS--------------------------------------
@@ -55,7 +55,7 @@ class GetTripByIdResponse(BaseModel):
 #-------------------------------------CREATE SCHEMAS--------------------------------------
 
 class CreateTripOpeningItemResponse(BaseModel):
-    trip_opening_item_id: UUID
+    trip_opening_item_id: UUID4
     trip_opening_item_name: str
     trip_opening_item_description: Optional[str]
     trip_opening_item_category: str  # Assuming this is an Enum or string representation
@@ -68,8 +68,8 @@ class CreateTripOpeningItemResponse(BaseModel):
 
 
 class CreateTripOpeningResponse(BaseModel):
-    trip_opening_id: UUID
-    trip_id: UUID
+    trip_opening_id: UUID4
+    trip_id: UUID4
     trip_opening_start_date: datetime
     trip_opening_end_date: datetime
     trip_opening_total_reward: Optional[float]
@@ -110,8 +110,8 @@ class CreateTripResponse(BaseModel):
     trip_upvote: Optional[int] = None
     trip_downvote: Optional[int] = None
     trip_creation_status: TripCreationStatusEnum
-    trip.trip_base_price: Optional[float] = None
-    trip.trip_base_reward: Optional[float] = None
+    trip_base_price: Optional[float] = None
+    trip_base_reward: Optional[float] = None
     host_id: uuid.UUID
 
 

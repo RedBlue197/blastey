@@ -154,13 +154,14 @@ async def create_trip(
     db: db_dependency,
     trip: CreateTripRequest
 ):
-    if user['user_role'] not in ["admin", "host"]:
+    if user['user_role'] not in ["admin", "host","user"]:
         return api_response(
             message="Unauthorized Role",
             status_code=403
         )
+    host_id= user['user_id']
     try:
-        trip_obj = TripInterface(db=db).create_trip(trip)
+        trip_obj = TripInterface(db=db).create_trip(trip,host_id)
         trip_response = CreateTripResponse.model_validate(trip_obj, from_attributes=True)
         return api_response(
             data=trip_response,

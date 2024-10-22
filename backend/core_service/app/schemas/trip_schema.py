@@ -18,11 +18,11 @@ class CreateTripOpeningItemRequest(BaseModel):
     trip_opening_item_total_availability: int = Field(..., description="Total availability for this trip opening item")
     trip_opening_item_total_booking: Optional[int] = Field(None, description="Total bookings for this trip opening item")
     trip_opening_item_price: Optional[float] = Field(None, description="Price of this trip opening item")
-    trip_item_id: Optional[UUID] = Field(..., description="ID of the trip item to link this opening to")
+    trip_item_id: UUID4 = Field(..., description="ID of the trip item to link this opening to")
 
 
 class CreateTripOpeningsRequest(BaseModel):
-    trip_id: UUID = Field(..., description="ID of the trip this opening belongs to")
+    trip_id: UUID4 = Field(..., description="ID of the trip this opening belongs to")
     trip_opening_start_date: datetime = Field(..., description="Start date of the trip opening")
     trip_opening_end_date: datetime = Field(..., description="End date of the trip opening")
     trip_opening_total_reward: Optional[float] = Field(None, description="Total reward for this trip opening")
@@ -50,11 +50,9 @@ class CreateTripRequest(BaseModel):
     trip_description: Optional[str] = Field(None, max_length=1000, description="Description of the trip")
     trip_origin: Optional[str] = Field(None, max_length=100, description="Origin of the trip")
     trip_destination: Optional[str] = Field(None, max_length=100, description="Destination of the trip")
-    host_id: UUID4 = Field(..., description="Host ID")
     trip_link_url: Optional[str] = Field(None, pattern=r'^https?:\/\/\S+$', description="Link URL of the trip")
     trip_base_price: Optional[float] = Field(None, ge=0, description="Price of the trip")
     trip_base_reward : Optional[float] = Field(None, ge=0, description="Base reward of the trip")
-
 
 class PatchTripItemRequest(BaseModel):
     trip_item_date: Optional[datetime] = Field(None, description="Date of the trip item")
@@ -66,6 +64,7 @@ class PatchTripItemRequest(BaseModel):
     trip_item_type: Optional[TripItemTypeEnum] = Field(None, description="Type of the trip item")
     trip_item_price: Optional[float] = Field(None, ge=0, description="Price of the trip item")
     trip_item_id: UUID4 = Field(..., description="Trip item ID")
+
 
 
 class PatchTripRequest(BaseModel):

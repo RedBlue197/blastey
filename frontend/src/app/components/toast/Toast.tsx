@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FaCheckCircle, FaExclamationTriangle, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
 import styles from './Toast.module.css';
 
 interface ToastProps {
@@ -31,15 +32,15 @@ const Toast: React.FC<ToastProps> = ({ type, message, duration = 10000 }) => {
 const getIcon = (type: string) => {
   switch (type) {
     case 'success':
-      return '✔️';
+      return <FaCheckCircle />;
     case 'error':
-      return '❌';
+      return <FaTimesCircle />;
     case 'warning':
-      return '⚠️';
+      return <FaExclamationTriangle />;
     case 'info':
-      return 'ℹ️';
+      return <FaInfoCircle />;
     default:
-      return '';
+      return null;
   }
 };
 
