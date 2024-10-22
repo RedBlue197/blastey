@@ -173,25 +173,37 @@ async def create_trip(
             status_code=500
         )
 
-#API to create trip items, need to create the interface function creat_trip_items
+#API to create trip items
 @router.post("/create-trip-items")
 async def create_trip_items(
     user: user_dependency,
-    db: db_dependency,
+    db:db_dependency,
     trip_items: CreateTripItemsRequest
 ):
+    # Only admin or host can create trip items
     if user['user_role'] not in ["admin", "host"]:
         return api_response(
             message="Unauthorized Role",
             status_code=403
         )
+    
     try:
+        # Create trip items using the interface
         trip_items_obj = TripInterface(db=db).create_trip_items(trip_items)
-        trip_items_response = CreateTripItemsResponse.model_validate(trip_items_obj, from_attributes=True)
+        
+        # Convert the response object to the appropriate response schema
+        trip_items_response = [CreateTripItemResponse.model_validate(item, from_attributes=True) for item in trip_items_obj]
+        
         return api_response(
             data=trip_items_response,
-            message="Trip items created",
+            message="Trip items created successfully",
             status_code=201
+        )
+    
+    except HTTPException as http_exc:
+        return api_response(
+            message=http_exc.detail,
+            status_code=http_exc.status_code
         )
     except Exception as e:
         return api_response(
@@ -199,7 +211,8 @@ async def create_trip_items(
             status_code=500
         )
 
-#API to create trip openings and trips items, need to create the interface function creat_trip_openings
+
+#API to create trip openings and trips items
 @router.post("/create-trip-openings")
 async def create_trip_openings(
     user: user_dependency,
@@ -226,7 +239,12 @@ async def create_trip_openings(
         )
 
 #[TO START] api to create trip images
-@router
+# @router.post("/create-trip-images")
+# async def create_trip_images(
+#     user: user_dependency,
+#     db: db_dependency, 
+#     trip_images: 
+# )
 
 #----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
 

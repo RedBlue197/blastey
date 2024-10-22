@@ -23,3 +23,14 @@ export interface Trip {
     trip_link_url: string;
   }
   
+
+export interface CreateTrip {
+    trip_title: string;
+    trip_description?: string;
+    trip_origin?: string;
+    trip_destination?: string;
+    host_id: UUID;  // UUID format
+    trip_link_url?: string;
+    trip_base_price?: number;
+    trip_base_reward?: number;
+  }

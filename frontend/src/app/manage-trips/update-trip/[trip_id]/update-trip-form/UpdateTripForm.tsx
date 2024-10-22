@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import Toast from "@/components/toast/Toast"
 import TripDetailsForm from '../create-trip/create-trip-form/trip-details-form/TripDetailsForm';
 import TripItemsForm from '../create-trip/create-trip-form/trip-items-form/TripItemsForm';
 import TripOpeningsForm from '../create-trip/create-trip-form/trip-openings-form/TripOpeningsForm';

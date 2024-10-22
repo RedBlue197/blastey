@@ -1,7 +1,7 @@
 'use client';
 
-import { FormProvider, useForm } from 'react-hook-form';
 import { useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import TripDetailsForm from './trip-details-form/TripDetailsForm';
 import TripItemsForm from './trip-items-form/TripItemsForm';
 import TripOpeningsForm from './trip-openings-form/TripOpeningsForm';
@@ -9,6 +9,9 @@ import TripImagesForm from './trip-images-form/TripImagesForm';
 import Stepper from './stepper/Stepper';
 import axios from 'axios';
 import styles from './CreateTripForm.module.css';
+import Toast from '@app/components/toast/Toast';
+
+import {createTrip} from "@/services/internal_services/trip_api_handler"
 
 interface CreateTripFormInputs {
   trip_title: string;
@@ -43,32 +46,41 @@ const CreateTripForm = () => {
       trip_openings: [{ trip_opening_date: '', trip_opening_price: 0, trip_opening_availability: 0 }],
     },
   });
-  const { handleSubmit, reset } = methods;
+  const { reset, getValues } = methods;
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const steps = ['Trip Details', 'Trip Items', 'Trip Openings', 'Trip Images'];
 
-  const onSubmit = async (data: CreateTripFormInputs) => {
+  const handleNext = async () => {
     try {
       setLoading(true);
-      const response = await axios.post('/api/create-trip', data);
-      if (response.status === 201) {
-        alert('Trip created successfully!');
-        reset();
-        setCurrentStep(0); // Reset to the first step
+      let response;
+
+      // API call for each step
+      if (currentStep === 0) {
+        response = await createTrip(getValues())
+      } else if (currentStep === 1) {
+        response = await axios.post('/api/create-trip-items', getValues());
+      } else if (currentStep === 2) {
+        response = await axios.post('/api/create-trip-openings', getValues());
+      } else if (currentStep === 3) {
+        response = await axios.post('/api/create-trip-images', getValues());
+      }
+
+      if (response && response.status === 201) {
+        setToastMessage({ type: 'success', message: `Step ${currentStep + 1} completed successfully!` });
+        if (currentStep < steps.length - 1) {
+          setCurrentStep((prevStep) => prevStep + 1);
+        }
       } else {
-        alert('Failed to create trip');
+        setToastMessage({ type: 'error', message: `Failed to complete step ${currentStep + 1}` });
       }
     } catch (error) {
-      console.error('Error creating trip:', error);
+      console.error(`Error on step ${currentStep + 1}:`, error);
+      setToastMessage({ type: 'error', message: `Error on step ${currentStep + 1}` });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep((prevStep) => prevStep + 1);
     }
   };
 
@@ -80,14 +92,15 @@ const CreateTripForm = () => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form>
         <div className={styles.container}>
           <h2 className={'page-title'}>Create a New Trip</h2>
 
           <div className={styles.stepNavigation}>
-          <Stepper steps={steps} currentStep={currentStep} />
+            <Stepper steps={steps} currentStep={currentStep} />
           </div>
 
+          {/* Render form sections based on the current step */}
           {currentStep === 0 && <TripDetailsForm />}
           {currentStep === 1 && <TripItemsForm />}
           {currentStep === 2 && <TripOpeningsForm />}
@@ -108,16 +121,25 @@ const CreateTripForm = () => {
                 type="button"
                 className={`btn-primary ${styles.primaryButton}`}
                 onClick={handleNext}
+                disabled={loading}
               >
-                Next
+                {loading ? 'Processing...' : 'Next'}
               </button>
             ) : (
-              <button type="submit" className={styles.primaryButton} disabled={loading}>
+              <button
+                type="button"
+                className={styles.primaryButton}
+                onClick={handleNext}
+                disabled={loading}
+              >
                 {loading ? 'Submitting...' : 'Submit'}
               </button>
             )}
           </div>
         </div>
+
+        {/* Display the toast message */}
+        {toastMessage && <Toast type={toastMessage.type} message={toastMessage.message} />}
       </form>
     </FormProvider>
   );

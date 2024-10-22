@@ -124,8 +124,8 @@ class TripInterface(BaseInterface[Trip]):
         
         return {"trips": trips}, total_count
 
-    
-    def create_trip(self, trip: CreateTripRequest, image_files: List[UploadFile]):
+    #---------------------------------Create Functions----------------------------------------
+    def create_trip(self, trip: CreateTripRequest):
         trip_id = uuid.uuid4()  # Generate a UUID for the trip
 
         # Upload images to GCS and get their public URLs
@@ -136,46 +136,21 @@ class TripInterface(BaseInterface[Trip]):
             trip_id=trip_id,
             trip_name=trip.trip_title,
             trip_description=trip.trip_description,
-            trip_departure_date=trip.trip_departure_date,
-            trip_return_date=trip.trip_return_date,
             trip_origin=trip.trip_origin,
             trip_destination=trip.trip_destination,
-            trip_total_availability=trip.trip_total_availability,
-            trip_total_booking=trip.trip_total_booking,
+            trip_link_url=trip.trip_link_url,
+            trip_upvote=trip.trip_upvote,
+            trip_downvote=trip.trip_downvote,
+            trip_base_price=trip.trip_base_price,
+            trip_base_reward=trip.trip_base_reward,
+            trip_creation_status=trip.trip_creation_status,
+
             host_id=trip.host_id,
         )
 
         try:
             # Start a transaction
             self.db.add(new_trip)
-
-            # Loop through each trip item and validate
-            for trip_item in trip.trip_items:
-                new_trip_item = TripItem(
-                    trip_item_id=uuid.uuid4(),
-                    trip_id=trip_id,
-                    trip_item_date=trip_item.trip_item_date,
-                    trip_item_name=trip_item.trip_item_name,
-                    trip_item_description=trip_item.trip_item_description,
-                    trip_item_category=trip_item.trip_item_category,
-                    trip_item_address=trip_item.trip_item_address,
-                    trip_item_traveler_reward=trip_item.trip_item_traveler_reward,
-                    trip_item_type=trip_item.trip_item_type,
-                    trip_item_price=trip_item.trip_item_price
-                )
-                if not self.is_valid_trip_item(new_trip_item):
-                    raise ValueError(f"Invalid trip item: {trip_item.trip_item_name}")
-                self.db.add(new_trip_item)
-
-            # Save uploaded images to the database
-            for image_info in uploaded_images:
-                new_trip_image = TripImages(
-                    trip_image_id=image_info['uuid'],  # Use the image UUID generated
-                    trip_id=trip_id,
-                    trip_image_url=image_info['public_url'],
-                    trip_image_is_primary=False  # Set primary logic as needed
-                )
-                self.db.add(new_trip_image)
 
             # Commit all changes
             self.db.commit()
@@ -199,6 +174,118 @@ class TripInterface(BaseInterface[Trip]):
         if not trip_item.trip_item_name or trip_item.trip_item_price < 0:
             return False
         return True
+
+    def create_trip_items(self, trip_items_request: CreateTripItemsRequest):
+        # Ensure the trip exists
+        trip = self.db.query(Trip).filter(
+            Trip.trip_id == trip_items_request.trip_id,
+            Trip.is_deleted == False
+        ).first()
+        
+        if not trip:
+            raise HTTPException(status_code=404, detail="Trip not found")
+
+        # Create the trip items
+        new_trip_items = []
+        for item_request in trip_items_request.trip_items:
+            trip_item = TripItem(
+                trip_item_id=uuid.uuid4(),
+                trip_id=trip_items_request.trip_id,
+                trip_item_name=item_request.trip_item_name,
+                trip_item_description=item_request.trip_item_description,
+                trip_item_category=item_request.trip_item_category,
+                trip_item_traveler_reward=item_request.trip_item_traveler_reward,
+                trip_item_type=item_request.trip_item_type,
+                trip_item_price=item_request.trip_item_price,
+                trip_item_status=item_request.trip_item_status,
+            )
+            
+            # Validate the item (optional)
+            if not self.is_valid_trip_item(trip_item):
+                raise HTTPException(status_code=400, detail="Invalid trip item details")
+
+            self.db.add(trip_item)
+            new_trip_items.append(trip_item)
+
+        # Commit the transaction to save the new trip items
+        try:
+            self.db.commit()
+            return new_trip_items
+        except Exception as e:
+            self.db.rollback()
+            raise HTTPException(status_code=500, detail=f"Failed to create trip items: {str(e)}")
+
+    def create_trip_openings(self, trip_openings_request: CreateTripOpeningsRequest):
+        # Ensure the trip exists
+        trip = self.db.query(Trip).filter(
+            Trip.trip_id == trip_openings_request.trip_id,
+            Trip.is_deleted == False
+        ).first()
+        
+        if not trip:
+            raise HTTPException(status_code=404, detail="Trip not found")
+
+        # Create the trip opening
+        new_trip_opening = TripOpening(
+            trip_opening_id=uuid.uuid4(),
+            trip_id=trip_openings_request.trip_id,
+            trip_opening_start_date=trip_openings_request.trip_opening_start_date,
+            trip_opening_end_date=trip_openings_request.trip_opening_end_date,
+            trip_opening_total_reward=trip_openings_request.trip_opening_total_reward,
+            is_limited_availability=trip_openings_request.is_limited_availability,
+            trip_opening_total_availability=trip_openings_request.trip_opening_total_availability,
+            trip_opening_total_booking=trip_openings_request.trip_opening_total_booking,
+            trip_opening_price=trip_openings_request.trip_opening_price
+        )
+
+        # Validate the trip opening (optional)
+        if not self.is_valid_trip_opening(new_trip_opening):
+            raise HTTPException(status_code=400, detail="Invalid trip opening details")
+
+        self.db.add(new_trip_opening)
+        
+        # Create the associated trip opening items (if any)
+        new_trip_opening_items = []
+        if trip_openings_request.trip_opening_items:
+            for item_request in trip_openings_request.trip_opening_items:
+                trip_opening_item = TripOpeningItem(
+                    trip_opening_item_id=uuid.uuid4(),
+                    trip_opening_id=new_trip_opening.trip_opening_id,
+                    trip_item_id=item_request.trip_item_id,
+                    trip_opening_item_name=item_request.trip_opening_item_name,
+                    trip_opening_item_description=item_request.trip_opening_item_description,
+                    trip_opening_item_category=item_request.trip_opening_item_category,
+                    trip_opening_item_address=item_request.trip_opening_item_address,
+                    trip_opening_item_traveler_reward=item_request.trip_opening_item_traveler_reward,
+                    is_limited_availability=item_request.is_limited_availability,
+                    trip_opening_item_total_availability=item_request.trip_opening_item_total_availability,
+                    trip_opening_item_total_booking=item_request.trip_opening_item_total_booking,
+                    trip_opening_item_price=item_request.trip_opening_item_price
+                )
+                
+                # Validate the trip opening item (optional)
+                if not self.is_valid_trip_opening_item(trip_opening_item):
+                    raise HTTPException(status_code=400, detail="Invalid trip opening item details")
+
+                self.db.add(trip_opening_item)
+                new_trip_opening_items.append(trip_opening_item)
+
+        # Commit the transaction
+        try:
+            self.db.commit()
+            return {"trip_opening": new_trip_opening, "trip_opening_items": new_trip_opening_items}
+        except Exception as e:
+            self.db.rollback()
+            raise HTTPException(status_code=500, detail=f"Failed to create trip opening: {str(e)}")
+
+    def is_valid_trip_opening(self, trip_opening: TripOpening):
+        # Add validation logic for trip opening here (e.g., date range checks, etc.)
+        return True
+
+    def is_valid_trip_opening_item(self, trip_opening_item: TripOpeningItem):
+        # Add validation logic for trip opening items here (e.g., availability checks, etc.)
+        return True
+
 
 
     def patch_trip(self, trip_id: uuid.UUID, trip_update: PatchTripRequest, image_files: Optional[list[UploadFile]] = None):

@@ -1,8 +1,11 @@
 from pydantic import BaseModel
 import uuid
-from models.trip_model import TripItemCategoryEnum, TripItemTypeEnum
+from models.trip_model import TripItemCategoryEnum, TripItemTypeEnum, TripCreationStatusEnum
 from typing import Optional
 from datetime import datetime
+
+#-------------------------------------GET SCHEMAS--------------------------------------
+
 
 class GetTripHostResponse(BaseModel):
     user_name: str
@@ -49,13 +52,36 @@ class GetTripByIdResponse(BaseModel):
         orm_mode = True
         from_attributes = True
 
-class CreateTripOpeningsResponse(BaseModel):
-    trip_opening_id: uuid.UUID
+#-------------------------------------CREATE SCHEMAS--------------------------------------
+
+class CreateTripOpeningItemResponse(BaseModel):
+    trip_opening_item_id: UUID
+    trip_opening_item_name: str
+    trip_opening_item_description: Optional[str]
+    trip_opening_item_category: str  # Assuming this is an Enum or string representation
+    trip_opening_item_address: Optional[str]
+    trip_opening_item_traveler_reward: Optional[float]
+    is_limited_availability: bool
+    trip_opening_item_total_availability: Optional[int]
+    trip_opening_item_total_booking: Optional[int]
+    trip_opening_item_price: Optional[float]
+
+
+class CreateTripOpeningResponse(BaseModel):
+    trip_opening_id: UUID
+    trip_id: UUID
     trip_opening_start_date: datetime
     trip_opening_end_date: datetime
-    trip_opening_total_availability: int
+    trip_opening_total_reward: Optional[float]
+    is_limited_availability: bool
+    trip_opening_total_availability: Optional[int]
+    trip_opening_total_booking: Optional[int]
     trip_opening_price: float
-    trip_id: uuid.UUID
+    trip_opening_items: Optional[List[CreateTripOpeningItemResponse]]
+
+
+class CreateTripOpeningsResponse(BaseModel):
+    trip_openings: Optional[List[CreateTripOpeningResponse]]
         
 class CreateTripItemResponse(BaseModel):
     trip_item_date: Optional[datetime] = None
@@ -75,16 +101,17 @@ class CreateTripItemsResponse(BaseModel):
         orm_mode = True
 
 class CreateTripResponse(BaseModel):
-    activity_items: list[CreateTripItemResponse]
     trip_id: uuid.UUID
     trip_title: str
     trip_description: Optional[str] = None
-    trip_departure_date: Optional[datetime] = None
-    trip_return_date: Optional[datetime] = None
     trip_origin: Optional[str] = None
     trip_destination: Optional[str] = None
-    trip_total_availability: Optional[int] = None
-    trip_total_booking: Optional[int] = None
+    trip_link_url: Optional[str] = None
+    trip_upvote: Optional[int] = None
+    trip_downvote: Optional[int] = None
+    trip_creation_status: TripCreationStatusEnum
+    trip.trip_base_price: Optional[float] = None
+    trip.trip_base_reward: Optional[float] = None
     host_id: uuid.UUID
 
 
