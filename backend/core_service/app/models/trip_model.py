@@ -57,7 +57,7 @@ class TripItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByM
     trip_item_traveler_reward = Column(Numeric(precision=10, scale=2), nullable=True)  # Reward for the traveler
     trip_item_type=Column(Enum(TripItemTypeEnum),default=TripItemTypeEnum.INCLUDED)
     trip_item_price=Column(Float, nullable=True) 
-    trip_item_image = Column(String, nullable=False)
+    trip_item_image = Column(String, nullable=True)
 
     #Foreign Keys
     trip_id = Column(UUID(as_uuid=True), ForeignKey("trips.trip_id", ondelete="CASCADE"), nullable=False)

@@ -77,28 +77,28 @@ class CreateTripOpeningResponse(BaseModel):
     trip_opening_total_availability: Optional[int]
     trip_opening_total_booking: Optional[int]
     trip_opening_price: float
-    trip_opening_items: Optional[List[CreateTripOpeningItemResponse]]
 
 
 class CreateTripOpeningsResponse(BaseModel):
-    trip_openings: Optional[List[CreateTripOpeningResponse]]
+    trip_openings: List[CreateTripOpeningResponse]
         
 class CreateTripItemResponse(BaseModel):
-    trip_item_date: Optional[datetime] = None
     trip_item_name : str
     trip_item_description: Optional[str] = None
     trip_item_category : TripItemCategoryEnum
     trip_item_address : Optional[str] = None
-    trip_item_traveler_reward : Optional[int] = None
+    trip_item_traveler_reward : Optional[float] = None
     trip_item_type: TripItemTypeEnum
     trip_item_price: Optional[float] = None
     trip_item_id: uuid.UUID
+    trip_id: uuid.UUID
 
 class CreateTripItemsResponse(BaseModel):
     trip_items: list[CreateTripItemResponse]
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 class CreateTripResponse(BaseModel):
     trip_id: uuid.UUID

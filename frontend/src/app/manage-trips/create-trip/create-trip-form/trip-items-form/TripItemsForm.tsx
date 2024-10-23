@@ -11,7 +11,7 @@ const TripItemsForm = () => {
   const { register, control } = useFormContext(); // Access the form context
   const { fields: activityItemsFields, append: appendActivityItem, remove: removeActivityItem } = useFieldArray({
     control,
-    name: 'activity_items',
+    name: 'trip_items',
   });
 
   const [itemsDropdownOpen, setItemsDropdownOpen] = useState(Array(activityItemsFields.length).fill(false)); // Toggle for each trip item dropdown
@@ -57,7 +57,7 @@ const TripItemsForm = () => {
         >
           <div className={styles.sectionTitle} onClick={() => toggleItemDropdown(index)}>
             <h2>
-              {register(`activity_items.${index}.trip_item_name`).value || `Trip Item ${index + 1}`}
+              {register(`trip_items.${index}.trip_item_name`).value || `Trip Item ${index + 1}`}
             </h2>
             <h2 className={styles.itemDropdown}>
               <span className={styles.dropdownIcon}>
@@ -71,38 +71,60 @@ const TripItemsForm = () => {
               <label className={styles.formLabel}>Trip Item Name</label>
               <input
                 className={styles.formInput}
-                {...register(`activity_items.${index}.trip_item_name`, { required: true })}
+                {...register(`trip_items.${index}.trip_item_name`, { required: true })}
+              />
+              <label className={styles.formLabel}>Trip Item Description</label>
+              <textarea
+                className={styles.formInput}
+                {...register(`trip_items.${index}.trip_item_description`, { required: true })}
+              />
+              <label className={styles.formLabel}>Trip Item Address</label>
+              <input
+                className={styles.formInput}
+                {...register(`trip_items.${index}.trip_item_address`, { required: true })}
+              />
+              <label className={styles.formLabel}>Trip Item Traveler Reward</label>
+              <input
+                className={styles.formInput}
+                {...register(`trip_items.${index}.trip_item_traveler_reward`, { required: true })}
+              />
+              <label className={styles.formLabel}>Trip Item Price</label>
+              <input
+                className={styles.formInput}
+                {...register(`trip_items.${index}.trip_item_price`, { required: true })}
               />
 
-            <label className={styles.formLabel}>Trip Item Category</label>
-            <select
-              className={styles.formInput}
-              {...register('trip_item_category', {
-                required: 'Trip Item Category is required',
-              })}
-            >
-              <option value="">Select Category</option>
-              {Object.values(TripItemCategory).map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
+
+              <label className={styles.formLabel}>Trip Item Category</label>
+              <select
+                className={styles.formInput}
+                {...register(`trip_items.${index}.trip_item_category`, {
+                  required: 'Trip Item Category is required',
+                })}
+              >
+                <option value="">Select Category</option>
+                {Object.values(TripItemCategory).map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
 
               <label className={styles.formLabel}>Trip Item Type</label>
               <select
-              className={styles.formInput}
-              {...register('trip_item_type', {
-                required: 'Trip Item type is required',
-              })}
-            >
-              <option value="">Select type</option>
-              {Object.values(TripItemType).map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
+                className={styles.formInput}
+                {...register(`trip_items.${index}.trip_item_type`, {
+                  required: 'Trip Item type is required',
+                })}
+              >
+                <option value="">Select Type</option>
+                {Object.values(TripItemType).map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+
 
               {/* Delete Button */}
               <LinkWithIconButton

@@ -182,18 +182,21 @@ async def create_trip_items(
     trip_items: CreateTripItemsRequest
 ):
     # Only admin or host can create trip items
-    if user['user_role'] not in ["admin", "host"]:
+    if user['user_role'] not in ["admin", "host","user"]:
         return api_response(
             message="Unauthorized Role",
             status_code=403
         )
     
     try:
+        # User
+        host_id = user['user_id']
         # Create trip items using the interface
-        trip_items_obj = TripInterface(db=db).create_trip_items(trip_items)
+        trip_items_obj = TripInterface(db=db).create_trip_items(trip_items,host_id)
+
         
         # Convert the response object to the appropriate response schema
-        trip_items_response = [CreateTripItemResponse.model_validate(item, from_attributes=True) for item in trip_items_obj]
+        trip_items_response = CreateTripItemsResponse.model_validate(trip_items_obj, from_attributes=True)
         
         return api_response(
             data=trip_items_response,
@@ -220,13 +223,14 @@ async def create_trip_openings(
     db: db_dependency,
     trip_openings: CreateTripOpeningsRequest
 ):
-    if user['user_role'] not in ["admin", "host"]:
+    if user['user_role'] not in ["admin", "host","user"]:
         return api_response(
             message="Unauthorized Role",
             status_code=403
         )
+    host_id= user['user_id']
     try:
-        trip_openings_obj = TripInterface(db=db).create_trip_openings_obj(trip_openings)
+        trip_openings_obj = TripInterface(db=db).create_trip_openings(trip_openings,host_id)
         trip_openings_response = CreateTripOpeningsResponse.model_validate(trip_openings_obj, from_attributes=True)
         return api_response(
             data=trip_openings_response,

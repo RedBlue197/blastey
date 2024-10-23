@@ -10,7 +10,7 @@ import Stepper from './stepper/Stepper';
 import axios from 'axios';
 import styles from './CreateTripForm.module.css';
 import Toast from '@/app/components/toast/Toast';
-import { CreateTripInterface } from '@/types/trip';
+import { CreateTripInterface, CreateTripItemsInterface } from '@/types/trip';
 import { createTrip, createTripItems, createTripOpenings } from "@/services/internal_services/trip_api_handler";
 
 interface CreateTripFormInputs {
@@ -24,56 +24,34 @@ interface CreateTripFormInputs {
   trip_total_booking?: number;
   trip_base_price?: number;
   trip_base_reward?: number;
-  trip_items: {
+  activity_items: {
     trip_item_name: string;
     trip_item_category: string;
     trip_item_type: string;
-    trip_item_description: string;
-    trip_item_address: string;
-    trip_item_traveler_reward: number;
-    trip_item_price: number;
   }[];
   trip_images?: { trip_image_url: string; trip_image_is_primary: boolean }[];
   trip_openings?: {
-    trip_opening_start_date: string;
-    trip_opening_end_date: string;
-    trip_opening_total_reward: number;
-    is_limited_availability: boolean;
-    trip_opening_total_availability: number;
-    trip_opening_total_booking: number;
+    trip_opening_date: string;
     trip_opening_price: number;
+    trip_opening_availability: number;
+    is_limited_availability: boolean;
   }[];
 }
 
 const CreateTripForm = () => {
   const methods = useForm<CreateTripFormInputs>({
     defaultValues: {
-      trip_items: [{ 
-        trip_item_name: '',
-        trip_item_description:'', 
-        trip_item_category: '', 
-        trip_item_type: '',
-        trip_item_address:'',
-        trip_item_traveler_reward:'',
-        trip_item_price:'' 
-      }],
+      activity_items: [{ trip_item_name: '', trip_item_category: '', trip_item_type: '' }],
       trip_images: [{ trip_image_url: '', trip_image_is_primary: true }],
-      trip_openings: [{ 
-        trip_opening_start_date:'',
-        trip_opening_end_date:'',
-        trip_opening_total_reward: 0,
-        is_limited_availability: false,
-        trip_opening_total_availability: 0,
-        trip_opening_total_booking: 0,
-        trip_opening_price: 0,
-      }],
+      trip_openings: [{ trip_opening_date: '', trip_opening_price: 0, trip_opening_availability: 0 }],
     },
   });
   const { reset, getValues } = methods;
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-  const [tripId, setTripId] = useState<string | null>(null); // State to store the trip_id
+  const [tripId, setTripId] = useState<string | null>(null); // Store the trip_id
+  const [stepCompleted, setStepCompleted] = useState([false, false, false, false]); // Array to track completed steps
   const steps = ['Trip Details', 'Trip Items', 'Trip Openings', 'Trip Images'];
 
   useEffect(() => {
@@ -90,43 +68,88 @@ const CreateTripForm = () => {
       setLoading(true);
       let response;
 
-      // API call for each step
-      if (currentStep === 0) {
-        const tripData: CreateTripInterface = {
-          trip_title: getValues('trip_title'),
-          trip_description: getValues('trip_description'),
-          trip_origin: getValues('trip_origin'),
-          trip_destination: getValues('trip_destination'),
-          trip_base_price: parseFloat(getValues('trip_base_price') || '0'), 
-          trip_base_reward: parseFloat(getValues('trip_base_reward') || '0'), 
-        };  
+      // Only make the API call if the step has not been completed
+      if (!stepCompleted[currentStep]) {
+        // API call for each step
+        if (currentStep === 0) {
+          const tripData: CreateTripInterface = {
+            trip_title: getValues('trip_title'),
+            trip_description: getValues('trip_description'),
+            trip_origin: getValues('trip_origin'),
+            trip_destination: getValues('trip_destination'),
+            trip_base_price: parseFloat(getValues('trip_base_price') || '0'), 
+            trip_base_reward: parseFloat(getValues('trip_base_reward') || '0'), 
+          };  
 
-        // Create the trip and capture the response, including trip_id
-        response = await createTrip(tripData);
+          response = await createTrip(tripData);
 
-        // Check if the response is successful and store trip_id
-        if (response && response.status_code === 201) {
-          setTripId(response.data.trip_id); // Save the trip_id from response
+          if (response && response.status_code === 201) {
+            setTripId(response.data.trip_id); // Store trip_id
+            setStepCompleted((prev) => {
+              const newSteps = [...prev];
+              newSteps[0] = true;
+              return newSteps;
+            });
+          }
+
+        } else if (currentStep === 1 && tripId) {
+          const tripItemsData: CreateTripItemsInterface = {
+            trip_items: getValues('trip_items').map((item) => ({
+              trip_item_name: item.trip_item_name,
+              trip_item_description: item.trip_item_description,
+              trip_item_category: item.trip_item_category,
+              trip_item_address: item.trip_item_address,
+              trip_item_traveler_reward: parseFloat(item.trip_item_traveler_reward),
+              trip_item_type: item.trip_item_type,
+              trip_item_price: parseFloat(item.trip_item_price),
+              trip_item_image: item.trip_item_image,
+            })),
+            trip_id: tripId,
+          };
+          console.log('tripItemsData:', tripItemsData);
+
+          response = await createTripItems(tripItemsData);
+
+          if (response && response.status_code === 201) {
+            setStepCompleted((prev) => {
+              const newSteps = [...prev];
+              newSteps[1] = true;
+              return newSteps;
+            });
+          }
+
+        } else if (currentStep === 2 && tripId) {
+          const tripOpeningsData = {
+            ...getValues(),
+            trip_id: tripId,
+          };
+
+          response = await createTripOpenings(tripOpeningsData);
+
+          if (response && response.status_code === 201) {
+            setStepCompleted((prev) => {
+              const newSteps = [...prev];
+              newSteps[2] = true;
+              return newSteps;
+            });
+          }
+
+        } else if (currentStep === 3 && tripId) {
+          const tripImagesData = {
+            ...getValues(),
+            trip_id: tripId,
+          };
+
+          response = await axios.post('/api/create-trip-images', tripImagesData);
+
+          if (response && response.status_code === 201) {
+            setStepCompleted((prev) => {
+              const newSteps = [...prev];
+              newSteps[3] = true;
+              return newSteps;
+            });
+          }
         }
-
-      } else if (currentStep === 1 && tripId) {
-        const tripItemsData = {
-          trip_items: getValues('trip_items'),
-          trip_id: tripId, // Include trip_id
-        };
-        response = await createTripItems(tripItemsData);
-      } else if (currentStep === 2 && tripId) {
-        const tripOpeningsData = {
-          trip_openings: getValues('trip_openings'),
-          trip_id: tripId, // Include trip_id
-        };
-        response = await createTripOpenings(tripOpeningsData);
-      } else if (currentStep === 3 && tripId) {
-        const tripImagesData = {
-          trip_items: getValues('trip_items'),
-          trip_id: tripId, // Include trip_id
-        };
-        response = await axios.post('/api/create-trip-images', tripImagesData);
       }
 
       if (response && response.status_code === 201) {
@@ -134,9 +157,17 @@ const CreateTripForm = () => {
         if (currentStep < steps.length - 1) {
           setCurrentStep((prevStep) => prevStep + 1);
         }
-      } else {
+      }        
+      else if (stepCompleted[currentStep]) {
+        setToastMessage({ type: 'success', message: `Step ${currentStep + 1} already completed!` });
+        if (currentStep < steps.length - 1) {
+          setCurrentStep((prevStep) => prevStep + 1);
+        }
+      } 
+      else {
         setToastMessage({ type: 'error', message: `Failed to complete step ${currentStep + 1}` });
       }
+
     } catch (error) {
       console.error(`Error on step ${currentStep + 1}:`, error);
       setToastMessage({ type: 'error', message: `Error on step ${currentStep + 1}` });
@@ -167,15 +198,6 @@ const CreateTripForm = () => {
           {currentStep === 3 && <TripImagesForm />}
 
           <div className={styles.stepNavigationButton}>
-          {currentStep == 0 && (
-              <button
-                type="button"
-                className={`btn-secondary ${styles.secondaryButton}`}
-                onClick={handlePrevious}
-              >
-                Cancel
-              </button>
-            )}
             {currentStep > 0 && (
               <button
                 type="button"
