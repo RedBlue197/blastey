@@ -125,9 +125,12 @@ const TripItemsForm = () => {
         onClick={() => {
           appendActivityItem({
             trip_item_name: '',
-            trip_item_category: '',
+            trip_item_description:'', 
+            trip_item_category: '', 
             trip_item_type: '',
-            // Removed unnecessary fields as per CreateTripItemsInterface
+            trip_item_address:'',
+            trip_item_traveler_reward:'',
+            trip_item_price:''
           });
           setItemsDropdownOpen((prev) => [...prev, false]); // Add new entry for the new item, default to closed
         }}

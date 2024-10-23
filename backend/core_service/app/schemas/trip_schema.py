@@ -21,8 +21,7 @@ class CreateTripOpeningItemRequest(BaseModel):
     trip_item_id: UUID4 = Field(..., description="ID of the trip item to link this opening to")
 
 
-class CreateTripOpeningsRequest(BaseModel):
-    trip_id: UUID4 = Field(..., description="ID of the trip this opening belongs to")
+class CreateTripOpeningRequest(BaseModel):
     trip_opening_start_date: datetime = Field(..., description="Start date of the trip opening")
     trip_opening_end_date: datetime = Field(..., description="End date of the trip opening")
     trip_opening_total_reward: Optional[float] = Field(None, description="Total reward for this trip opening")
@@ -31,6 +30,12 @@ class CreateTripOpeningsRequest(BaseModel):
     trip_opening_total_booking: Optional[int] = Field(None, description="Total bookings for this trip opening")
     trip_opening_price: float = Field(..., description="Price of this trip opening")
     trip_opening_items: Optional[List[CreateTripOpeningItemRequest]] = Field(None, description="List of trip opening items")
+
+
+class CreateTripOpeningsRequest(BaseModel):
+    trip_openings: List[CreateTripOpeningRequest] = Field(..., min_items=1, description="List of trip openings")
+    trip_id: UUID4 = Field(..., description="Trip ID")
+
 
 class CreateTripItemRequest(BaseModel):
     trip_item_name: str = Field(..., min_length=1, max_length=100, description="Name of the trip item")

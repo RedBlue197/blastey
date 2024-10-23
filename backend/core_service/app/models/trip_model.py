@@ -7,9 +7,9 @@ from enum import Enum as PyEnum
 
 class TripCreationStatusEnum(PyEnum):
     DRAFT = "draft"
-    ON_GOING_TRIP_ITEM_CREATION = "trip_item_creation"
-    ON_GOING_TRIP_OPENING_CREATION = "trip_opening_creation"
-    ON_GOING_TRIP_IMAGES_CREATION = "trip_images_creation"
+    TRIP_ITEM_CREATION = "trip_item_creation"
+    TRIP_OPENING_CREATION = "trip_opening_creation"
+    TRIP_IMAGES_CREATION = "trip_images_creation"
     COMPLETED="completed"
 
 

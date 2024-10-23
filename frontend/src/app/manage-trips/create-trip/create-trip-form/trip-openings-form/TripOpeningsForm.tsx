@@ -55,12 +55,13 @@ const TripOpeningsForm = () => {
         variant="success"
         onClick={() => {
           appendActivityItem({
-            trip_item_name: '',
-            trip_item_category: '',
-            trip_item_type: '',
-            trip_item_address: '',
-            trip_item_traveler_reward: '',
-            trip_item_price: '',
+            trip_opening_start_date:'',
+            trip_opening_end_date:'',
+            trip_opening_total_reward: 0,
+            is_limited_availability: false,
+            trip_opening_total_availability: 0,
+            trip_opening_total_booking: 0,
+            trip_opening_price: 0,
           });
           setItemsDropdownOpen((prev) => [...prev, false]); // Add new entry for the new item, default to closed
         }}

@@ -24,25 +24,49 @@ interface CreateTripFormInputs {
   trip_total_booking?: number;
   trip_base_price?: number;
   trip_base_reward?: number;
-  activity_items: {
+  trip_items: {
     trip_item_name: string;
     trip_item_category: string;
     trip_item_type: string;
+    trip_item_description: string;
+    trip_item_address: string;
+    trip_item_traveler_reward: number;
+    trip_item_price: number;
   }[];
   trip_images?: { trip_image_url: string; trip_image_is_primary: boolean }[];
   trip_openings?: {
-    trip_opening_date: string;
+    trip_opening_start_date: string;
+    trip_opening_end_date: string;
+    trip_opening_total_reward: number;
+    is_limited_availability: boolean;
+    trip_opening_total_availability: number;
+    trip_opening_total_booking: number;
     trip_opening_price: number;
-    trip_opening_availability: number;
   }[];
 }
 
 const CreateTripForm = () => {
   const methods = useForm<CreateTripFormInputs>({
     defaultValues: {
-      activity_items: [{ trip_item_name: '', trip_item_category: '', trip_item_type: '' }],
+      trip_items: [{ 
+        trip_item_name: '',
+        trip_item_description:'', 
+        trip_item_category: '', 
+        trip_item_type: '',
+        trip_item_address:'',
+        trip_item_traveler_reward:'',
+        trip_item_price:'' 
+      }],
       trip_images: [{ trip_image_url: '', trip_image_is_primary: true }],
-      trip_openings: [{ trip_opening_date: '', trip_opening_price: 0, trip_opening_availability: 0 }],
+      trip_openings: [{ 
+        trip_opening_start_date:'',
+        trip_opening_end_date:'',
+        trip_opening_total_reward: 0,
+        is_limited_availability: false,
+        trip_opening_total_availability: 0,
+        trip_opening_total_booking: 0,
+        trip_opening_price: 0,
+      }],
     },
   });
   const { reset, getValues } = methods;
@@ -87,19 +111,19 @@ const CreateTripForm = () => {
 
       } else if (currentStep === 1 && tripId) {
         const tripItemsData = {
-          ...getValues(), 
+          trip_items: getValues('trip_items'),
           trip_id: tripId, // Include trip_id
         };
         response = await createTripItems(tripItemsData);
       } else if (currentStep === 2 && tripId) {
         const tripOpeningsData = {
-          ...getValues(),
+          trip_openings: getValues('trip_openings'),
           trip_id: tripId, // Include trip_id
         };
         response = await createTripOpenings(tripOpeningsData);
       } else if (currentStep === 3 && tripId) {
         const tripImagesData = {
-          ...getValues(),
+          trip_items: getValues('trip_items'),
           trip_id: tripId, // Include trip_id
         };
         response = await axios.post('/api/create-trip-images', tripImagesData);
@@ -143,6 +167,15 @@ const CreateTripForm = () => {
           {currentStep === 3 && <TripImagesForm />}
 
           <div className={styles.stepNavigationButton}>
+          {currentStep == 0 && (
+              <button
+                type="button"
+                className={`btn-secondary ${styles.secondaryButton}`}
+                onClick={handlePrevious}
+              >
+                Cancel
+              </button>
+            )}
             {currentStep > 0 && (
               <button
                 type="button"
