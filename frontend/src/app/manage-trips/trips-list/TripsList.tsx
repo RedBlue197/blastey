@@ -1,6 +1,7 @@
 'use client'; // Add this at the top to make the component a Client Component
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/router'; // useRouter can be used after 'use client'
 import styles from './TripsList.module.css'; 
 import { fetchTripsByHostId } from '@/services/internal_services/trip_api_handler';
@@ -56,21 +57,14 @@ const TripsList = () => {
     setLoadingMore(false);
   };
 
-  const handleCreateTrip = () => {
-    router.push('/trips/create');
-  };
-
-  const handleUpdateTrip = (tripId: UUID) => {
-    router.push(`/trips/update/${tripId}`);
-  };
 
   return (
     <div className={styles.container}>
       <h1 className={'page-title'}>Manage Trips</h1>
 
-      <button onClick={handleCreateTrip} className={`btn-primary ${styles.createButton}`}>
-        Create New Trip
-      </button>
+      <Link href={`/manage-trips/create-trip`} className={`btn-primary ${styles.createButton}`} onClick={() => {}}>
+            Create new trip
+        </Link>
 
       <div className={styles.tripList}>
         {trips.length === 0 ? (
