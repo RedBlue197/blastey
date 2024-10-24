@@ -59,6 +59,16 @@ class CreateTripRequest(BaseModel):
     trip_base_price: Optional[float] = Field(None, ge=0, description="Price of the trip")
     trip_base_reward : Optional[float] = Field(None, ge=0, description="Base reward of the trip")
 
+class CreateTripImageRequest(BaseModel):
+    trip_image_is_primary: bool = Field(..., description="Indicates if the image is primary")
+    trip_image_url: str = Field(..., pattern=r'^https?:\/\/\S+$', description="URL of the image")
+
+class CreateTripImagesRequest(BaseModel):
+    trip_images: List[CreateTripImageRequest] = Field(..., min_items=1, description="List of trip images")
+    trip_id: UUID4 = Field(..., description="Trip ID")
+
+
+
 class PatchTripItemRequest(BaseModel):
     trip_item_date: Optional[datetime] = Field(None, description="Date of the trip item")
     trip_item_name: Optional[str] = Field(None, min_length=1, max_length=100, description="Name of the trip item")

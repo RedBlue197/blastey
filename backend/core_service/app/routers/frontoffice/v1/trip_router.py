@@ -6,7 +6,7 @@ from dependencies.auth_dependency import user_dependency
 
 from interfaces.trip_interface import TripInterface
 
-from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest,CreateTripOpeningsRequest, PatchTripRequest
+from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest,CreateTripOpeningsRequest,CreateTripImagesRequest, PatchTripRequest
 
 from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemsResponse,CreateTripOpeningsResponse
 
@@ -244,12 +244,33 @@ async def create_trip_openings(
         )
 
 #[TO START] api to create trip images
-# @router.post("/create-trip-images")
-# async def create_trip_images(
-#     user: user_dependency,
-#     db: db_dependency, 
-#     trip_images: 
-# )
+@router.post("/create-trip-images")
+async def create_trip_images(
+    user: user_dependency,
+    db: db_dependency, 
+    trip_images_data: CreateTripImagesRequest,
+    trip_images: List[UploadFile] = File(...),
+):
+    if user['user_role'] not in ["admin", "host","user"]:
+        return api_response(
+            message="Unauthorized Role",
+            status_code=403
+        )
+    host_id= user['user_id']
+    try:
+        trip_images_obj = TripInterface(db=db).create_trip_images(trip_images_data,trip_images,host_id)
+        trip_images_response = CreateTripOpeningsResponse.model_validate(trip_images_obj, from_attributes=True)
+        return api_response(
+            data=trip_images_response,
+            message="Trip images created",
+            status_code=201
+        )
+    except Exception as e:
+        return api_response(
+            message="Failed to create trip images: " + str(e),
+            status_code=500
+        )
+
 
 #----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
 

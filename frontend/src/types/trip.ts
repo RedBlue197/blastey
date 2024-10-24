@@ -42,6 +42,7 @@ export enum TripItemCategory {
   STAY="stay",
   OTHER="other",
   }
+  
 export enum TripItemType {
   INCLUDED="included",
   OPTIONAL="optional",
@@ -67,5 +68,11 @@ export interface CreateTripOpeningsInterface {
     is_limited_availability: boolean;
     trip_opening_total_availability: number;
     trip_opening_price: number;
+    trip_id: UUID;
+  }
+
+  export interface CreateTripImagesInterface {
+    trip_image_url: string;
+    trip_image_is_primary: boolean;
     trip_id: UUID;
   }

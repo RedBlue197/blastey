@@ -11,7 +11,7 @@ import uuid
 
 from typing import List,Optional
 
-from models.trip_model import Trip, TripItem, TripOpening, TripOpeningItem
+from models.trip_model import Trip, TripItem, TripOpening, TripOpeningItem,TripImage
 from models.user_model import User
 
 from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest,CreateTripOpeningsRequest
@@ -282,6 +282,42 @@ class TripInterface(BaseInterface[Trip]):
     def is_valid_trip_opening_item(self, trip_opening_item: TripOpeningItem):
         # Add validation logic for trip opening items here (e.g., availability checks, etc.)
         return True
+    
+    def create_trip_images(self, trip_id: uuid.UUID, image_files: List[UploadFile],host_id:uuid.UUID):
+        # Ensure the trip exists
+        trip = self.db.query(Trip).filter(
+            Trip.trip_id == trip_id,
+            Trip.is_deleted == False
+        ).first()
+        
+        if not trip:
+            raise HTTPException(status_code=404, detail="Trip not found")
+
+        # Upload images to GCS and get their public URLs
+        image_urls = post_trip_images_on_gcs(image_files)
+
+        # Create the trip images
+        new_trip_images = []
+        for image_url in image_urls:
+            new_trip_image = TripImage(
+                trip_image_id=uuid.uuid4(),
+                trip_id=trip_id,
+                trip_image_is_primary=False,
+                trip_image_url=image_url,
+
+                created_by=host_id,
+                updated_by=host_id
+            )
+            self.db.add(new_trip_image)
+            new_trip_images.append(new_trip_image)
+
+        # Commit the transaction
+        try:
+            self.db.commit()
+            return {"trip_images": new_trip_images}
+        except Exception as e:
+            self.db.rollback()
+            raise HTTPException(status_code=500, detail=f"Failed to create trip images: {str(e)}")
 
 
 
