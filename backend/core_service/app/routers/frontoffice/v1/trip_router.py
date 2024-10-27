@@ -243,7 +243,7 @@ async def create_trip_openings(
             status_code=500
         )
 
-#[TO START] api to create trip images
+#[TO TEST] api to create trip images
 @router.post("/create-trip-images")
 async def create_trip_images(
     user: user_dependency,
