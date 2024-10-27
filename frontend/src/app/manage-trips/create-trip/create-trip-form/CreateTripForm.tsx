@@ -10,8 +10,8 @@ import Stepper from './stepper/Stepper';
 import axios from 'axios';
 import styles from './CreateTripForm.module.css';
 import Toast from '@/app/components/toast/Toast';
-import { CreateTripInterface, CreateTripItemsInterface } from '@/types/trip';
-import { createTrip, createTripItems, createTripOpenings } from "@/services/internal_services/trip_api_handler";
+import { CreateTripInterface, CreateTripItemsInterface,CreateTripOpeningsInterface,CreateTripImagesInterface} from '@/types/trip';
+import { createTrip, createTripItems, createTripOpenings,createTripImages } from "@/services/internal_services/trip_api_handler";
 
 interface CreateTripFormInputs {
   trip_title: string;
@@ -63,11 +63,11 @@ const CreateTripForm = () => {
     }
   }, [toastMessage]);
 
-  const handleNext = async () => {
+  const handleNext = async () => { 
     try {
       setLoading(true);
       let response;
-
+  
       // Only make the API call if the step has not been completed
       if (!stepCompleted[currentStep]) {
         // API call for each step
@@ -80,9 +80,9 @@ const CreateTripForm = () => {
             trip_base_price: parseFloat(getValues('trip_base_price') || '0'), 
             trip_base_reward: parseFloat(getValues('trip_base_reward') || '0'), 
           };  
-
+  
           response = await createTrip(tripData);
-
+  
           if (response && response.status_code === 201) {
             setTripId(response.data.trip_id); // Store trip_id
             setStepCompleted((prev) => {
@@ -91,41 +91,61 @@ const CreateTripForm = () => {
               return newSteps;
             });
           }
-
+  
         } else if (currentStep === 1 && tripId) {
-          const tripItemsData: CreateTripItemsInterface = {
-            trip_items: getValues('trip_items').map((item) => ({
-              trip_item_name: item.trip_item_name,
-              trip_item_description: item.trip_item_description,
-              trip_item_category: item.trip_item_category,
-              trip_item_address: item.trip_item_address,
-              trip_item_traveler_reward: parseFloat(item.trip_item_traveler_reward),
-              trip_item_type: item.trip_item_type,
-              trip_item_price: parseFloat(item.trip_item_price),
-              trip_item_image: item.trip_item_image,
-            })),
-            trip_id: tripId,
-          };
-          console.log('tripItemsData:', tripItemsData);
-
-          response = await createTripItems(tripItemsData);
-
-          if (response && response.status_code === 201) {
+          const tripItems = getValues('trip_items');
+  
+          if (!tripItems || tripItems.length === 0) {
+            // If no trip items, mark step as completed without API call
             setStepCompleted((prev) => {
               const newSteps = [...prev];
               newSteps[1] = true;
               return newSteps;
             });
-          }
+  
+            setToastMessage({ type: 'success', message: `Step ${currentStep + 1} completed successfully!` });
+            if (currentStep < steps.length - 1) {
+              setCurrentStep((prevStep) => prevStep + 1);
+            }
+            return; // Exit early to avoid setting error toast
 
+          } else {
+            // Proceed with API call if trip items exist
+            const tripItemsData: CreateTripItemsInterface = {
+              trip_items: tripItems.map((item) => ({
+                trip_item_name: item.trip_item_name,
+                trip_item_description: item.trip_item_description,
+                trip_item_category: item.trip_item_category,
+                trip_item_address: item.trip_item_address,
+                trip_item_traveler_reward: parseFloat(item.trip_item_traveler_reward),
+                trip_item_type: item.trip_item_type,
+                trip_item_price: parseFloat(item.trip_item_price),
+                trip_item_image: item.trip_item_image,
+              })),
+              trip_id: tripId,
+            };
+            console.log('tripItemsData:', tripItemsData);
+  
+            response = await createTripItems(tripItemsData);
+  
+            if (response && response.status_code === 201) {
+              setStepCompleted((prev) => {
+                const newSteps = [...prev];
+                newSteps[1] = true;
+                return newSteps;
+              });
+            }
+          }
+  
         } else if (currentStep === 2 && tripId) {
-          const tripOpeningsData = {
+          const tripOpeningsData: CreateTripOpeningsInterface = {
             ...getValues(),
             trip_id: tripId,
           };
 
-          response = await createTripOpenings(tripOpeningsData);
 
+          response = await createTripOpenings(tripOpeningsData);
+  
           if (response && response.status_code === 201) {
             setStepCompleted((prev) => {
               const newSteps = [...prev];
@@ -133,41 +153,55 @@ const CreateTripForm = () => {
               return newSteps;
             });
           }
-
+  
         } else if (currentStep === 3 && tripId) {
           const tripImagesData = {
-            ...getValues(),
-            trip_id: tripId,
+            trip_images: getValues('trip_images').map((image) => ({
+              trip_image_is_primary: image.trip_image_is_primary,
+            })),
           };
+        
+          const formData = new FormData();
+          formData.append('trip_id', tripId);  // Append trip_id as FormData
+          formData.append('trip_images_data', JSON.stringify(tripImagesData));  // Append trip images metadata as JSON string
+        
+          getValues('trip_images').forEach((image) => {
+            if (image.trip_image_file) {
+              formData.append('trip_images', image.trip_image_file);  // Append each file
+            }
+          });
 
-          response = await axios.post('/api/create-trip-images', tripImagesData);
-
+          console.log('formData:', formData);
+        
+          response = await createTripImages(formData);
+        
           if (response && response.status_code === 201) {
             setStepCompleted((prev) => {
               const newSteps = [...prev];
               newSteps[3] = true;
               return newSteps;
             });
+          } else {
+            console.error("Failed to create trip images", response);
           }
         }
+        
       }
-
+  
       if (response && response.status_code === 201) {
         setToastMessage({ type: 'success', message: `Step ${currentStep + 1} completed successfully!` });
         if (currentStep < steps.length - 1) {
           setCurrentStep((prevStep) => prevStep + 1);
         }
-      }        
-      else if (stepCompleted[currentStep]) {
+      } else if (stepCompleted[currentStep]) {
         setToastMessage({ type: 'success', message: `Step ${currentStep + 1} already completed!` });
         if (currentStep < steps.length - 1) {
           setCurrentStep((prevStep) => prevStep + 1);
         }
-      } 
-      else {
+      } else {
         setToastMessage({ type: 'error', message: `Failed to complete step ${currentStep + 1}` });
       }
-
+  
     } catch (error) {
       console.error(`Error on step ${currentStep + 1}:`, error);
       setToastMessage({ type: 'error', message: `Error on step ${currentStep + 1}` });
@@ -175,6 +209,7 @@ const CreateTripForm = () => {
       setLoading(false);
     }
   };
+  
 
   const handlePrevious = () => {
     if (currentStep > 0) {
@@ -207,6 +242,15 @@ const CreateTripForm = () => {
                 Previous
               </button>
             )}
+            {currentStep === 0 && (
+              <button
+                type="button"
+                className={`btn-secondary ${styles.secondaryButton}`}
+                onClick={() => reset()}
+              >
+                Cancel
+              </button>
+            )}
             {currentStep < steps.length - 1 ? (
               <button
                 type="button"
@@ -217,14 +261,16 @@ const CreateTripForm = () => {
                 {loading ? 'Processing...' : 'Next'}
               </button>
             ) : (
+
               <button
-                type="button"
-                className={styles.primaryButton}
-                onClick={handleNext}
-                disabled={loading}
-              >
+              type="button"
+              className={`btn-primary ${styles.primaryButton}`}
+              onClick={handleNext}
+              disabled={loading}
+            >
                 {loading ? 'Submitting...' : 'Submit'}
-              </button>
+            </button>
+ 
             )}
           </div>
         </div>

@@ -61,11 +61,9 @@ class CreateTripRequest(BaseModel):
 
 class CreateTripImageRequest(BaseModel):
     trip_image_is_primary: bool = Field(..., description="Indicates if the image is primary")
-    trip_image_url: str = Field(..., pattern=r'^https?:\/\/\S+$', description="URL of the image")
 
 class CreateTripImagesRequest(BaseModel):
     trip_images: List[CreateTripImageRequest] = Field(..., min_items=1, description="List of trip images")
-    trip_id: UUID4 = Field(..., description="Trip ID")
 
 
 

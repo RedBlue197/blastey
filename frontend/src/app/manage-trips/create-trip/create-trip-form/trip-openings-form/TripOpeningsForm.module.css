@@ -105,69 +105,37 @@
 
 /* Container for availability section */
 .availabilityContainer {
+  margin-top: 1rem;
   display: flex;
-  align-items: center; /* Aligns checkbox and label vertically centered */
-  margin-bottom: 1rem; /* Space below the availability section */
+  align-items: center;
+  justify-content: flex-start; /* Center the checkbox horizontally */
+  margin-bottom: 1rem;
 }
 
 /* Checkbox and label in a row */
 .availabilityCheckbox {
   display: flex;
   align-items: center; /* Center checkbox and label vertically */
-  margin-right: 1rem; /* Space between checkbox and availability input */
-  margin-top: 2rem;
+  margin-right: 1rem;
 }
 
-/* Input field styling for availability */
-.availabilityField {
-  display: flex;
-  flex-direction: column; /* Stack label and input */
-  margin-left: 1rem; /* Space between checkbox and input */
+.checkboxLabel {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555;
+  margin-top: 0.5rem;
 }
 
-.availabilityField label {
-  margin-bottom: 0.25rem; /* Space between label and input */
+.deleteButton {
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-/* General styles */
-.formGroup {
-  margin-bottom: 1rem; /* Space between form groups */
-}
-.checkbox {
-  height: 20px;
-}
-
-/* Custom checkbox */
-.checkbox + .checkbox-label {
-  display: inline-block;
-  width: 20px; /* Adjust the size */
-  height: 20px; /* Adjust the size */
-  background-color: #fff; /* Background color when unchecked */
-  border: 2px solid #ddd; /* Border color */
-  border-radius: 4px; /* Rounded corners */
-  position: relative; /* Positioning for the pseudo-element */
-  cursor: pointer; /* Cursor change on hover */
-  transition: background-color 0.3s, border-color 0.3s; /* Transition effects */
-}
-
-/* Change background color and border color when checked */
-.checkbox:checked + .checkbox-label {
-  background-color: #00bf63; /* Change background color */
-  border-color: #00bf63; /* Change border color */
-}
-
-/* Checkmark (pseudo-element) */
-.checkbox:checked + .checkbox-label::after {
-  content: ''; /* Pseudo-element content */
-  position: absolute; /* Absolute positioning */
-  top: 3px; /* Adjust position */
-  left: 6px; /* Adjust position */
-  width: 5px; /* Checkmark width */
-  height: 10px; /* Checkmark height */
-  border: solid white; /* Checkmark color */
-  border-width: 0 2px 2px 0; /* Checkmark shape */
-  transform: rotate(45deg); /* Rotate for checkmark effect */
-}
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .formGroup {

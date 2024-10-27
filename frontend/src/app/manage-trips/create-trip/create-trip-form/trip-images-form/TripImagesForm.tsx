@@ -1,80 +1,98 @@
 'use client';
 
 import { useFormContext, useFieldArray } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import styles from './TripImagesForm.module.css';
+import { FaTrash, FaPlus } from 'react-icons/fa';
+import LinkWithIconButton from '@/app/components/button/LinkWithIconButton';
 
-const MAX_IMAGES = 5; // Set a limit for the number of images
+const MAX_IMAGES = 5;
 
 const TripImagesForm = () => {
-  const { register, control, setValue, watch } = useFormContext(); // Access the form context
+  const { register, control, setValue, watch } = useFormContext();
   const { fields: tripImagesFields, append: appendTripImage, remove: removeTripImage } = useFieldArray({
     control,
     name: 'trip_images'
   });
 
-  const tripImages = watch('trip_images'); // Watch for changes in trip images
+  const [imagePreviews, setImagePreviews] = useState({});
+  const tripImages = watch('trip_images');
 
-  // Ensure only one image can be marked as primary
-  const handlePrimaryChange = (index: number) => {
+  const handlePrimaryChange = (index) => {
     tripImagesFields.forEach((_, i) => {
-      setValue(`trip_images.${i}.trip_image_is_primary`, i === index); // Only allow one primary image
+      setValue(`trip_images.${i}.trip_image_is_primary`, i === index);
     });
   };
 
-  // Disable adding new images if max limit is reached
+  const handleImageUpload = (index, event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImagePreviews((prev) => ({
+        ...prev,
+        [index]: URL.createObjectURL(file)
+      }));
+      setValue(`trip_images.${index}.trip_image_file`, file);
+    }
+  };
+
   const canAddMoreImages = tripImagesFields.length < MAX_IMAGES;
 
   return (
-    <div className={styles.sectionBig}>
+    <div className={styles.imageSection}>
       <h2 className="section-title">Trip Images (Max {MAX_IMAGES} images)</h2>
-      {tripImagesFields.map((image, index) => (
-        <div key={image.id} className={styles.formGroup}>
-          <label className={styles.formLabel}>Upload Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            className={styles.formInput}
-            {...register(`trip_images.${index}.trip_image_file`, { required: 'Image file is required' })}
-          />
+      <div className={styles.imagesContainer}>
+        {tripImagesFields.map((image, index) => (
+          <div key={image.id} className={styles.imageCard}>
+            <div className={styles.imageUpload}>
+              <input
+                type="file"
+                accept="image/*"
+                className={styles.fileInput}
+                {...register(`trip_images.${index}.trip_image_file`, { required: 'Image file is required' })}
+                onChange={(event) => handleImageUpload(index, event)}
+              />
+              {imagePreviews[index] && (
+                <img src={imagePreviews[index]} alt={`Trip Image ${index + 1}`} className={styles.imagePreview} />
+              )}
+            </div>
+            <div className={styles.primarySection}>
+              <label className={styles.primaryCheckbox}>
+                <input
+                  type="checkbox"
+                  checked={!!tripImages[index].trip_image_is_primary}
+                  onChange={() => handlePrimaryChange(index)}
+                />
+                <span className={styles.primaryLabel}>Set as Primary Image</span>
+              </label>
+              <button
+                className={styles.deleteButton}
+                onClick={() => {
+                  removeTripImage(index);
+                  setImagePreviews((prev) => {
+                    const newPreviews = { ...prev };
+                    delete newPreviews[index];
+                    return newPreviews;
+                  });
+                }}
+                aria-label="Delete Image"
+              >
+                <FaTrash />
+                <span className={styles.deleteLabel}>Delete Image</span>
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
 
-          <label className={styles.formLabel}>Image URL</label>
-          <input
-            className={styles.formInput}
-            {...register(`trip_images.${index}.trip_image_url`, { required: 'Image URL is required' })}
-            placeholder="Image URL will be auto-filled after upload"
-            readOnly
-          />
+      {!canAddMoreImages ? `Max ${MAX_IMAGES} images reached` : null}
 
-          <label className={styles.formLabel}>
-            <input
-              type="checkbox"
-              checked={!!tripImages[index].trip_image_is_primary}
-              onChange={() => handlePrimaryChange(index)}
-            />{' '}
-            Set as Primary Image
-          </label>
-
-          {/* Button to remove the image */}
-          <button 
-            className={styles.formButton}
-            type="button" 
-            onClick={() => removeTripImage(index)}
-          >
-            Remove Image
-          </button>
-        </div>
-      ))}
-
-      {/* Add image button is disabled if the limit is reached */}
-      <button
-        className={styles.formButton}
-        type="button"
-        onClick={() => appendTripImage({ trip_image_url: '', trip_image_is_primary: false, trip_image_file: null })}
+      <LinkWithIconButton
+        label="Add Trip Image"
+        icon={<FaPlus />}
+        variant="success"
+        onClick={() => appendTripImage({ trip_image_is_primary: false, trip_image_file: null })}
         disabled={!canAddMoreImages}
-      >
-        {canAddMoreImages ? 'Add Trip Image' : `Max ${MAX_IMAGES} images reached`}
-      </button>
+      />
     </div>
   );
 };

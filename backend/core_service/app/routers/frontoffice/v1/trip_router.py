@@ -1,5 +1,5 @@
 from fastapi import status, APIRouter, Query, UploadFile, File,Form,HTTPException,Request
-from pydantic import ValidationError
+from pydantic import ValidationError,UUID4
 
 from dependencies.db_dependency import db_dependency
 from dependencies.auth_dependency import user_dependency
@@ -248,17 +248,24 @@ async def create_trip_openings(
 async def create_trip_images(
     user: user_dependency,
     db: db_dependency, 
-    trip_images_data: CreateTripImagesRequest,
-    trip_images: List[UploadFile] = File(...),
+    trip_id: UUID4 = Form(...),  # Receive trip_id from FormData
+    trip_images_data: str = Form(...),  # JSON string of trip images metadata
+    trip_images: List[UploadFile] = File(...)  # List of image files
 ):
-    if user['user_role'] not in ["admin", "host","user"]:
+    if user['user_role'] not in ["admin", "host", "user"]:
         return api_response(
             message="Unauthorized Role",
             status_code=403
         )
-    host_id= user['user_id']
+    
+    host_id = user['user_id']
     try:
-        trip_images_obj = TripInterface(db=db).create_trip_images(trip_images_data,trip_images,host_id)
+        # Parse the trip_images_data JSON string into a Python object
+        trip_images_data_obj = CreateTripImagesRequest.model_validate_json(trip_images_data)
+        
+        # Pass the parsed data and images to the interface
+        trip_images_obj = TripInterface(db=db).create_trip_images(trip_images_data_obj, trip_images, host_id)
+        
         trip_images_response = CreateTripOpeningsResponse.model_validate(trip_images_obj, from_attributes=True)
         return api_response(
             data=trip_images_response,
@@ -270,8 +277,6 @@ async def create_trip_images(
             message="Failed to create trip images: " + str(e),
             status_code=500
         )
-
-
 #----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
 
 @router.patch("/update-trip", status_code=status.HTTP_200_OK)

@@ -45,7 +45,6 @@ const TripDetailsForm = () => {
               maxLength: { value: 100, message: 'Origin must be less than 100 characters' },
             })}
           >
-            <option value="">Select City</option>
             <option value="City 1">City 1</option>
             <option value="City 2">City 2</option>
           </select>
@@ -62,7 +61,6 @@ const TripDetailsForm = () => {
               maxLength: { value: 100, message: 'Destination must be less than 100 characters' },
             })}
           >
-            <option value="">Select City</option>
             <option value="City 1">City 1</option>
             <option value="City 2">City 2</option>
           </select>

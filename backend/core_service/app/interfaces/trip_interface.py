@@ -124,7 +124,7 @@ class TripInterface(BaseInterface[Trip]):
         
         return {"trips": trips}, total_count
 
-    #---------------------------------Create Functions----------------------------------------
+#---------------------------------Create Functions----------------------------------------
     def create_trip(self, trip: CreateTripRequest,host_id:uuid.UUID):
         trip_id = uuid.uuid4()  # Generate a UUID for the trip
 
