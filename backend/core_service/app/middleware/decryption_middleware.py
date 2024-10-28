@@ -35,7 +35,7 @@ def decrypt_data(iv: str, encrypted_data: str) -> str:
 class DecryptionMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         # Try to parse the JSON body if the request method is POST
-        if request.method == 'POST':
+        if request.method == 'POST' or request.method == 'PUT':
             try:
                 body_json = await request.json()  # Get JSON body
                 # Check if 'iv' and 'data' are in the request body
@@ -45,7 +45,6 @@ class DecryptionMiddleware(BaseHTTPMiddleware):
                     # Decrypt the data
                     decrypted_data = decrypt_data(iv, encrypted_data)
                     decrypted_json = json.loads(decrypted_data)
-
                     # Replace request body with decrypted data directly
                     request._json = decrypted_json  # Modify request object
                     # Set the body for FastAPI to read
@@ -64,6 +63,7 @@ class DecryptionMiddleware(BaseHTTPMiddleware):
 
         # Continue processing request
         try:
+
             response = await call_next(request)
         except Exception as e:
             print("Error processing request:", e)

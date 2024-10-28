@@ -115,3 +115,22 @@ class CreateTripResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+#-------------------------------------PUT SCHEMAS--------------------------------------
+
+class PutTripResponse(BaseModel):
+    trip_id: uuid.UUID
+    trip_title: str
+    trip_description: Optional[str] = None
+    trip_origin: Optional[str] = None
+    trip_destination: Optional[str] = None
+    trip_link_url: Optional[str] = None
+    trip_upvote: Optional[int] = None
+    trip_downvote: Optional[int] = None
+    trip_base_price: Optional[float] = None
+    trip_base_reward: Optional[float] = None
+    host_id: uuid.UUID
+
+    class Config:
+        orm_mode = True
+        from_attributes = True

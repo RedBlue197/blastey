@@ -15,7 +15,7 @@ from models.trip_model import Trip, TripItem, TripOpening, TripOpeningItem,TripI
 from models.user_model import User
 
 from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest,CreateTripOpeningsRequest
-from schemas.trip_schema import PatchTripRequest, PatchTripItemRequest
+from schemas.trip_schema import PutTripRequest, PatchTripItemRequest
 
 from services.image_service import post_trip_images_on_gcs
 
@@ -321,10 +321,10 @@ class TripInterface(BaseInterface[Trip]):
 
 
 
-    def patch_trip(self, trip_id: uuid.UUID, trip_update: PatchTripRequest, image_files: Optional[list[UploadFile]] = None):
+    def put_trip(self,user_id: uuid.UUID,trip_update: PutTripRequest):
         try:
             # Fetch the existing trip
-            trip_obj = self.db.query(Trip).filter(Trip.id == trip_id).first()
+            trip_obj = self.db.query(Trip).filter(Trip.trip_id == trip_update.trip_id).first()
 
             if not trip_obj:
                 return None
@@ -334,14 +334,7 @@ class TripInterface(BaseInterface[Trip]):
             for field, value in update_data.items():
                 if field != "trip_items":  # Skip trip items for now
                     setattr(trip_obj, field, value)
-
-            # Handle trip items if they are provided in the update request
-            if trip_update.trip_items:
-                self.update_trip_items(trip_obj, trip_update.trip_items)
-
-            # Handle image files if any
-            if image_files:
-                self.update_trip_images(trip_obj, image_files)
+            setattr(trip_obj, "updated_by", user_id)
 
             # Commit the changes to the database
             self.db.commit()

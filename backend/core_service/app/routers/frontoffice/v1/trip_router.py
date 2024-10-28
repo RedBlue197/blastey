@@ -1,18 +1,18 @@
 from fastapi import status, APIRouter, Query, UploadFile, File,Form,HTTPException,Request
-from pydantic import ValidationError,UUID4
+from pydantic import UUID4
 
 from dependencies.db_dependency import db_dependency
 from dependencies.auth_dependency import user_dependency
 
 from interfaces.trip_interface import TripInterface
 
-from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest,CreateTripOpeningsRequest,CreateTripImagesRequest, PatchTripRequest
+from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest,CreateTripOpeningsRequest,CreateTripImagesRequest, PutTripRequest
 
-from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemsResponse,CreateTripOpeningsResponse
+from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemsResponse,CreateTripOpeningsResponse,PutTripResponse
 
 from utils.responses import api_response
 
-from typing import Optional,List
+from typing import List
 
 from main import limiter
 
@@ -279,27 +279,24 @@ async def create_trip_images(
         )
 #----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
 
-@router.patch("/update-trip", status_code=status.HTTP_200_OK)
+@router.put("/update-trip", status_code=status.HTTP_200_OK)
 async def patch_trip(
     user: user_dependency,
     db: db_dependency, 
-    trip_update: PatchTripRequest,
+    trip_update: PutTripRequest,
 ):
-    if user['user_role'] not in ["admin", "host"]:
+    if user['user_role'] not in ["admin", "host","user"]:
         return api_response(
             message="Unauthorized Role",
             status_code=403
         )
     
-    if user.user_id != trip_update.host_id:
-        return api_response(
-            message="Unauthorized request",
-            status_code=403
-        )
+    user_id = user['user_id']
+
 
     try:
         # Update trip in the database through the interface
-        trip_obj = TripInterface(db=db).patch_trip(trip_update.trip_id, trip_update)
+        trip_obj = TripInterface(db=db).put_trip(user_id,trip_update)
 
         if not trip_obj:
             return api_response(
@@ -308,12 +305,12 @@ async def patch_trip(
             )
 
         # Transform the updated trip object into response
-        trip_response = CreateTripResponse.model_validate(trip_obj, from_attributes=True)
+        trip_response = PutTripResponse.model_validate(trip_obj, from_attributes=True)
 
         return api_response(
             data=trip_response, 
             message="Trip updated",
-            status_code=204
+            status_code=202
         )
     except Exception as e:
         return api_response(

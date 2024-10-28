@@ -1,6 +1,6 @@
 import CreateTripForm from './create-trip-form/CreateTripForm';
 import { Metadata } from 'next';
-import { TripProvider } from '@context/CreateTripContext'; // Adjust the import based on your file structure
+import { TripProvider } from '@/context/CreateTripContext'; // Adjust the import based on your file structure
 
 // Set page-specific metadata
 export const metadata: Metadata = {

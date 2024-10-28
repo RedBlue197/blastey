@@ -71,8 +71,20 @@ export interface CreateTripOpeningsInterface {
     trip_id: UUID;
   }
 
-  export interface CreateTripImagesInterface {
+export interface CreateTripImagesInterface {
     trip_image_is_primary: boolean;
     trip_id: UUID;
     trip_images: File[];
   }
+
+//--------------------------------------------UPDATE INTERFACE--------------------------------------------
+
+export interface UpdateTripInterface {
+  trip_id: UUID;
+  trip_title: string;
+  trip_description: string;
+  trip_origin: string;
+  trip_destination: string;
+  trip_base_price: number;
+  trip_base_reward: number;
+}
