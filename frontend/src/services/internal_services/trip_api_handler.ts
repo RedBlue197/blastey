@@ -179,39 +179,42 @@ export async function createTripImages(
   token: string // Authentication token
 ) {
   try {
-    // Create FormData and add JSON metadata and image files
+    // Create FormData and add trip_id, trip_images_data as JSON, and image files
     const formData = new FormData();
     formData.append('trip_id', create_trip_images_data.trip_id); // Append trip ID
-    formData.append('trip_images_data', JSON.stringify(create_trip_images_data.trip_images)); // Append JSON metadata
+    
+    // Convert trip_images_data to JSON string and add to FormData
+    formData.append('trip_images_data', JSON.stringify(create_trip_images_data.trip_images));
 
+    // Append each image file to FormData with a unique field name
     tripImages.forEach((image, index) => {
-      formData.append('trip_images', image, `image_${index}.jpg`); // Append each image with a unique name
+      formData.append('trip_images', image, `image_${index}.jpg`); // Each file has a unique name
     });
 
     // Make API request
     const response = await makeAPIRequest<{ data: any }>(
-      microservices.CORE, // Replace with your actual microservice
+      microservices.CORE, // Replace with your actual microservice name
       endpoints.trips.CREATE.CREATE_TRIP_IMAGES, // Endpoint URL
       {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`, // Include token in Authorization header
+          Authorization: `Bearer ${token}`, // Add token for authorization
         },
         data: formData, // Send FormData as request data
-        withCredentials: true, // Optional based on your API needs
+        withCredentials: true,
         version: 'v1',
       }
     );
 
-    // Validate the response structure and handle any data transformations if needed
+    // Check if the response was successful
     if (!response || !response.data) {
-      throw new Error('Failed to upload trip images or invalid response structure');
+      throw new Error('Failed to create trip images or invalid response structure');
     }
 
-    return response.data; // Return response data for further use
+    return response.data; // Return response data if successful
   } catch (error: any) {
     console.error("Error creating trip images:", error);
-    throw error; // Re-throw the error for handling in the calling context
+    throw error; // Re-throw error for handling by the caller
   }
 }
