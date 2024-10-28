@@ -72,7 +72,7 @@ export interface CreateTripOpeningsInterface {
   }
 
   export interface CreateTripImagesInterface {
-    trip_image_url: string;
     trip_image_is_primary: boolean;
     trip_id: UUID;
+    trip_images: File[];
   }
