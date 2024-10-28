@@ -175,22 +175,9 @@ export async function createTripOpenings(create_trip_openings_data:CreateTripOpe
 }
 
 export async function createTripImages(
-  create_trip_images_data: CreateTripImagesInterface,
-  tripImages: File[], // List of image files
-  token: string // Authentication token
+  formData: FormData,
 ) {
   try {
-    // Create FormData and add trip_id, trip_images_data as JSON, and image files
-    const formData = new FormData();
-    formData.append('trip_id', create_trip_images_data.trip_id); // Append trip ID
-    
-    // Convert trip_images_data to JSON string and add to FormData
-    formData.append('trip_images_data', JSON.stringify(create_trip_images_data.trip_images));
-
-    // Append each image file to FormData with a unique field name
-    tripImages.forEach((image, index) => {
-      formData.append('trip_images', image, `image_${index}.jpg`); // Each file has a unique name
-    });
 
     // Make API request
     const response = await makeAPIRequest<{ data: any }>(
@@ -200,7 +187,6 @@ export async function createTripImages(
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`, // Add token for authorization
         },
         data: formData, // Send FormData as request data
         withCredentials: true,

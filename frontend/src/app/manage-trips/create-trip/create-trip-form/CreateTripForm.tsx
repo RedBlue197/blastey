@@ -74,6 +74,7 @@ const CreateTripForm = () => {
   }, [toastMessage]);
 
   const handleNext = async () => { 
+
     try {
       setLoading(true);
       let response;
@@ -154,6 +155,7 @@ const CreateTripForm = () => {
           }
 
         } else if (currentStep === 3 && tripId) {
+          console.log('Creating trip images');
           const tripImagesData = getValues('trip_images').map((image) => ({
             trip_image_url: image.trip_image_url,
             trip_image_is_primary: image.trip_image_is_primary,
@@ -168,6 +170,8 @@ const CreateTripForm = () => {
               formData.append('trip_images', image.trip_image_file);
             }
           });
+          
+          console.log('Creating trip images', formData);
 
           response = await createTripImages(formData);
 
@@ -202,6 +206,32 @@ const CreateTripForm = () => {
             });
           }
 
+        }
+        else if (currentStep === 3) {
+          const tripImagesData = getValues('trip_images').map((image) => ({
+            trip_image_url: image.trip_image_url,
+            trip_image_is_primary: image.trip_image_is_primary,
+          }));
+
+          const formData = new FormData();
+          formData.append('trip_id', tripId);
+          formData.append('trip_images_data', JSON.stringify(tripImagesData));
+
+          getValues('trip_images').forEach((image) => {
+            if (image.trip_image_file) {
+              formData.append('trip_images', image.trip_image_file);
+            }
+          });
+
+          response = await createTripImages(formData);
+
+          if (response && response.status_code === 201) {
+            setStepCompleted((prev) => {
+              const newSteps = [...prev];
+              newSteps[3] = true;
+              return newSteps;
+            });
+          }
         }
       }
 
