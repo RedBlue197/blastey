@@ -4,24 +4,25 @@ import styles from './Stepper.module.css';
 interface StepperProps {
   steps: string[];
   currentStep: number;
+  stepCompleted: boolean[]; // Add stepCompleted prop to manage completion state
 }
 
-const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
+const Stepper: React.FC<StepperProps> = ({ steps, currentStep, stepCompleted }) => {
   return (
     <div className={styles.stepperContainer}>
       {steps.map((step, index) => (
         <div key={index} className={styles.step}>
           <div
             className={`${styles.circle} ${
-              index < currentStep ? styles.active : ''
-            } ${index === currentStep ? styles.currentStep : ''}`} 
+              stepCompleted[index] ? styles.completed : '' // Indicate completed steps
+            } ${index < currentStep ? styles.active : ''} ${index === currentStep ? styles.currentStep : ''}`}
           >
             {index + 1}
           </div>
           <p
             className={`${styles.stepLabel} ${
-              index < currentStep ? styles.activeLabel : ''
-            } ${index === currentStep ? styles.currentLabel : ''}`}
+              stepCompleted[index] ? styles.completedLabel : '' // Label for completed steps
+            } ${index < currentStep ? styles.activeLabel : ''} ${index === currentStep ? styles.currentLabel : ''}`}
           >
             {step}
           </p>
