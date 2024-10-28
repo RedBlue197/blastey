@@ -40,8 +40,6 @@ class GetTripByIdResponse(BaseModel):
     trip_id: uuid.UUID
     trip_title: str
     trip_description: Optional[str] = None
-    trip_departure_date: Optional[datetime] = None
-    trip_return_date: Optional[datetime] = None
     trip_origin: Optional[str] = None
     trip_destination: Optional[str] = None
     trip_total_availability: Optional[int] = None
