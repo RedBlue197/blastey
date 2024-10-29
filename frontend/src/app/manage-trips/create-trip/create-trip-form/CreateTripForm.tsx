@@ -15,7 +15,8 @@ import {
   CreateTripItemsInterface, 
   CreateTripOpeningsInterface, 
   CreateTripImagesInterface,
-  UpdateTripInterface 
+  UpdateTripInterface;
+  UpdateTripItemsInterface
 } from '@/types/trip';
 import { 
   createTrip, 
@@ -186,7 +187,6 @@ const CreateTripForm = () => {
       } else {
         if (currentStep === 0) {
           console.log('Updating trip details');
-
           const tripData: UpdateTripInterface = {
             trip_id: tripId,
             trip_title: getValues('trip_title'),
@@ -205,6 +205,48 @@ const CreateTripForm = () => {
               return newSteps;
             });
           }
+
+        }
+        else if (currentStep === 1){
+          console.log('Updating trip items');
+          const tripItems = getValues('trip_items') || [];
+          if (tripItems.length > 0) {
+
+          const tripItemsData: UpdateTripItemsInterface = {
+            trip_items: tripItems.map((item) => ({
+              trip_item_name: item.trip_item_name,
+              trip_item_description: item.trip_item_description,
+              trip_item_category: item.trip_item_category,
+              trip_item_address: item.trip_item_address,
+              trip_item_traveler_reward: parseFloat(item.trip_item_traveler_reward),
+              trip_item_type: item.trip_item_type,
+              trip_item_price: parseFloat(item.trip_item_price),
+              trip_item_image: item.trip_item_image,
+            })),
+            trip_id: tripId,
+          };
+  
+            response = await updateTripItems(tripItemsData);
+
+            if (response && response.status_code === 201) {
+              setStepCompleted((prev) => {
+                const newSteps = [...prev];
+                newSteps[1] = true;
+                return newSteps;
+              });
+            }
+          } else {
+            setStepCompleted((prev) => {
+              const newSteps = [...prev];
+              newSteps[1] = true;
+              return newSteps;
+            });
+            return;
+          }
+          
+
+
+        } else if (currentStep === 2){
 
         }
         else if (currentStep === 3) {

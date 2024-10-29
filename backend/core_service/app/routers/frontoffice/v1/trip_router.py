@@ -6,9 +6,24 @@ from dependencies.auth_dependency import user_dependency
 
 from interfaces.trip_interface import TripInterface
 
-from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest,CreateTripOpeningsRequest,CreateTripImagesRequest, PutTripRequest
+from schemas.trip_schema import (
+    CreateTripRequest,
+    CreateTripItemsRequest,
+    CreateTripOpeningsRequest,
+    CreateTripImagesRequest, 
+    PutTripRequest,
+    PutTripItemsRequest
+    )
 
-from responses.trip_response import GetTripsResponse,GetTripByIdResponse,CreateTripResponse,CreateTripItemsResponse,CreateTripOpeningsResponse,PutTripResponse
+from responses.trip_response import (
+    GetTripsResponse,
+    GetTripByIdResponse,
+    CreateTripResponse,
+    CreateTripItemsResponse,
+    CreateTripOpeningsResponse,
+    PutTripResponse,
+    PutTripItemsResponse
+    )
 
 from utils.responses import api_response
 
@@ -277,10 +292,10 @@ async def create_trip_images(
             message="Failed to create trip images: " + str(e),
             status_code=500
         )
-#----------------------------------------------------PATCH ENDPOINTS----------------------------------------------------
+#----------------------------------------------------PUT ENDPOINTS----------------------------------------------------
 
 @router.put("/update-trip", status_code=status.HTTP_200_OK)
-async def patch_trip(
+async def put_trip(
     user: user_dependency,
     db: db_dependency, 
     trip_update: PutTripRequest,
@@ -318,8 +333,44 @@ async def patch_trip(
             status_code=500
         )
 
-#[TO START] api to patch trip items
+@router.put("/update-trip-items", status_code=status.HTTP_200_O)
+async def put_trip_items(
+    user: user_dependency,
+    db: db_dependency, 
+    trip_items_update: PutTripItemsRequest,
+):
+    if user['user_role'] not in ["admin", "host","user"]:
+        return api_response(
+            message="Unauthorized Role",
+            status_code=403
+        )
+    
+    user_id = user['user_id']
 
+
+    try:
+        # Update trip in the database through the interface
+        trip_items_obj = TripInterface(db=db).put_trip_items(user_id,trip_items_update)
+
+        if not trip_trip_items_objobj:
+            return api_response(
+                message="Trip Items not found",
+                status_code=404  
+            )
+
+        # Transform the updated trip object into response
+        trip_items_response = PutTripItemsResponse.model_validate(trip_items_obj, from_attributes=True)
+
+        return api_response(
+            data=trip_items_response, 
+            message="Trip items updated",
+            status_code=202
+        )
+    except Exception as e:
+        return api_response(
+            message=f"Failed to update trip: {str(e)}",
+            status_code=500
+        )
 #[TO START] api to patch trip openings
 
 #[TO START] api to patch trip images

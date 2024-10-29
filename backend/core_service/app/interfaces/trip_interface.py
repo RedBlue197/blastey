@@ -319,12 +319,16 @@ class TripInterface(BaseInterface[Trip]):
             self.db.rollback()
             raise HTTPException(status_code=500, detail=f"Failed to create trip images: {str(e)}")
 
+#---------------------------------PUT Functions----------------------------------------
 
 
     def put_trip(self,user_id: uuid.UUID,trip_update: PutTripRequest):
         try:
             # Fetch the existing trip
-            trip_obj = self.db.query(Trip).filter(Trip.trip_id == trip_update.trip_id).first()
+            trip_obj = self.db.query(Trip).filter(
+                Trip.trip_id == trip_update.trip_id,
+                Trip.is_deleted == False,
+                ).first()
 
             if not trip_obj:
                 return None
@@ -347,23 +351,62 @@ class TripInterface(BaseInterface[Trip]):
             self.db.rollback()
             raise Exception(f"Error updating trip: {str(e)}")
 
-    def update_trip_items(self, trip_obj, updated_items: list[PatchTripItemRequest]):
-        # Fetch existing trip items
-        existing_items = {item.trip_item_id: item for item in trip_obj.items}
 
-        for item_data in updated_items:
-            item_dict = item_data.dict(exclude_unset=True)
+
+    def put_trip_items(self, trip_items_obj: PutTripItemsRequest):
+        try:
+            # Fetch the existing trip with associated items
+            trip_obj = self.db.query(Trip).filter(
+                Trip.trip_id == trip_items_obj.trip_id,
+                Trip.is_deleted == False
+            ).first()
             
-            # Check if the item already exists (by some unique identifier like ID)
-            if "trip_item_id" in item_dict and item_dict["trip_item_id"] in existing_items:
-                # Update the existing trip item
-                existing_item = existing_items[item_dict["trip_item_id"]]
-                for field, value in item_dict.items():
-                    setattr(existing_item, field, value)
-            else:
-                # If item does not exist, create a new trip item and add to the trip
-                new_item = TripItem(**item_dict)
-                trip_obj.items.append(new_item)
+            if not trip_obj:
+                raise Exception("Trip not found or has been deleted.")
+
+            # Fetch existing trip items from the trip
+            existing_items = {item.trip_item_id: item for item in trip_obj.items}
+
+            # Track IDs that are updated or added
+            processed_ids = set()
+
+            # Loop through each item in the provided trip items list
+            for item_data in trip_items_obj.trip_items:
+                item_dict = item_data.dict(exclude_unset=True)
+                trip_item_id = item_dict.get("trip_item_id")
+
+                if trip_item_id and trip_item_id in existing_items:
+                    # Update the existing item if it exists in the database
+                    existing_item = existing_items[trip_item_id]
+                    for field, value in item_dict.items():
+                        setattr(existing_item, field, value)
+                    processed_ids.add(trip_item_id)  # Mark this ID as processed
+                else:
+                    # If no matching item found, create a new trip item
+                    new_item = TripItem(**item_dict)
+                    trip_obj.items.append(new_item)
+
+            # Mark any items that were not processed as deleted
+            for trip_item_id, existing_item in existing_items.items():
+                if trip_item_id not in processed_ids:
+                    existing_item.is_deleted = True
+
+            # Commit the transaction to apply all changes to the database
+            self.db.commit()
+            
+            # Refresh the trip object to reflect all updates, including the new items
+            self.db.refresh(trip_obj)
+            
+            # Return the updated list of trip items, including newly generated IDs
+            return trip_obj.items
+
+        except Exception as e:
+            # Roll back the transaction if any error occurs
+            self.db.rollback()
+            raise Exception(f"Error updating trip items: {str(e)}")
+
+
+
 
     def update_trip_images(self, trip_obj, image_files: list[UploadFile]):
         # Logic for handling image updates (if required)

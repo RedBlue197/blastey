@@ -7,7 +7,8 @@ import {
   CreateTripItemsInterface,
   CreateTripOpeningsInterface,
   CreateTripImagesInterface,
-  UpdateTripInterface
+  UpdateTripInterface,
+  UpdateTripItemsInterface
 } from "@/types/trip"
 
 export async function fetchTrips(page: number, limit: number) {
@@ -234,4 +235,31 @@ export async function updateTripById(update_trip_data:UpdateTripInterface){
     // Log the full error details to get more information
     return error;
   }
+}
+
+export async function updateTripItems(update_trip_items_data:UpdateTripItemsInterface){
+  try {
+    // Make API request
+    const response = await makeAPIRequest<{ data: any }>(
+      microservices.CORE, // Replace with your actual microservice name
+      endpoints.trips.UPDATE.UPDATE_TRIP_ITEMS, // Endpoint
+      {
+        method: 'PUT',
+        data: update_trip_items_data,
+        withCredentials: true, // Use withCredentials to send the token in the request
+        version: 'v1', // Provide necessary options
+      }
+    );
+
+    // Check if the response was successful and has expected data
+    if (!response || !response.data) {
+      throw new Error('No trips found or invalid response structure');
+    }
+
+    return response; // Return the fetched trips if needed elsewhere
+
+  } catch (error: any) {
+    // Log the full error details to get more information
+    return error;
+  } 
 }

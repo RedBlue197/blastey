@@ -134,3 +134,10 @@ class PutTripResponse(BaseModel):
     class Config:
         orm_mode = True
         from_attributes = True
+
+class PutTripItemsResponse(BaseModel):
+    trip_items: list[CreateTripItemResponse]
+
+    class Config:
+        orm_mode = True
+        from_attributes = True

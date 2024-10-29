@@ -65,7 +65,7 @@ class CreateTripImageRequest(BaseModel):
 class CreateTripImagesRequest(BaseModel):
     trip_images: List[CreateTripImageRequest] = Field(..., min_items=1, description="List of trip images")
 
-
+#----------------------------------------------------------PATCH SCHEMAS-----------------------------------------------------------------------------
 
 class PatchTripItemRequest(BaseModel):
     trip_item_date: Optional[datetime] = Field(None, description="Date of the trip item")
@@ -79,6 +79,7 @@ class PatchTripItemRequest(BaseModel):
     trip_item_id: UUID4 = Field(..., description="Trip item ID")
 
 
+#----------------------------------------------------------PUT SCHEMAS-----------------------------------------------------------------------------
 
 class PutTripRequest(BaseModel):
     trip_id: UUID4 = Field(..., description="Trip ID")
@@ -89,3 +90,16 @@ class PutTripRequest(BaseModel):
     trip_base_price: Optional[float] = Field(None, ge=0, description="Price of the trip")
     trip_base_reward : Optional[float] = Field(None, ge=0, description="Base reward of the trip")
 
+class PutTripItemRequet(BaseModel):
+    trip_item_id: Optional[UUID4] = Field(..., description="Trip item ID")
+    trip_item_name: str = Field(..., min_length=1, max_length=100, description="Name of the trip item")
+    trip_item_description: Optional[str] = Field(None, max_length=500, description="Description of the trip item")
+    trip_item_category: TripItemCategoryEnum = Field(..., description="Category of the trip item")
+    trip_item_address: Optional[str] = Field(None, max_length=200, description="Address of the trip item")
+    trip_item_traveler_reward: Optional[int] = Field(None, description="Traveler reward for the trip item")
+    trip_item_type: TripItemTypeEnum = Field(..., description="Type of the trip item")
+    trip_item_price: Optional[float] = Field(None, ge=0, description="Price of the trip item")
+
+class PutTripItemsRequest(BaseModel):
+    trip_items: List[PatchTripItemRequest] = Field(..., min_items=1, description="List of trip items")
+    trip_id: UUID4 = Field(..., description="Trip ID")
