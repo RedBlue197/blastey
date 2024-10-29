@@ -15,8 +15,9 @@ import {
   CreateTripItemsInterface, 
   CreateTripOpeningsInterface, 
   CreateTripImagesInterface,
-  UpdateTripInterface;
-  UpdateTripItemsInterface
+  UpdateTripInterface,
+  UpdateTripItemsInterface,
+  UpdateTripOpeningsInterface
 } from '@/types/trip';
 import { 
   createTrip, 
@@ -24,6 +25,8 @@ import {
   createTripOpenings, 
   createTripImages,
   updateTripById,
+  updateTripItems,
+  updateTripOpenings
  } from "@/services/internal_services/trip_api_handler";
 
 interface CreateTripFormInputs {
@@ -186,7 +189,6 @@ const CreateTripForm = () => {
           }
         }
       } 
-      
       //Update Part
       else {
         // Update Trips Details
@@ -234,7 +236,7 @@ const CreateTripForm = () => {
   
             response = await updateTripItems(tripItemsData);
 
-            if (response && response.status_code === 201) {
+            if (response && response.status_code === 202) {
               setStepCompleted((prev) => {
                 const newSteps = [...prev];
                 newSteps[1] = true;
@@ -249,13 +251,25 @@ const CreateTripForm = () => {
             });
             return;
           }
-          
-
-
         } 
         // Update Trips Openings
         else if (currentStep === 2){
+          console.log('Updating trip openings');
+          const tripOpenings = getValues('trip_openings') || [];
+          const tripOpeningsData: CreateTripOpeningsInterface = {
+            ...getValues(),
+            trip_id: tripId,
+          };
 
+          response = await updateTripOpenings(tripOpeningsData);
+
+          if (response && response.status_code === 201) {
+            setStepCompleted((prev) => {
+              const newSteps = [...prev];
+              newSteps[2] = true;
+              return newSteps;
+            });
+          }
         }
         // Update Trips Images
         else if (currentStep === 3) {

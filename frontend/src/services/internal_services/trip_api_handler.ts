@@ -257,7 +257,7 @@ export async function updateTripItems(update_trip_items_data:UpdateTripItemsInte
   } 
 }
 
-export async function UpdateTripOpenings(update_trip_openings_data:UpdateTripOpeningsInterface){
+export async function updateTripOpenings(update_trip_openings_data:UpdateTripOpeningsInterface){
   try {
     // Make API request
     const response = await makeAPIRequest<{ data: any }>(
