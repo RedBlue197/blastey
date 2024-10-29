@@ -1,4 +1,4 @@
-from pydantic import BaseModel,UUID4
+from pydantic import BaseModel,UUID4,Field
 import uuid
 from models.trip_model import TripItemCategoryEnum, TripItemTypeEnum, TripCreationStatusEnum
 from typing import List, Optional
@@ -137,7 +137,7 @@ class PutTripItemsResponse(BaseModel):
         from_attributes = True
 
 class PutTripOpeningResponse(BaseModel):
-    trip_opening_id : UUID : Field(..., description="Trip opening ID")
+    trip_opening_id : UUID4 = Field(..., description="Trip opening ID")
     trip_opening_start_date: datetime = Field(..., description="Start date of the trip opening")
     trip_opening_end_date: datetime = Field(..., description="End date of the trip opening")
     trip_opening_total_reward: Optional[float] = Field(None, description="Total reward for this trip opening")
@@ -145,8 +145,7 @@ class PutTripOpeningResponse(BaseModel):
     trip_opening_total_availability: Optional[int] = Field(None, description="Total availability of the trip opening")
     trip_opening_total_booking: Optional[int] = Field(None, description="Total bookings for this trip opening")
     trip_opening_price: float = Field(..., description="Price of this trip opening")
-    trip_opening_items: Optional[List[CreateTripOpeningItemRequest]] = Field(None, description="List of trip opening items")
 
 class PutTripOpeningsResponse(BaseModel):
-    trip_openings: List[CreateTripOpeningRequest] = Field(..., min_items=1, description="List of trip openings")
+    trip_openings: List[PutTripOpeningResponse] = Field(..., min_items=1, description="List of trip openings")
     trip_id: UUID4 = Field(..., description="Trip ID")

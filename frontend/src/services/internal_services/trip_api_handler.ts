@@ -173,6 +173,7 @@ export async function createTripImages(formData: FormData) {
   try {
 
     // Make API request
+    console.log("Creating trip images with form data:", formData);
     const response = await makeAPIRequest<{ data: any }>(
       microservices.CORE, // Replace with your actual microservice name
       endpoints.trips.CREATE.CREATE_TRIP_IMAGES, // Endpoint URL
@@ -184,6 +185,7 @@ export async function createTripImages(formData: FormData) {
         data: formData, // Send FormData as request data
         withCredentials: true,
         version: 'v1',
+        encrypt: false, // Disable encryption for file uploads
       }
     );
 

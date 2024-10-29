@@ -259,10 +259,11 @@ async def create_trip_openings(
 #[TO TEST] api to create trip images
 @router.post("/create-trip-images")
 async def create_trip_images(
-    user: user_dependency,
-    db: db_dependency, 
-    trip_images_data: str = Form(...),  # JSON string of trip images metadata
-    trip_images: List[UploadFile] = File(...)  # List of image files
+        user: user_dependency,
+        db: db_dependency,
+        trip_id:  str = Form(...),  # Accept `trip_id` as a form field
+        trip_images_data:  str = Form(...),  # Accept `trip_id` as a form field
+        trip_images: List[UploadFile] = File(...)
     ):
     if user['user_role'] not in ["admin", "host", "user"]:
         return api_response(
@@ -290,7 +291,6 @@ async def create_trip_images(
             status_code=500
         )
 #----------------------------------------------------PUT ENDPOINTS----------------------------------------------------
-
 @router.put("/update-trip")
 async def put_trip(
     user: user_dependency,
@@ -414,8 +414,7 @@ async def put_trip_openings(
 async def put_trip_images(
     user: user_dependency,
     db: db_dependency, 
-    trip_images_data: str = Form(...),  # JSON string of trip images metadata
-    trip_images: List[UploadFile] = File(...)  # List of image files
+    data: str = Form(...),  # JSON string of trip images metadata
     ):
     if user['user_role'] not in ["admin", "host", "user"]:
         return api_response(
@@ -442,7 +441,6 @@ async def put_trip_images(
             message="Failed to create trip images: " + str(e),
             status_code=500
         )
-
 #----------------------------------------------------DELETE ENDPOINTS----------------------------------------------------
 @router.delete("/delete-all-trips")
 async def delete_all_trips(

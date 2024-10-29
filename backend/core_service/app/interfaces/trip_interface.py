@@ -11,16 +11,30 @@ import uuid
 
 from typing import List,Optional
 
-from models.trip_model import Trip, TripItem, TripOpening, TripOpeningItem,TripImage
+from models.trip_model import (
+    Trip, 
+    TripItem, 
+    TripOpening,
+    TripOpeningItem, 
+    TripImage
+)
 from models.user_model import User
 
-from schemas.trip_schema import CreateTripRequest,CreateTripItemsRequest,CreateTripOpeningsRequest
-from schemas.trip_schema import PutTripRequest, PatchTripItemRequest
+from schemas.trip_schema import (
+    CreateTripRequest,
+    CreateTripItemsRequest,
+    CreateTripOpeningsRequest,
+    CreateTripImagesRequest,
+    PutTripRequest,
+    PutTripItemsRequest,
+    PutTripOpeningsRequest
+)
 
 from services.image_service import post_trip_images_on_gcs
 
 
 class TripInterface(BaseInterface[Trip]):
+    
     def __init__(self, db: Session):
         super().__init__(db, Trip, 'trip_id')
 

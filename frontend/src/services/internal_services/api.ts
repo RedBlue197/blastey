@@ -20,6 +20,7 @@ interface MakeAPIRequestOptions {
   data?: any;
   microservice?: string;
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE'; // Specify HTTP method
+  encrypt?: boolean; // New parameter to specify whether encryption is needed
   [key: string]: any; // Allow for other Axios request options
 }
 
@@ -54,6 +55,7 @@ export const makeAPIRequest = async <T>(
     withCredentials = false, // Default value for withCredentials
     data = null,
     method = 'GET',
+    encrypt = true, // Default to encrypting data unless specified otherwise
     ...rest
   } = options;
 
@@ -79,13 +81,19 @@ export const makeAPIRequest = async <T>(
     config.headers.Authorization = `Bearer ${options.token}`;
   }
 
+  // Encrypt data if encryption is enabled
   if (data) {
-    try {
-      const { iv, encryptedData } = encryptData(data);
-      config.data = { iv, data: encryptedData }; // Wrap the encrypted data inside a 'data' object
-    } catch (error) {
-      console.error("Error encrypting data:", error);
-      throw error;
+    if (encrypt) {
+      try {
+        const { iv, encryptedData } = encryptData(data);
+        config.data = { iv, data: encryptedData }; // Wrap the encrypted data inside a 'data' object
+      } catch (error) {
+        console.error("Error encrypting data:", error);
+        throw error;
+      }
+    } else {
+      // Send data as-is without encryption
+      config.data = data;
     }
   }
 

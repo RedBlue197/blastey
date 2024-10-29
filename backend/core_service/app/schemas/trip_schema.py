@@ -99,7 +99,7 @@ class PutTripItemsRequest(BaseModel):
     trip_id: UUID4 = Field(..., description="Trip ID")
 
 class PutTripOpeningRequest(BaseModel):
-    trip_opening_id : Optional[UUID] : Field(..., description="Trip opening ID")
+    trip_opening_id : Optional[UUID4] = Field(..., description="Trip opening ID")
     trip_opening_start_date: datetime = Field(..., description="Start date of the trip opening")
     trip_opening_end_date: datetime = Field(..., description="End date of the trip opening")
     trip_opening_total_reward: Optional[float] = Field(None, description="Total reward for this trip opening")

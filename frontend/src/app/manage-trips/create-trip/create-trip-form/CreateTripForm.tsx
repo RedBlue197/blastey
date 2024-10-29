@@ -106,7 +106,8 @@ const CreateTripForm = () => {
             });
           }
 
-        } else if (currentStep === 1 && tripId) {
+        } 
+        else if (currentStep === 1 && tripId) {
           const tripItems = getValues('trip_items') || [];
 
           if (tripItems.length > 0) {
@@ -143,7 +144,8 @@ const CreateTripForm = () => {
           }
 
           
-        } else if (currentStep === 2 && tripId) {
+        } 
+        else if (currentStep === 2 && tripId) {
           const tripOpeningsData: CreateTripOpeningsInterface = {
             ...getValues(),
             trip_id: tripId,
@@ -159,10 +161,9 @@ const CreateTripForm = () => {
             });
           }
 
-        } else if (currentStep === 3 && tripId) {
-          console.log('Creating trip images');
+        } 
+        else if (currentStep === 3 && tripId) {
           const tripImagesData = getValues('trip_images').map((image) => ({
-            trip_image_url: image.trip_image_url,
             trip_image_is_primary: image.trip_image_is_primary,
           }));
 
@@ -171,12 +172,14 @@ const CreateTripForm = () => {
           formData.append('trip_images_data', JSON.stringify(tripImagesData));
 
           getValues('trip_images').forEach((image) => {
-            if (image.trip_image_file) {
-              formData.append('trip_images', image.trip_image_file);
+            if (image.trip_image_file[0] instanceof File) { // Ensure it's a File object
+              console.log(image.trip_image_file); // Log the file object for verification
+              formData.append('trip_images', image.trip_image_file[0]); // Append the file directly
+            } else {
+              console.warn("Expected a File object, but got:",  getValues('trip_images'));
             }
+            console.log(image.trip_image_file);
           });
-          
-          console.log('Creating trip images', formData);
 
           response = await createTripImages(formData);
 
@@ -249,7 +252,6 @@ const CreateTripForm = () => {
               newSteps[1] = true;
               return newSteps;
             });
-            return;
           }
         } 
         // Update Trips Openings
@@ -284,6 +286,7 @@ const CreateTripForm = () => {
 
           getValues('trip_images').forEach((image) => {
             if (image.trip_image_file) {
+              console.log(image.trip_image_file);
               formData.append('trip_images', image.trip_image_file);
             }
           });
