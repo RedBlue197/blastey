@@ -169,9 +169,7 @@ export async function createTripOpenings(create_trip_openings_data:CreateTripOpe
   }
 }
 
-export async function createTripImages(
-  formData: FormData,
-) {
+export async function createTripImages(formData: FormData) {
   try {
 
     // Make API request

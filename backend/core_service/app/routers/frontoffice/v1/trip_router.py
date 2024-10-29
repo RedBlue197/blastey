@@ -43,7 +43,7 @@ router = APIRouter(
 #----------------------------------------------------GET ENDPOINTS----------------------------------------------------
 
 #API to get all trips
-@router.get("/", status_code=status.HTTP_200_OK)
+@router.get("/")
 @limiter.limit("5/minute")
 async def get_trips(
     request: Request,
@@ -89,7 +89,7 @@ async def get_trips(
     )
 
 #API to get a specific trip by id
-@router.get("/{trip_id}",response_model=GetTripByIdResponse, status_code=status.HTTP_200_OK)
+@router.get("/{trip_id}")
 async def get_trip_by_id(
     db: db_dependency,
     trip_id: uuid.UUID,
@@ -110,7 +110,7 @@ async def get_trip_by_id(
             )
 
 #API to get all trips by host id
-@router.get("/by-host-id/", status_code=status.HTTP_200_OK)
+@router.get("/by-host-id/")
 async def get_trips_by_host_id(
     user: user_dependency,
     db: db_dependency,
@@ -162,7 +162,7 @@ async def get_trips_by_host_id(
     )
 
 #----------------------------------------------------POST ENDPOINTS----------------------------------------------------
-@router.post("/create-trip", status_code=status.HTTP_201_CREATED)
+@router.post("/create-trip")
 async def create_trip(
     user: user_dependency,
     db: db_dependency,
@@ -261,7 +261,6 @@ async def create_trip_openings(
 async def create_trip_images(
     user: user_dependency,
     db: db_dependency, 
-    trip_id: UUID4 = Form(...),  # Receive trip_id from FormData
     trip_images_data: str = Form(...),  # JSON string of trip images metadata
     trip_images: List[UploadFile] = File(...)  # List of image files
     ):
@@ -292,7 +291,7 @@ async def create_trip_images(
         )
 #----------------------------------------------------PUT ENDPOINTS----------------------------------------------------
 
-@router.put("/update-trip", status_code=status.HTTP_200_OK)
+@router.put("/update-trip")
 async def put_trip(
     user: user_dependency,
     db: db_dependency, 
@@ -331,7 +330,7 @@ async def put_trip(
             status_code=500
         )
 
-@router.put("/update-trip-items", status_code=status.HTTP_200_O)
+@router.put("/update-trip-items")
 async def put_trip_items(
     user: user_dependency,
     db: db_dependency, 
@@ -371,7 +370,7 @@ async def put_trip_items(
         )
 
 #[TO Complete] api to put trip openings
-@router.put("/update-trip-openings", status_code=status.HTTP_200_O)
+@router.put("/update-trip-openings")
 async def put_trip_openings(
     user: user_dependency,
     db: db_dependency, 
@@ -411,9 +410,41 @@ async def put_trip_openings(
         )
 
 #[TO START] api to patch trip images
+@router.put("/update-trip-images")
+async def put_trip_images(
+    user: user_dependency,
+    db: db_dependency, 
+    trip_images_data: str = Form(...),  # JSON string of trip images metadata
+    trip_images: List[UploadFile] = File(...)  # List of image files
+    ):
+    if user['user_role'] not in ["admin", "host", "user"]:
+        return api_response(
+            message="Unauthorized Role",
+            status_code=403
+        )
+    
+    host_id = user['user_id']
+    try:
+        # Parse the trip_images_data JSON string into a Python object
+        trip_images_data_obj = CreateTripImagesRequest.model_validate_json(trip_images_data)
+        
+        # Pass the parsed data and images to the interface
+        trip_images_obj = TripInterface(db=db).create_trip_images(trip_images_data_obj, trip_images, host_id)
+        
+        trip_images_response = CreateTripOpeningsResponse.model_validate(trip_images_obj, from_attributes=True)
+        return api_response(
+            data=trip_images_response,
+            message="Trip images created",
+            status_code=202
+        )
+    except Exception as e:
+        return api_response(
+            message="Failed to create trip images: " + str(e),
+            status_code=500
+        )
 
 #----------------------------------------------------DELETE ENDPOINTS----------------------------------------------------
-@router.delete("/delete-all-trips", status_code=status.HTTP_200_OK)
+@router.delete("/delete-all-trips")
 async def delete_all_trips(
     user: user_dependency,
     db: db_dependency
