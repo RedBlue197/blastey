@@ -12,7 +12,6 @@ class TripCreationStatusEnum(PyEnum):
     TRIP_IMAGES_CREATION = "trip_images_creation"
     COMPLETED="completed"
 
-
 class TripItemCategoryEnum(PyEnum):
     ACTIVITY="activity"
     FOOD="food"
@@ -20,14 +19,12 @@ class TripItemCategoryEnum(PyEnum):
     STAY="stay"
     OTHER="other"
 
-
-class  TripItemTypeEnum(PyEnum):
+class TripItemTypeEnum(PyEnum):
     INCLUDED="included"
     OPTIONAL="optional"
     EXCLUDED="excluded"
 
-
-class  Trip(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
+class Trip(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "trips"
 
     trip_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -44,7 +41,6 @@ class  Trip(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixi
 
     #Foreign Keys
     host_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
-
 
 class TripItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "trip_items"
@@ -70,7 +66,6 @@ class TripImage(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedBy
     trip_image_url = Column(String, nullable=False)
     trip_image_is_primary = Column(Boolean, default=False)
 
-
 class TripRating(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "trip_ratings"
 
@@ -83,16 +78,12 @@ class TripRating(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedB
     #Foreign Keys
     booking_id = Column(UUID(as_uuid=True), ForeignKey("bookings.booking_id", ondelete="CASCADE"), nullable=False)
 
-
 class TripRatingImages(Base,TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "trip_rating_images"
 
     trip_rating_image_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     trip_rating_id = Column(UUID(as_uuid=True), ForeignKey("trip_ratings.trip_rating_id", ondelete="CASCADE"), nullable=False)
     trip_rating_image = Column(Text, nullable=False)
-
-
-
 
 class TripOpening(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "trip_openings"
@@ -108,8 +99,6 @@ class TripOpening(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Updated
 
     # Foreign Keys
     trip_id = Column(UUID(as_uuid=True), ForeignKey("trips.trip_id", ondelete="CASCADE"), nullable=False)
-
-
 
 class TripOpeningItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "trip_opening_items"

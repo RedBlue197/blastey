@@ -12,7 +12,8 @@ from schemas.trip_schema import (
     CreateTripOpeningsRequest,
     CreateTripImagesRequest, 
     PutTripRequest,
-    PutTripItemsRequest
+    PutTripItemsRequest,
+    PutTripOpeningsRequest
     )
 
 from responses.trip_response import (
@@ -22,7 +23,8 @@ from responses.trip_response import (
     CreateTripItemsResponse,
     CreateTripOpeningsResponse,
     PutTripResponse,
-    PutTripItemsResponse
+    PutTripItemsResponse,
+    PutTripOpeningsResponse
     )
 
 from utils.responses import api_response
@@ -40,7 +42,6 @@ router = APIRouter(
 
 #----------------------------------------------------GET ENDPOINTS----------------------------------------------------
 
-
 #API to get all trips
 @router.get("/", status_code=status.HTTP_200_OK)
 @limiter.limit("5/minute")
@@ -49,7 +50,7 @@ async def get_trips(
     db: db_dependency,
     page: int = Query(1, ge=1),
     items_per_page: int = Query(10, le=100),
-):
+    ):
     # Calculate pagination offsets
     offset = (page - 1) * items_per_page
     limit = items_per_page
@@ -87,14 +88,13 @@ async def get_trips(
         status_code=200
     )
 
-
 #API to get a specific trip by id
 @router.get("/{trip_id}",response_model=GetTripByIdResponse, status_code=status.HTTP_200_OK)
 async def get_trip_by_id(
     db: db_dependency,
     trip_id: uuid.UUID,
     user: user_dependency
-):
+    ):
     trip = TripInterface(db=db).get_trip_by_id(trip_id)
     if trip:
         trip_response=GetTripByIdResponse.model_validate(trip, from_attributes=True)
@@ -117,14 +117,14 @@ async def get_trips_by_host_id(
     page: int = Query(1, ge=1),
     items_per_page: int = Query(10, le=100),
 
-):
+    ):
     if user['user_role'] not in ["admin", "host","user"]:
         return api_response(
             message="Unauthorized Role",
             status_code=403
         )
     
-# Calculate pagination offsets
+    # Calculate pagination offsets
     offset = (page - 1) * items_per_page
     limit = items_per_page
 
@@ -161,14 +161,13 @@ async def get_trips_by_host_id(
         status_code=200
     )
 
-
 #----------------------------------------------------POST ENDPOINTS----------------------------------------------------
 @router.post("/create-trip", status_code=status.HTTP_201_CREATED)
 async def create_trip(
     user: user_dependency,
     db: db_dependency,
     trip: CreateTripRequest
-):
+    ):
     if user['user_role'] not in ["admin", "host","user"]:
         return api_response(
             message="Unauthorized Role",
@@ -195,7 +194,7 @@ async def create_trip_items(
     user: user_dependency,
     db:db_dependency,
     trip_items: CreateTripItemsRequest
-):
+    ):
     # Only admin or host can create trip items
     if user['user_role'] not in ["admin", "host","user"]:
         return api_response(
@@ -230,14 +229,13 @@ async def create_trip_items(
             status_code=500
         )
 
-
 #API to create trip openings and trips items
 @router.post("/create-trip-openings")
 async def create_trip_openings(
     user: user_dependency,
     db: db_dependency,
     trip_openings: CreateTripOpeningsRequest
-):
+    ):
     if user['user_role'] not in ["admin", "host","user"]:
         return api_response(
             message="Unauthorized Role",
@@ -266,7 +264,7 @@ async def create_trip_images(
     trip_id: UUID4 = Form(...),  # Receive trip_id from FormData
     trip_images_data: str = Form(...),  # JSON string of trip images metadata
     trip_images: List[UploadFile] = File(...)  # List of image files
-):
+    ):
     if user['user_role'] not in ["admin", "host", "user"]:
         return api_response(
             message="Unauthorized Role",
@@ -299,7 +297,7 @@ async def put_trip(
     user: user_dependency,
     db: db_dependency, 
     trip_update: PutTripRequest,
-):
+    ):
     if user['user_role'] not in ["admin", "host","user"]:
         return api_response(
             message="Unauthorized Role",
@@ -338,7 +336,7 @@ async def put_trip_items(
     user: user_dependency,
     db: db_dependency, 
     trip_items_update: PutTripItemsRequest,
-):
+    ):
     if user['user_role'] not in ["admin", "host","user"]:
         return api_response(
             message="Unauthorized Role",
@@ -371,17 +369,55 @@ async def put_trip_items(
             message=f"Failed to update trip: {str(e)}",
             status_code=500
         )
-#[TO START] api to patch trip openings
+
+#[TO Complete] api to put trip openings
+@router.put("/update-trip-openings", status_code=status.HTTP_200_O)
+async def put_trip_openings(
+    user: user_dependency,
+    db: db_dependency, 
+    trip_openings_update: PutTripOpeningsRequest,
+    ):
+    if user['user_role'] not in ["admin", "host","user"]:
+        return api_response(
+            message="Unauthorized Role",
+            status_code=403
+        )
+    
+    user_id = user['user_id']
+
+
+    try:
+        # Update trip in the database through the interface
+        trip_openings_obj = TripInterface(db=db).put_trip_openings(user_id,trip_openings_update)
+
+        if not trip_openings_obj:
+            return api_response(
+                message="Trip Openings not found",
+                status_code=404  
+            )
+
+        # Transform the updated trip object into response
+        trip_openings_response = PutTripOpeningsResponse.model_validate(trip_openings_obj, from_attributes=True)
+
+        return api_response(
+            data=trip_openings_response, 
+            message="Trip Openings updated",
+            status_code=202
+        )
+    except Exception as e:
+        return api_response(
+            message=f"Failed to update trip openings: {str(e)}",
+            status_code=500
+        )
 
 #[TO START] api to patch trip images
-
 
 #----------------------------------------------------DELETE ENDPOINTS----------------------------------------------------
 @router.delete("/delete-all-trips", status_code=status.HTTP_200_OK)
 async def delete_all_trips(
     user: user_dependency,
     db: db_dependency
-):
+    ):
     
     #check role of user
     # if user['user_role'] not in ["admin"]:

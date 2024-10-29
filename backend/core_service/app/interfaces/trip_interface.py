@@ -24,6 +24,8 @@ class TripInterface(BaseInterface[Trip]):
     def __init__(self, db: Session):
         super().__init__(db, Trip, 'trip_id')
 
+#---------------------------------GET Functions----------------------------------------
+
     def get_trips_with_pagination(self, offset: int, limit: int):
         total_count_query = (
             self.db.query(func.count(Trip.trip_id))
@@ -70,8 +72,7 @@ class TripInterface(BaseInterface[Trip]):
             trips = []
 
         return {"trips": trips}, total_count
-
-    
+  
     def get_trip_by_id(self, trip_id: uuid.UUID):
         return self.db.query(Trip).filter(
             Trip.is_deleted == False,
@@ -124,7 +125,8 @@ class TripInterface(BaseInterface[Trip]):
         
         return {"trips": trips}, total_count
 
-#---------------------------------Create Functions----------------------------------------
+#---------------------------------CREATE Functions----------------------------------------
+
     def create_trip(self, trip: CreateTripRequest,host_id:uuid.UUID):
         trip_id = uuid.uuid4()  # Generate a UUID for the trip
 
@@ -321,7 +323,6 @@ class TripInterface(BaseInterface[Trip]):
 
 #---------------------------------PUT Functions----------------------------------------
 
-
     def put_trip(self,user_id: uuid.UUID,trip_update: PutTripRequest):
         try:
             # Fetch the existing trip
@@ -350,8 +351,6 @@ class TripInterface(BaseInterface[Trip]):
             # If any error occurs, roll back the transaction
             self.db.rollback()
             raise Exception(f"Error updating trip: {str(e)}")
-
-
 
     def put_trip_items(self, trip_items_obj: PutTripItemsRequest):
         try:
@@ -405,8 +404,57 @@ class TripInterface(BaseInterface[Trip]):
             self.db.rollback()
             raise Exception(f"Error updating trip items: {str(e)}")
 
+    def put_trip_openings(self, trip_openings_obj: PutTripOpeningsRequest):
+        try:
+            # Fetch the existing trip with associated openings
+            trip_obj = self.db.query(Trip).filter(
+                Trip.trip_id == trip_openings_obj.trip_id,
+                Trip.is_deleted == False
+            ).first()
+            
+            if not trip_obj:
+                raise Exception("Trip not found or has been deleted.")
 
+            # Fetch existing trip openings as a dictionary by trip_opening_id
+            existing_openings = {opening.trip_opening_id: opening for opening in trip_obj.openings}
 
+            # Track IDs that are updated or added
+            processed_ids = set()
+
+            # Loop through each opening in the provided trip openings list
+            for opening_data in trip_openings_obj.trip_openings:
+                opening_dict = opening_data.dict(exclude_unset=True)
+                trip_opening_id = opening_dict.get("trip_opening_id")
+
+                if trip_opening_id and trip_opening_id in existing_openings:
+                    # Update the existing opening if it exists in the database
+                    existing_opening = existing_openings[trip_opening_id]
+                    for field, value in opening_dict.items():
+                        setattr(existing_opening, field, value)
+                    processed_ids.add(trip_opening_id)  # Mark this ID as processed
+                else:
+                    # If no matching opening found, create a new trip opening
+                    new_opening = TripOpening(**opening_dict)
+                    trip_obj.openings.append(new_opening)
+
+            # Mark any openings that were not processed as deleted
+            for trip_opening_id, existing_opening in existing_openings.items():
+                if trip_opening_id not in processed_ids:
+                    existing_opening.is_deleted = True
+
+            # Commit the transaction to apply all changes to the database
+            self.db.commit()
+            
+            # Refresh the trip object to reflect all updates, including the new openings
+            self.db.refresh(trip_obj)
+            
+            # Return the updated list of trip openings, including newly generated IDs
+            return trip_obj.openings
+
+        except Exception as e:
+            # Roll back the transaction if any error occurs
+            self.db.rollback()
+            raise Exception(f"Error updating trip openings: {str(e)}")
 
     def update_trip_images(self, trip_obj, image_files: list[UploadFile]):
         # Logic for handling image updates (if required)

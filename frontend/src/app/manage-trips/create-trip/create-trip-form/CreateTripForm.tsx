@@ -80,6 +80,7 @@ const CreateTripForm = () => {
       setLoading(true);
       let response;
 
+      //Create Part
       if (!stepCompleted[currentStep]) {
         if (currentStep === 0) {
           const tripData: CreateTripInterface = {
@@ -184,7 +185,11 @@ const CreateTripForm = () => {
             });
           }
         }
-      } else {
+      } 
+      
+      //Update Part
+      else {
+        // Update Trips Details
         if (currentStep === 0) {
           console.log('Updating trip details');
           const tripData: UpdateTripInterface = {
@@ -207,6 +212,7 @@ const CreateTripForm = () => {
           }
 
         }
+        // Update Trips Items
         else if (currentStep === 1){
           console.log('Updating trip items');
           const tripItems = getValues('trip_items') || [];
@@ -246,9 +252,12 @@ const CreateTripForm = () => {
           
 
 
-        } else if (currentStep === 2){
+        } 
+        // Update Trips Openings
+        else if (currentStep === 2){
 
         }
+        // Update Trips Images
         else if (currentStep === 3) {
           const tripImagesData = getValues('trip_images').map((image) => ({
             trip_image_url: image.trip_image_url,
@@ -277,6 +286,7 @@ const CreateTripForm = () => {
         }
       }
 
+      // Stepper Navigation
       if (response && response.status_code === 201) {
         setToastMessage({ type: 'success', message: `Step ${currentStep + 1} completed successfully!` });
         if (currentStep < steps.length - 1) setCurrentStep((prevStep) => prevStep + 1);

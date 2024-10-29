@@ -6,8 +6,6 @@ from typing import List, Optional
 class CreateTripItemImageRequest(BaseModel):
     trip_image_is_primary: bool = Field(..., description="Indicates if the image is primary")
 
-
-
 class CreateTripOpeningItemRequest(BaseModel):
     trip_opening_item_name: str = Field(..., min_length=1, max_length=100, description="Name of the trip opening item")
     trip_opening_item_description: Optional[str] = Field(None, max_length=500, description="Description of the trip opening item")
@@ -20,7 +18,6 @@ class CreateTripOpeningItemRequest(BaseModel):
     trip_opening_item_price: Optional[float] = Field(None, description="Price of this trip opening item")
     trip_item_id: UUID4 = Field(..., description="ID of the trip item to link this opening to")
 
-
 class CreateTripOpeningRequest(BaseModel):
     trip_opening_start_date: datetime = Field(..., description="Start date of the trip opening")
     trip_opening_end_date: datetime = Field(..., description="End date of the trip opening")
@@ -31,11 +28,9 @@ class CreateTripOpeningRequest(BaseModel):
     trip_opening_price: float = Field(..., description="Price of this trip opening")
     trip_opening_items: Optional[List[CreateTripOpeningItemRequest]] = Field(None, description="List of trip opening items")
 
-
 class CreateTripOpeningsRequest(BaseModel):
     trip_openings: List[CreateTripOpeningRequest] = Field(..., min_items=1, description="List of trip openings")
     trip_id: UUID4 = Field(..., description="Trip ID")
-
 
 class CreateTripItemRequest(BaseModel):
     trip_item_name: str = Field(..., min_length=1, max_length=100, description="Name of the trip item")
@@ -78,7 +73,6 @@ class PatchTripItemRequest(BaseModel):
     trip_item_price: Optional[float] = Field(None, ge=0, description="Price of the trip item")
     trip_item_id: UUID4 = Field(..., description="Trip item ID")
 
-
 #----------------------------------------------------------PUT SCHEMAS-----------------------------------------------------------------------------
 
 class PutTripRequest(BaseModel):
@@ -102,4 +96,19 @@ class PutTripItemRequet(BaseModel):
 
 class PutTripItemsRequest(BaseModel):
     trip_items: List[PatchTripItemRequest] = Field(..., min_items=1, description="List of trip items")
+    trip_id: UUID4 = Field(..., description="Trip ID")
+
+class PutTripOpeningRequest(BaseModel):
+    trip_opening_id : Optional[UUID] : Field(..., description="Trip opening ID")
+    trip_opening_start_date: datetime = Field(..., description="Start date of the trip opening")
+    trip_opening_end_date: datetime = Field(..., description="End date of the trip opening")
+    trip_opening_total_reward: Optional[float] = Field(None, description="Total reward for this trip opening")
+    is_limited_availability: bool = Field(..., description="Indicates if the trip opening has limited availability")
+    trip_opening_total_availability: Optional[int] = Field(None, description="Total availability of the trip opening")
+    trip_opening_total_booking: Optional[int] = Field(None, description="Total bookings for this trip opening")
+    trip_opening_price: float = Field(..., description="Price of this trip opening")
+    trip_opening_items: Optional[List[CreateTripOpeningItemRequest]] = Field(None, description="List of trip opening items")
+
+class PutTripOpeningsRequest(BaseModel):
+    trip_openings: List[CreateTripOpeningRequest] = Field(..., min_items=1, description="List of trip openings")
     trip_id: UUID4 = Field(..., description="Trip ID")

@@ -6,13 +6,11 @@ from datetime import datetime
 
 #-------------------------------------GET SCHEMAS--------------------------------------
 
-
 class GetTripHostResponse(BaseModel):
     user_name: str
     user_email: str
     user_phone_number: Optional[str] = None
     user_id: uuid.UUID
-
 
 class GetTripResponse(BaseModel):
     trip_id: uuid.UUID
@@ -27,7 +25,6 @@ class GetTripResponse(BaseModel):
     trip_lowest_trip_opening_price:float
     host: GetTripHostResponse
 
-
 class GetTripsResponse(BaseModel):
     trips: list[GetTripResponse]
 
@@ -35,7 +32,6 @@ class GetTripsResponse(BaseModel):
         orm_mode = True
         from_attributes = True  # This is the key setting
 
- 
 class GetTripByIdResponse(BaseModel):
     trip_id: uuid.UUID
     trip_title: str
@@ -64,7 +60,6 @@ class CreateTripOpeningItemResponse(BaseModel):
     trip_opening_item_total_booking: Optional[int]
     trip_opening_item_price: Optional[float]
 
-
 class CreateTripOpeningResponse(BaseModel):
     trip_opening_id: UUID4
     trip_id: UUID4
@@ -75,7 +70,6 @@ class CreateTripOpeningResponse(BaseModel):
     trip_opening_total_availability: Optional[int]
     trip_opening_total_booking: Optional[int]
     trip_opening_price: float
-
 
 class CreateTripOpeningsResponse(BaseModel):
     trip_openings: List[CreateTripOpeningResponse]
@@ -141,3 +135,18 @@ class PutTripItemsResponse(BaseModel):
     class Config:
         orm_mode = True
         from_attributes = True
+
+class PutTripOpeningResponse(BaseModel):
+    trip_opening_id : UUID : Field(..., description="Trip opening ID")
+    trip_opening_start_date: datetime = Field(..., description="Start date of the trip opening")
+    trip_opening_end_date: datetime = Field(..., description="End date of the trip opening")
+    trip_opening_total_reward: Optional[float] = Field(None, description="Total reward for this trip opening")
+    is_limited_availability: bool = Field(..., description="Indicates if the trip opening has limited availability")
+    trip_opening_total_availability: Optional[int] = Field(None, description="Total availability of the trip opening")
+    trip_opening_total_booking: Optional[int] = Field(None, description="Total bookings for this trip opening")
+    trip_opening_price: float = Field(..., description="Price of this trip opening")
+    trip_opening_items: Optional[List[CreateTripOpeningItemRequest]] = Field(None, description="List of trip opening items")
+
+class PutTripOpeningsResponse(BaseModel):
+    trip_openings: List[CreateTripOpeningRequest] = Field(..., min_items=1, description="List of trip openings")
+    trip_id: UUID4 = Field(..., description="Trip ID")

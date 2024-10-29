@@ -65,7 +65,6 @@ class BookingItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Updated
         booking_number = f"BOOK-{today}-{sequence:06d}"
         return booking_number
     
-
 @event.listens_for(Booking, 'before_insert')
 def receive_before_insert(mapper, connection, target):
     session = connection.info['session']

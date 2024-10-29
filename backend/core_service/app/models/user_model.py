@@ -19,7 +19,6 @@ class UserRole(PyEnum):
     HOST= "host"
     USER = "user"
 
-
 class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "users"
 
@@ -38,6 +37,7 @@ class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     user_image = Column(String, nullable=True)
     user_auth_token = Column(String, nullable=True)
     user_notification_token = Column(String, nullable=True)
+    is_verified = Column(Boolean, default=True)
     is_active = Column(Boolean, default=True)
     is_blocked = Column(Boolean, default=False)
     user_last_login_date = Column(DateTime, nullable=True)
@@ -46,7 +46,6 @@ class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     user_role = Column(Enum(UserRole), default=UserRole.USER, nullable=False)
     newsletter_id= Column(UUID(as_uuid=True), ForeignKey("newsletters.newsletter_id"), nullable=True)
     referrer_id=Column(UUID(as_uuid=True), ForeignKey("users.user_id"), nullable=True)
-
 
 class UserDetails(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "user_details"

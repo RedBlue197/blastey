@@ -12,7 +12,11 @@ from interfaces.user_interface import UserInterface
 
 from schemas.user_schema import CreateUserRequest
 
-from responses.user_response import GetUserByIdResponse,GetUserResponse,CreateUserResponse
+from responses.user_response import (
+    GetUserByIdResponse,
+    GetUserResponse,
+    CreateUserResponse
+    )
 
 from utils.responses import api_response
 
@@ -34,7 +38,7 @@ async def get_users(
     request: Request,
     page: int = Query(1, ge=1),  # Default to page 1, must be greater than or equal to 1
     items_per_page: int = Query(10, le=100),  # Default to 10 items per page, max 100
-):
+    ):
     # Initialize UserInterface
     user_interface = UserInterface(db=db)
 
@@ -70,7 +74,7 @@ async def get_users(
 async def get_user_by_id(
     user_id: uuid.UUID,
     db: db_dependency,  # Database dependency
-):
+    ):
     # Initialize UserInterface
     user_interface = UserInterface(db=db)
 
@@ -98,7 +102,7 @@ async def create_user(
     user_data: CreateUserRequest,
     user: user_dependency,
     db: db_dependency,  # Database dependency
-):
+    ):
     user_interface = UserInterface(db)
     
     try:
