@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Field, UUID4
+from pydantic import BaseModel, Field, UUID4,field_validator
 from models.trip_model import TripItemCategoryEnum, TripItemTypeEnum
 from datetime import datetime
 from typing import List, Optional
+import json 
 
 
 #----------------------------------------------------------CREATE SCHEMAS-----------------------------------------------------------------------------
@@ -61,7 +62,7 @@ class CreateTripImageRequest(BaseModel):
     trip_image_is_primary: bool = Field(..., description="Indicates if the image is primary")
 
 class CreateTripImagesRequest(BaseModel):
-    trip_images: List[CreateTripImageRequest] = Field(..., min_items=1, description="List of trip images")
+    trip_images_is_default: List[bool] = Field(..., description="Is default")
 
 #----------------------------------------------------------PATCH SCHEMAS-----------------------------------------------------------------------------
 

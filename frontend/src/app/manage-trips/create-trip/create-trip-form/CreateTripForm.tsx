@@ -45,7 +45,8 @@ interface CreateTripFormInputs {
     trip_item_category: string;
     trip_item_type: string;
   }[];
-  trip_images?: { trip_image_url: string; trip_image_is_primary: boolean }[];
+  trip_images: [];
+  trip_images_data: [];
   trip_openings?: {
     trip_opening_date: string;
     trip_opening_price: number;
@@ -58,7 +59,8 @@ const CreateTripForm = () => {
   const methods = useForm<CreateTripFormInputs>({
     defaultValues: {
       activity_items: [{ trip_item_name: '', trip_item_category: '', trip_item_type: '' }],
-      trip_images: [{ trip_image_url: '', trip_image_is_primary: true }],
+      trip_images: [],
+      trip_images_data: [],
       trip_openings: [{ trip_opening_date: '', trip_opening_price: 0, trip_opening_availability: 0 }],
     },
   });
@@ -163,17 +165,13 @@ const CreateTripForm = () => {
 
         } 
         else if (currentStep === 3 && tripId) {
-          const tripImagesData = getValues('trip_images').map((image) => ({
-            trip_image_is_primary: image.trip_image_is_primary,
-          }));
-
+          const tripImagesData = getValues('trip_images_data')
           const formData = new FormData();
           formData.append('trip_id', tripId);
-          formData.append('trip_images_data', JSON.stringify(tripImagesData));
+          formData.append('trip_images_data', JSON.stringify({ trip_images_is_default: tripImagesData }));
 
           getValues('trip_images').forEach((image) => {
             if (image.trip_image_file[0] instanceof File) { // Ensure it's a File object
-              console.log(image.trip_image_file); // Log the file object for verification
               formData.append('trip_images', image.trip_image_file[0]); // Append the file directly
             } else {
               console.warn("Expected a File object, but got:",  getValues('trip_images'));

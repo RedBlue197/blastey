@@ -35,6 +35,8 @@ from main import limiter
 
 import uuid
 
+import json
+
 router = APIRouter(
     prefix="/core/frontoffice/v1/trips",
     tags=['Frontoffice Trips']
@@ -261,10 +263,11 @@ async def create_trip_openings(
 async def create_trip_images(
         user: user_dependency,
         db: db_dependency,
-        trip_id:  str = Form(...),  # Accept `trip_id` as a form field
-        trip_images_data:  str = Form(...),  # Accept `trip_id` as a form field
+        trip_id: str = Form(...),  # Accept `trip_id` as a form field
+        trip_images_data: str = Form(...),  # Accept `trip_images_data` as a form field
         trip_images: List[UploadFile] = File(...)
     ):
+    # Check user role authorization
     if user['user_role'] not in ["admin", "host", "user"]:
         return api_response(
             message="Unauthorized Role",
@@ -274,14 +277,13 @@ async def create_trip_images(
     host_id = user['user_id']
     try:
         # Parse the trip_images_data JSON string into a Python object
-        trip_images_data_obj = CreateTripImagesRequest.model_validate_json(trip_images_data)
-        
+        parsed_data = json.loads(trip_images_data)
+        trip_images_data_obj = CreateTripImagesRequest(**parsed_data)
+
         # Pass the parsed data and images to the interface
-        trip_images_obj = TripInterface(db=db).create_trip_images(trip_images_data_obj, trip_images, host_id)
-        
-        trip_images_response = CreateTripOpeningsResponse.model_validate(trip_images_obj, from_attributes=True)
+        trip_images_obj = TripInterface(db=db).create_trip_images(trip_id,trip_images_data_obj, trip_images, host_id)
+                
         return api_response(
-            data=trip_images_response,
             message="Trip images created",
             status_code=201
         )

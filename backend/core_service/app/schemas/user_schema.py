@@ -8,7 +8,7 @@ class CreateUserRequest(BaseModel):
     user_password: str = Field(..., min_length=8, max_length=100, description="Password for the user")
     user_first_name: str = Field(..., min_length=1, max_length=50, description="First name of the user")
     user_last_name: str = Field(..., min_length=1, max_length=50, description="Last name of the user")
-    user_email: str = Field(..., pattern=r'^\S+@\S+\.\S+$', description="Email of the user")
+    user_email: EmailStr = Field(..., pattern=r'^\S+@\S+\.\S+$', description="Email of the user")
     user_phone_number: str = Field(..., pattern=r'^\+?\d{10,15}$', description="Phone number of the user")
     user_role: UserRole = Field(..., description="Role of the user")
     user_rank: UserRank = Field(..., description="Rank of the user")

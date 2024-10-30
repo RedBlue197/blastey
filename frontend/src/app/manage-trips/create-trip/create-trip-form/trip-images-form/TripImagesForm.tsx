@@ -12,26 +12,34 @@ const TripImagesForm = () => {
   const { register, control, setValue, watch } = useFormContext();
   const { fields: tripImagesFields, append: appendTripImage, remove: removeTripImage } = useFieldArray({
     control,
-    name: 'trip_images'
+    name: 'trip_images',
   });
 
   const [imagePreviews, setImagePreviews] = useState({});
   const tripImages = watch('trip_images');
+  const tripImagesData = watch('trip_images_data');
 
   const handlePrimaryChange = (index) => {
     tripImagesFields.forEach((_, i) => {
-      setValue(`trip_images.${i}.trip_image_is_primary`, i === index);
+      setValue(`trip_images_data.${i}`, i === index); // Set is_default based on the current index
     });
   };
 
   const handleImageUpload = (index, event) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]; // Use the first file
     if (file) {
       setImagePreviews((prev) => ({
         ...prev,
-        [index]: URL.createObjectURL(file)
+        [index]: URL.createObjectURL(file), // Create a preview for the uploaded image
       }));
-      setValue(`trip_images.${index}.trip_image_file`, file);
+      
+      // Set the image object with file and is_default property
+      setValue(`trip_images.${index}`, 
+        file,
+      );
+      setValue(`trip_images_data.${index}`, false); // Set is_default to true for the first image
+      console.log('trip_images', tripImages);
+      console.log('trip_images_data', tripImagesData);
     }
   };
 
@@ -59,7 +67,7 @@ const TripImagesForm = () => {
               <label className={styles.primaryCheckbox}>
                 <input
                   type="checkbox"
-                  checked={!!tripImages[index].trip_image_is_primary}
+                  checked={!!tripImages[index]?.trip_image_is_primary}
                   onChange={() => handlePrimaryChange(index)}
                 />
                 <span className={styles.primaryLabel}>Set as Primary Image</span>
@@ -84,7 +92,7 @@ const TripImagesForm = () => {
         ))}
       </div>
 
-      {!canAddMoreImages ? `Max ${MAX_IMAGES} images reached` : null}
+      {!canAddMoreImages ? <p className={styles.maxImagesReached}>Max {MAX_IMAGES} images reached</p> : null}
 
       <LinkWithIconButton
         label="Add Trip Image"

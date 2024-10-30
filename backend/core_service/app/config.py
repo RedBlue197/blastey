@@ -36,19 +36,16 @@ class DevSettings(BaseSettings):
     ANDROID_PACKAGE_NAME: str = "com.hytego.tiwaline"
     IOS_FALLBACK_LINK: str = "https://play.google.com/store/apps/details?id=com.hytego.tiwaline"
 
-    #Mail Settings
-    MAIL_SETTINGS={
-    MAIL_USERNAME = "goubs",
-    MAIL_PASSWORD = "3SS5fe71",
-    MAIL_FROM = "hamzagoubraim@email.com",
-    MAIL_PORT = 587,
-    MAIL_SERVER = "mail server",
-    MAIL_FROM_NAME="Hamza Goubs",
-    MAIL_STARTTLS = True,
-    MAIL_SSL_TLS = False,
-    USE_CREDENTIALS = True,
-    VALIDATE_CERTS = True
-    }
+    # SMTP Mail Settings for smtplib
+    MAIL_USERNAME: str = "goubs"
+    MAIL_PASSWORD: str = "3SS5fe71"
+    MAIL_FROM: str = "hamzagoubraim@email.com"
+    MAIL_PORT: int = 587
+    MAIL_SERVER: str = "mail.server.com"
+    MAIL_FROM_NAME: str = "Hamza Goubs"
+    MAIL_USE_TLS: bool = True
+    MAIL_USE_SSL: bool = False
+    MAIL_VALIDATE_CERTS: bool = True
 
 
 class ProdSettings(BaseSettings):
@@ -63,12 +60,24 @@ class ProdSettings(BaseSettings):
     BUCKET_NAME: str = "blastey_bucket_1"
     SERVICE_ACCOUNT_JSON: str = "services/prod_service_account.json"
 
-    # Add Firebase Dynamic Links settings
+    # Firebase Dynamic Links settings
     FIREBASE_API_KEY: str = os.getenv("FIREBASE_API_KEY", "AIzaSyApT-bwHspHA0N4SxVzVSbfgkxxWe2_xbo")
     DOMAIN_URI_PREFIX: str = "https://tiwaline.com/link"
     IOS_BUNDLE_ID: str = "com.hytego.tiwaline"
     ANDROID_PACKAGE_NAME: str = "com.hytego.tiwaline"
     IOS_FALLBACK_LINK: str = "https://play.google.com/store/apps/details?id=com.hytego.tiwaline"
+
+    # SMTP Mail Settings for smtplib
+    MAIL_USERNAME: str = os.getenv("PROD_MAIL_USERNAME", "prod_user")
+    MAIL_PASSWORD: str = os.getenv("PROD_MAIL_PASSWORD", "prod_password")
+    MAIL_FROM: str = "prod@example.com"
+    MAIL_PORT: int = 587
+    MAIL_SERVER: str = "mail.prod.server.com"
+    MAIL_FROM_NAME: str = "Prod Mailer"
+    MAIL_USE_TLS: bool = True
+    MAIL_USE_SSL: bool = False
+    MAIL_VALIDATE_CERTS: bool = True
+
 
 def get_settings() -> BaseSettings:
     if os.getenv("ENV", "development") == "production":

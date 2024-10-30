@@ -1,25 +1,29 @@
 # app/routers/user_router.py
 
-from fastapi import status, APIRouter, Query,Request,Depends,BackgroundTasks
+from fastapi import status, APIRouter, Query,Request,BackgroundTasks
 
 from dependencies.db_dependency import db_dependency
-from dependencies.auth_dependency import auth_bearer,user_dependency
+from dependencies.auth_dependency import auth_bearer
 
 import uuid
 
-from models.user_model import UserRole
-
 from interfaces.user_interface import UserInterface
 
-from schemas.user_schema import CreateUserRequest
+from schemas.user_schema import (
+    CreateUserRequest,
+    PutUserVerificationRequest
+    )
 
 from responses.user_response import (
     GetUserByIdResponse,
     GetUserResponse,
-    CreateUserResponse
+    CreateUserResponse,
+    
     )
 
 from utils.responses import api_response
+
+from utils.send_verification_email import send_verification_email
 
 from main import limiter
 

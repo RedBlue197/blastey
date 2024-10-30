@@ -16,8 +16,9 @@ from models.trip_model import (
     TripItem, 
     TripOpening,
     TripOpeningItem, 
-    TripImage
-)
+    TripImage,
+    TripCreationStatusEnum
+    )
 from models.user_model import User
 
 from schemas.trip_schema import (
@@ -28,7 +29,7 @@ from schemas.trip_schema import (
     PutTripRequest,
     PutTripItemsRequest,
     PutTripOpeningsRequest
-)
+    )
 
 from services.image_service import post_trip_images_on_gcs
 
@@ -229,7 +230,7 @@ class TripInterface(BaseInterface[Trip]):
             }
             new_trip_items.append(trip_item_to_add)
         # Update the step of the trip
-        setattr(trip, "trip_creation_status", "trip_opening_creation")
+        setattr(trip, "trip_creation_status", TripCreationStatusEnum.TRIP_OPENING_CREATION)
 
         # Commit the transaction to save the new trip items
         try:
@@ -284,7 +285,7 @@ class TripInterface(BaseInterface[Trip]):
                 "trip_opening_price":new_trip_opening.trip_opening_price
             }
             new_trip_openings.append(trip_opening_to_add)
-        setattr(trip, "trip_creation_status", "trip_images_creation")
+        setattr(trip, "trip_creation_status", TripCreationStatusEnum.TRIP_IMAGES_CREATION)
         # Commit the transaction
         try:
             self.db.commit()
@@ -301,7 +302,7 @@ class TripInterface(BaseInterface[Trip]):
         # Add validation logic for trip opening items here (e.g., availability checks, etc.)
         return True
     
-    def create_trip_images(self, trip_id: uuid.UUID, image_files: List[UploadFile],host_id:uuid.UUID):
+    def create_trip_images(self, trip_id: uuid.UUID,trip_images_data_obj:List[bool] ,image_files: List[UploadFile],host_id:uuid.UUID):
         # Ensure the trip exists
         trip = self.db.query(Trip).filter(
             Trip.trip_id == trip_id,
@@ -312,24 +313,23 @@ class TripInterface(BaseInterface[Trip]):
             raise HTTPException(status_code=404, detail="Trip not found")
 
         # Upload images to GCS and get their public URLs
-        image_urls = post_trip_images_on_gcs(image_files)
+        image_urls = post_trip_images_on_gcs(trip_id,image_files)
 
         # Create the trip images
         new_trip_images = []
         for image_url in image_urls:
             new_trip_image = TripImage(
-                trip_image_id=uuid.uuid4(),
+                trip_image_id=image_url['uuid'],
                 trip_id=trip_id,
                 trip_image_is_primary=False,
-                trip_image_url=image_url,
-
+                trip_image_url=image_url['public_url'],
                 created_by=host_id,
                 updated_by=host_id
             )
             self.db.add(new_trip_image)
             new_trip_images.append(new_trip_image)
         
-        setattr(trip, "trip_creation_status", "completed")
+        setattr(trip, "trip_creation_status", TripCreationStatusEnum.COMPLETED)
 
         # Commit the transaction
         try:
