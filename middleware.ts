@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import {jwtDecode} from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 
 interface DecodedToken {
   exp: number;
+  role: string;
   [key: string]: any;
 }
 
@@ -16,31 +17,44 @@ const isTokenExpired = (token: string): boolean => {
     return true;
   }
 };
-const protectedRoutes = [
-    '/dashboard', 
-    '/profile',
-];
 
-const publicRoutes = [
-    '/sign-in',
-    '/sign-up'
-];
+const accessControlList: { [path: string]: string[] } = {
+  '/dashboard': ['admin', 'user'],
+  '/profile': ['user', 'admin'],
+  // Define roles for additional routes
+};
 
-export default async function middleware(req:NextRequest) {
-    const path=req.nextUrl.pathname;
-    const isProtectedRoute = protectedRoutes.includes(path);
-    const isPublicRoute = publicRoutes.includes(path);
+export default async function middleware(req: NextRequest) {
+  const path = req.nextUrl.pathname;
+  const isProtectedRoute = Object.keys(accessControlList).includes(path);
 
-  // Add your authentication logic here
-    const token = req.cookies.get('token');
+  // Get the token from cookies
+  const token = req.cookies.get('token');
 
-    if (isProtectedRoute && isTokenExpired(token)) {
+  if (token) {
+    try {
+      const decoded: DecodedToken = jwtDecode(token);
+
+      // Check if the token is expired
+      if (isTokenExpired(token)) {
         return NextResponse.redirect(new URL('/sign-in', req.nextUrl).toString());
-    }
+      }
 
-    if (isPublicRoute && !isTokenExpired(token)) {
-        return NextResponse.redirect(new URL('/dashboard', req.nextUrl).toString());
+      // Check if the user has access to the route based on their role
+      if (isProtectedRoute) {
+        const allowedRoles = accessControlList[path];
+        if (!allowedRoles.includes(decoded.role)) {
+          return NextResponse.redirect(new URL('/unauthorized', req.nextUrl).toString());
+        }
+      }
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return NextResponse.redirect(new URL('/sign-in', req.nextUrl).toString());
     }
+  } else if (isProtectedRoute) {
+    // Redirect to sign-in if the route is protected and no token is present
+    return NextResponse.redirect(new URL('/sign-in', req.nextUrl).toString());
+  }
 
-    return NextResponse.next();
+  return NextResponse.next();
 }
