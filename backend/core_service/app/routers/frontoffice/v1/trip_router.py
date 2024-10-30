@@ -161,7 +161,7 @@ async def get_trips_by_host_id(
         status_code=200
     )
 
-#----------------------------------------------------POST ENDPOINTS----------------------------------------------------
+#----------------------------------------------------CREATE ENDPOINTS----------------------------------------------------
 @router.post("/create-trip")
 async def create_trip(
     user: user_dependency,

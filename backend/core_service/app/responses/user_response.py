@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 import uuid
 
+#----------------------------------------------------GET ENDPOINTS----------------------------------------------------
 
 class GetUserByIdResponse(BaseModel):
     user_id: uuid.UUID
@@ -21,6 +22,7 @@ class GetUserResponse(BaseModel):
         orm_mode = True
         from_attributes = True  # Pydantic v2 support for ORM models
 
+#----------------------------------------------------CREATE ENDPOINTS----------------------------------------------------
 
 class CreateUserResponse(BaseModel):
     user_id: uuid.UUID

@@ -15,6 +15,8 @@ class UserInterface(BaseInterface[User]):
     def __init__(self, db: Session):
         super().__init__(db, User, 'user_id')
 
+#---------------------------------GET Functions----------------------------------------
+
     def get_all_users_with_pagination(self, offset: int, limit: int):
         """Retrieve all users with pagination."""
         
@@ -61,6 +63,8 @@ class UserInterface(BaseInterface[User]):
             User.is_active == True
         ).first()
 
+#---------------------------------CREATE Functions----------------------------------------
+
     def create_user(self, user: CreateUserRequest):
         """Create a new user and save it to the database."""
         try:
@@ -76,6 +80,7 @@ class UserInterface(BaseInterface[User]):
                 user_city=user.user_city,
                 user_country=user.user_country,
                 user_postal_code=user.user_postal_code,
+                is_verified=False
             )
             self.db.add(db_user)
             self.db.commit()

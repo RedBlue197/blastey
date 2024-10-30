@@ -100,14 +100,12 @@ async def get_user_by_id(
 @router.post("/create-user", status_code=status.HTTP_201_CREATED)
 async def create_user(
     user_data: CreateUserRequest,
-    user: user_dependency,
-    db: db_dependency,  # Database dependency
+    db: db_dependency,
     ):
-    user_interface = UserInterface(db)
     
     try:
-        db_user = user_interface.create_user(user_data)
-        user_response = CreateUserResponse.from_orm(db_user)
+        user_obj = UserInterface(db).create_user(user_data)
+        user_response = CreateUserResponse.model_validate(user_obj, from_attributes=True)
         return api_response(
             message="User created successfully",
             data=user_response,

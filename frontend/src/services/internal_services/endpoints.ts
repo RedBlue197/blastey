@@ -1,10 +1,8 @@
 export const endpoints= {
-    "auth" :
-    {
+    "auth" :{
         GET_TOKEN : '/token'
     },
-    "trips" :
-    {   
+    "trips" :{   
         GET:{
             GET_TRIPS : '/trips/',
             GET_TRIP_BY_ID : '/trips/',
@@ -23,5 +21,10 @@ export const endpoints= {
             UPDATE_TRIP_IMAGES:'/trips/update-trip-images',
         }
     },
+    "users":{
+        CREATE:{
+            CREATE_USER:'/users/create-user'
+        }
+    }
     
 }
