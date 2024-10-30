@@ -59,7 +59,6 @@ class UserDetails(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Updated
     user_instagram_link = Column(String, nullable=True)
     user_birthdate=Column(DateTime, nullable=True)
 
-
 class VerificationCode(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "verification_codes"
     verification_code_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
