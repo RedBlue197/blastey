@@ -62,13 +62,9 @@ class UserDetails(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Updated
 
 class VerificationCode(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "verification_codes"
-    verifica
-    email = Column(String, primary_key=True)
-    code = Column(String)
+    verification_code_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    verification_code_email = Column(String,index=True)
+    verification_code_value = Column(String)
     expires_at = Column(DateTime)
-
-# Save to database with expiration time
-async def save_verification_code(email: str, code: str, expires_at: datetime, db_session):
-    verification = VerificationCode(email=email, code=code, expires_at=expires_at)
-    db_session.add(verification)
-    db_session.commit()
+    is_expired = Column(Boolean, default=False)
+    is_used = Column(Boolean, default=False)
