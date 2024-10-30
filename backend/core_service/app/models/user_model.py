@@ -58,3 +58,17 @@ class UserDetails(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Updated
     user_twitter_link = Column(String, nullable=True)
     user_instagram_link = Column(String, nullable=True)
     user_birthdate=Column(DateTime, nullable=True)
+
+
+class VerificationCode(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
+    __tablename__ = "verification_codes"
+    verifica
+    email = Column(String, primary_key=True)
+    code = Column(String)
+    expires_at = Column(DateTime)
+
+# Save to database with expiration time
+async def save_verification_code(email: str, code: str, expires_at: datetime, db_session):
+    verification = VerificationCode(email=email, code=code, expires_at=expires_at)
+    db_session.add(verification)
+    db_session.commit()

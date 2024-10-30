@@ -36,6 +36,21 @@ class DevSettings(BaseSettings):
     ANDROID_PACKAGE_NAME: str = "com.hytego.tiwaline"
     IOS_FALLBACK_LINK: str = "https://play.google.com/store/apps/details?id=com.hytego.tiwaline"
 
+    #Mail Settings
+    MAIL_SETTINGS={
+    MAIL_USERNAME = "goubs",
+    MAIL_PASSWORD = "3SS5fe71",
+    MAIL_FROM = "hamzagoubraim@email.com",
+    MAIL_PORT = 587,
+    MAIL_SERVER = "mail server",
+    MAIL_FROM_NAME="Hamza Goubs",
+    MAIL_STARTTLS = True,
+    MAIL_SSL_TLS = False,
+    USE_CREDENTIALS = True,
+    VALIDATE_CERTS = True
+    }
+
+
 class ProdSettings(BaseSettings):
     SERVICES: ClassVar[Dict[str, Dict[str, str]]] = {
         "users": {"url": "http://users-service:8000"},

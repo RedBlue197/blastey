@@ -21,6 +21,8 @@ from config import get_settings
 
 from datetime import datetime
 
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
+
 settings = get_settings()
 
 import psycopg2
@@ -33,6 +35,19 @@ except Exception as e:
 
 
 limiter = Limiter(key_func=get_remote_address)
+
+mail_connection_config = ConnectionConfig(
+    MAIL_USERNAME = "username",
+    MAIL_PASSWORD = "**********",
+    MAIL_FROM = "test@email.com",
+    MAIL_PORT = 587,
+    MAIL_SERVER = "mail server",
+    MAIL_FROM_NAME="Desired Name",
+    MAIL_STARTTLS = True,
+    MAIL_SSL_TLS = False,
+    USE_CREDENTIALS = True,
+    VALIDATE_CERTS = True
+)
 
 app=FastAPI(
     title="Blastey Core API",

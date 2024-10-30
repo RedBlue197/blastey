@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field,EmailStr
 from models.user_model import UserRole, UserRank
 from typing import Optional
+
+#----------------------------------------------------------CREATE SCHEMAS-----------------------------------------------------------------------------
 
 class CreateUserRequest(BaseModel):
     user_password: str = Field(..., min_length=8, max_length=100, description="Password for the user")
@@ -14,3 +16,9 @@ class CreateUserRequest(BaseModel):
     user_city: str = Field(..., min_length=1, max_length=100, description="City of the user")
     user_country: str = Field(..., min_length=2, max_length=100, description="Country of the user")
     user_postal_code: Optional[str] = Field(None, pattern=r'^\d{5,10}$', description="Postal code of the user (optional)")
+
+#----------------------------------------------------------UPDATE SCHEMAS-----------------------------------------------------------------------------
+
+class PutUserVerificationRequest(BaseModel):
+    user_email: EmailStr = Field(..., pattern=r'^\S+@\S+\.\S+$', description="Email of the user")
+    verification_code_value: str = Field(..., min_length=1, max_length=6, description="City of the user")

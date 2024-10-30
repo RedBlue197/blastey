@@ -3,15 +3,20 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from models.user_model import User
+from models.user_model import User,VerificationCode
+
 from interfaces.base_interface import BaseInterface
-from schemas.user_schema import CreateUserRequest
+
+from schemas.user_schema import CreateUserRequest,PutUserVerificationRequest
 
 from dependencies.auth_dependency import bcrypt_context
+
+from utils.send_verification_email import send_verification_email,generate_verification_code,expiration_time 
 
 import uuid
 
 class UserInterface(BaseInterface[User]):
+    
     def __init__(self, db: Session):
         super().__init__(db, User, 'user_id')
 
@@ -85,7 +90,60 @@ class UserInterface(BaseInterface[User]):
             self.db.add(db_user)
             self.db.commit()
             self.db.refresh(db_user)
-            return db_user
+
+            # Send verification Email
+
+            # Generate verification code
+            verification_code_value=generate_verification_code()
+
+            verification_code=VerificationCode(
+                verification_code_email = db.user_email,
+                verification_code_value = verification_code_value,
+                expires_at = expiration_time
+            )
+
+            self.db.add(verification_code)
+            self.db.commit()
+            self.db.refresh(verification_code)
+
+
+            return {"user":db_user,"verification_code":verification_code}
         except Exception as e:
             self.db.rollback()
             raise e
+
+#---------------------------------PUT Functions----------------------------------------
+
+    def update_user_verification(self, user: PutUserVerificationRequest):
+        """Update an existing user."""
+
+        try:
+            verification = self.db.query(VerificationCode).filter_by(email=user_data.user_email).first()
+
+            if not verification:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Verification code not found.")
+            
+            if verification.expires_at < datetime.now():
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Verification code has expired.")
+            
+            if verification.verification_code_value != user_data.verification_code_value:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid verification code.")
+            
+            # Mark the user as verified
+            self.db.query(User).filter_by(email=user_data.user_email).update({"is_verified": True})
+
+            # Mark the code as used
+            self.db.query(VerificationCode).filter_by(verification_code_id=verification.verification_code_id).update({"is_used": True})
+            
+            self.db.commit()
+            self.db.refresh()
+
+            return True
+        except Exception as e:
+            self.db.rollback()
+            raise e
+
+
+
+
+

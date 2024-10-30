@@ -3,6 +3,9 @@ from models.trip_model import TripItemCategoryEnum, TripItemTypeEnum
 from datetime import datetime
 from typing import List, Optional
 
+
+#----------------------------------------------------------CREATE SCHEMAS-----------------------------------------------------------------------------
+
 class CreateTripItemImageRequest(BaseModel):
     trip_image_is_primary: bool = Field(..., description="Indicates if the image is primary")
 

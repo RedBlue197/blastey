@@ -18,3 +18,4 @@ aioredis
 fastapi-redis-cache
 google-cloud-storage
 cryptography
+fastapi-mail
