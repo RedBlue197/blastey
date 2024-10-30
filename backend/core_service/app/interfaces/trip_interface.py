@@ -158,7 +158,7 @@ class TripInterface(BaseInterface[Trip]):
             trip_base_reward=trip.trip_base_reward,
             created_by=host_id,
             updated_by=host_id,
-
+        
             host_id=host_id,
         )
 
@@ -228,6 +228,8 @@ class TripInterface(BaseInterface[Trip]):
                 "trip_item_price":trip_item.trip_item_price
             }
             new_trip_items.append(trip_item_to_add)
+        # Update the step of the trip
+        setattr(trip, "trip_creation_status", "trip_opening_creation")
 
         # Commit the transaction to save the new trip items
         try:
@@ -282,7 +284,7 @@ class TripInterface(BaseInterface[Trip]):
                 "trip_opening_price":new_trip_opening.trip_opening_price
             }
             new_trip_openings.append(trip_opening_to_add)
-
+        setattr(trip, "trip_creation_status", "trip_images_creation")
         # Commit the transaction
         try:
             self.db.commit()
@@ -326,6 +328,8 @@ class TripInterface(BaseInterface[Trip]):
             )
             self.db.add(new_trip_image)
             new_trip_images.append(new_trip_image)
+        
+        setattr(trip, "trip_creation_status", "completed")
 
         # Commit the transaction
         try:

@@ -6,7 +6,6 @@ from models.base_model import TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, U
 from enum import Enum as PyEnum
 
 class TripCreationStatusEnum(PyEnum):
-    DRAFT = "draft"
     TRIP_ITEM_CREATION = "trip_item_creation"
     TRIP_OPENING_CREATION = "trip_opening_creation"
     TRIP_IMAGES_CREATION = "trip_images_creation"
@@ -37,7 +36,7 @@ class Trip(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     trip_downvote=Column(Integer, nullable=True,default=0)
     trip_base_price=Column(Float, nullable=True,default=0)
     trip_base_reward=Column(Float, nullable=True,default=0)
-    trip_creation_status=Column(Enum(TripCreationStatusEnum),default=TripCreationStatusEnum.DRAFT)
+    trip_creation_status=Column(Enum(TripCreationStatusEnum),default=TripCreationStatusEnum.TRIP_ITEM_CREATION)
 
     #Foreign Keys
     host_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
