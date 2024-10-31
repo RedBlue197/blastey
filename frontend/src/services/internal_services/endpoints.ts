@@ -1,6 +1,8 @@
 export const endpoints= {
     "auth" :{
-        GET_TOKEN : '/token'
+        GET:{
+            GET_TOKEN : '/token'
+        }
     },
     "trips" :{   
         GET:{
@@ -24,7 +26,10 @@ export const endpoints= {
     "users":{
         CREATE:{
             CREATE_USER:'/users/create-user'
-        }
+        },
+        UPDATE:{
+            UPDATE_USER_EMAIL_VERIFICATION_STATUS:'/users/update-user-email-verification-status'
+        },
     }
     
 }

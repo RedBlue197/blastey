@@ -4,7 +4,7 @@ from models.trip_model import TripItemCategoryEnum, TripItemTypeEnum, TripCreati
 from typing import List, Optional
 from datetime import datetime
 
-#-------------------------------------GET SCHEMAS--------------------------------------
+#-------------------------------------GET RESPONSES--------------------------------------
 
 class GetTripHostResponse(BaseModel):
     user_name: str
@@ -23,6 +23,7 @@ class GetTripResponse(BaseModel):
     trip_upvote: Optional[int] = None
     trip_downvote: Optional[int] = None
     trip_lowest_trip_opening_price:float
+    trip_image_url : Optional[str] = Field(None, pattern=r'^https?:\/\/\S+$', description="Link URL of the trip")
     host: GetTripHostResponse
 
 class GetTripsResponse(BaseModel):
@@ -46,7 +47,7 @@ class GetTripByIdResponse(BaseModel):
         orm_mode = True
         from_attributes = True
 
-#-------------------------------------CREATE SCHEMAS--------------------------------------
+#-------------------------------------CREATE RESPONSES--------------------------------------
 
 class CreateTripOpeningItemResponse(BaseModel):
     trip_opening_item_id: UUID4
@@ -110,7 +111,7 @@ class CreateTripResponse(BaseModel):
     class Config:
         orm_mode = True
 
-#-------------------------------------PUT SCHEMAS--------------------------------------
+#-------------------------------------PUT RESPONSES--------------------------------------
 
 class PutTripResponse(BaseModel):
     trip_id: uuid.UUID

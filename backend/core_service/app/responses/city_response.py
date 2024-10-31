@@ -3,6 +3,9 @@ import uuid
 from typing import Optional
 from datetime import datetime
 
+
+#-------------------------------------GET RESPONSES--------------------------------------
+
 class GetCityResponse(BaseModel):
     city_id: uuid.UUID
     city_name: str

@@ -1,34 +1,45 @@
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
+
+import {updateUserEmailVerificationStatus} from '@/services/internal_services/user_api_handler'
 
 const Verification: React.FC = () => {
   const router = useRouter();
+  const { email } = router.query; // Retrieve email from query parameters
   const [verificationCode, setVerificationCode] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!email) {
+      setError('Email is required for verification');
+    }
+  }, [email]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
+    if (!email) {
+      setError('Email is required for verification');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await fetch('/api/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: verificationCode }),
-      });
+      const response = await updateUserEmailVerificationStatus(
+        email
+      )
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
+      if (response && response.status_code==202) {
         setSuccess(true);
         setTimeout(() => {
           router.push('/dashboard');
         }, 2000);
       } else {
-        setError(result.message || 'Invalid verification code');
+        setError(response.data || 'Invalid verification code');
       }
     } catch (err) {
       setError('An error occurred. Please try again.');

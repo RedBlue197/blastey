@@ -164,6 +164,7 @@ async def get_trips_by_host_id(
     )
 
 #----------------------------------------------------CREATE ENDPOINTS----------------------------------------------------
+
 @router.post("/create-trip")
 async def create_trip(
     user: user_dependency,
@@ -292,7 +293,9 @@ async def create_trip_images(
             message="Failed to create trip images: " + str(e),
             status_code=500
         )
+
 #----------------------------------------------------PUT ENDPOINTS----------------------------------------------------
+
 @router.put("/update-trip")
 async def put_trip(
     user: user_dependency,
@@ -443,7 +446,9 @@ async def put_trip_images(
             message="Failed to create trip images: " + str(e),
             status_code=500
         )
+
 #----------------------------------------------------DELETE ENDPOINTS----------------------------------------------------
+
 @router.delete("/delete-all-trips")
 async def delete_all_trips(
     user: user_dependency,

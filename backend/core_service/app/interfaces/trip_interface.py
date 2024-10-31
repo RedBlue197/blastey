@@ -76,8 +76,16 @@ class TripInterface(BaseInterface[Trip]):
                 TripOpening.is_deleted == False,
                 TripOpening.status == True
             ).scalar()
-            
             trip.trip_lowest_trip_opening_price = lowest_price if lowest_price is not None else 0
+
+            # Get default trip image
+            default_image = self.db.query(TripImage).filter(
+                TripImage.trip_id == trip.trip_id,
+                TripImage.trip_image_is_primary == True,
+                TripImage.is_deleted == False,
+                TripImage.status == True
+            ).first()
+            trip.trip_image_url=default_image.trip_image_url if default_image else None
 
         if trips_query:
             total_count = trips_query[0][1]  # Get total_count from the first result

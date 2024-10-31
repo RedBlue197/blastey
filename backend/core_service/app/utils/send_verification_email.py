@@ -1,6 +1,5 @@
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail, Email, Content
 from pydantic import EmailStr
 from config import get_settings
 import secrets
@@ -17,30 +16,31 @@ verification_code = generate_verification_code()
 expiration_time = datetime.now() + timedelta(minutes=10)
 
 async def send_verification_email(subject: str, recipients: list[EmailStr], code: str, html: bool = True):
-    # Create a multipart message
-    message = MIMEMultipart()
-    message["From"] = settings.MAIL_FROM
-    message["Subject"] = subject
-
-    # Create the body of the email
+    # Create the content of the email
     if html:
-        body = f"<p>Your verification code is: <strong>{code}</strong></p>"
-        message.attach(MIMEText(body, "html"))
+        body_content = f"<p>Your verification code is: <strong>{code}</strong></p>"
     else:
-        body = f"Your verification code is: {code}"
-        message.attach(MIMEText(body, "plain"))
+        body_content = f"Your verification code is: {code}"
 
-    # Connect to the SMTP server and send the email
-    try:
-        with smtplib.SMTP(settings.MAIL_SERVER, settings.MAIL_PORT) as server:
-            server.starttls()  # Start TLS for security
-            server.login(settings.MAIL_USERNAME, settings.MAIL_PASSWORD)
-            for recipient in recipients:
-                message["To"] = recipient
-                server.sendmail(settings.MAIL_FROM, recipient, message.as_string())
-            print("Verification email sent successfully.")
-    except Exception as e:
-        print(f"Failed to send email: {e}")
+    # Loop through recipients to send individually
+    for recipient in recipients:
+        message = Mail(
+            from_email=(settings.MAIL_FROM, settings.MAIL_FROM_NAME),
+            to_emails=recipient,
+            subject=subject,
+            html_content=Content("text/html", body_content) if html else Content("text/plain", body_content)
+        )
+
+        # Send email with SendGrid client
+        try:
+            sg = SendGridAPIClient(settings.SENDGRID_API_KEY)  # Use your SendGrid API key
+            response = sg.send(message)
+            if response.status_code == 202:
+                print(f"Verification email sent successfully to {recipient}.")
+            else:
+                print(f"Failed to send email to {recipient}. Status Code: {response.status_code}")
+        except Exception as e:
+            print(f"Failed to send email to {recipient}: {e}")
 
 # Example usage
 # await send_verification_email("Your Subject Here", ["recipient@example.com"], verification_code)

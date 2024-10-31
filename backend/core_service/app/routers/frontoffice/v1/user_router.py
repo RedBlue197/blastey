@@ -128,9 +128,12 @@ async def create_user(
             status_code=500
         )
 
+
+#----------------------------------------------------PUT ENDPOINTS----------------------------------------------------
+
 #API to verify email
-@router.post("/verify-email", status_code=status.HTTP_200_OK)
-async def verify_email(
+@router.put("/update-user-email-verification-status", status_code=status.HTTP_200_OK)
+async def verify_user_email(
     user_data: PutUserVerificationRequest,
     db: db_dependency
     ):

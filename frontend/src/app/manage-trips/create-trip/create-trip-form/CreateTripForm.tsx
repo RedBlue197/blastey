@@ -28,6 +28,9 @@ import {
   updateTripItems,
   updateTripOpenings
  } from "@/services/internal_services/trip_api_handler";
+ import { useRouter } from 'next/router';
+
+ 
 
 interface CreateTripFormInputs {
   trip_title: string;
@@ -71,6 +74,7 @@ const CreateTripForm = () => {
   const [tripId, setTripId] = useState<string | null>(null);
   const [stepCompleted, setStepCompleted] = useState([false, false, false, false]);
   const steps = ['Trip Details', 'Trip Items', 'Trip Openings', 'Trip Images'];
+  const router = useRouter();
 
   useEffect(() => {
     if (toastMessage) {
@@ -303,8 +307,16 @@ const CreateTripForm = () => {
 
       // Stepper Navigation
       if (response && response.status_code === 201) {
-        setToastMessage({ type: 'success', message: `Step ${currentStep + 1} completed successfully!` });
-        if (currentStep < steps.length - 1) setCurrentStep((prevStep) => prevStep + 1);
+        if (currentStep < steps.length - 1){
+          setToastMessage({ type: 'success', message: `Step ${currentStep + 1} completed successfully!` });
+          setCurrentStep((prevStep) => prevStep + 1);
+        }
+        else {
+          setToastMessage({ type: 'success', message: `Trip created successfully!` });
+          // Go to manage-trips page
+          router.push('/manage-trips');
+
+        }
       } else if (stepCompleted[currentStep]) {
         setToastMessage({ type: 'success', message: `Step ${currentStep + 1} already completed!` });
         if (currentStep < steps.length - 1) setCurrentStep((prevStep) => prevStep + 1);

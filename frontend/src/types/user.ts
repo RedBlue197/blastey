@@ -8,3 +8,9 @@ export interface CreateUserInterface {
     user_email: string;
     user_phone_number : string;
 }
+
+//--------------------------------------------UPDATE INTERFACE--------------------------------------------
+
+export interface UpdateUserEmailVerificationStatus {
+    user_email: string;
+}
