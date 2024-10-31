@@ -5,6 +5,8 @@ from database import Base
 from models.base_model import TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin
 from enum import Enum as PyEnum
 
+#----------------------------------------------------------USER ENUMS-----------------------------------------------------------------------------
+
 class UserRank(PyEnum):
     BRONZE = "bronze"
     SILVER = "silver"
@@ -18,6 +20,8 @@ class UserRole(PyEnum):
     ADMIN = "admin"
     HOST= "host"
     USER = "user"
+
+#----------------------------------------------------------USER MODELS-----------------------------------------------------------------------------
 
 class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "users"

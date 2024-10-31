@@ -10,7 +10,8 @@ from schemas.trip_schema import (
     CreateTripRequest,
     CreateTripItemsRequest,
     CreateTripOpeningsRequest,
-    CreateTripImagesRequest, 
+    CreateTripImagesRequest,
+    CreateTripSearchRequest, 
     PutTripRequest,
     PutTripItemsRequest,
     PutTripOpeningsRequest
@@ -207,8 +208,6 @@ async def get_top_trips(
         status_code=200
     )
 
-#API to get the top trips based on origin and/or destination and trip opening date  
-
 #----------------------------------------------------CREATE ENDPOINTS----------------------------------------------------
 
 @router.post("/create-trip")
@@ -337,6 +336,33 @@ async def create_trip_images(
     except Exception as e:
         return api_response(
             message="Failed to create trip images: " + str(e),
+            status_code=500
+        )
+
+@router.post("/create-trip-search")
+async def create_trip_search(
+    db: db_dependency,
+    trip_search: CreateTripSearchRequest
+    ):
+
+    try :
+        trip_search_obj = TripInterface(db=db).create_trip_search(trip_search)
+        if not trip_search_obj:
+            return api_response(
+                message="Trip search not found",
+                status_code=404
+            )
+        else: 
+            trip_search_response = CreateTripOpeningsResponse.model_validate(trip_search_obj, from_attributes=True)
+            
+            return api_response(
+                data=trip_search_response,
+                message="Trip search created",
+                status_code=201
+            )
+    except Exception as e:
+        return api_response(
+            message="Failed to create trip search: " + str(e),
             status_code=500
         )
 

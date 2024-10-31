@@ -5,6 +5,8 @@ from database import Base
 from models.base_model import TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin
 from enum import Enum as PyEnum
 
+#----------------------------------------------------------TRIP ENUMS-----------------------------------------------------------------------------
+
 class TripCreationStatusEnum(PyEnum):
     TRIP_ITEM_CREATION = "trip_item_creation"
     TRIP_OPENING_CREATION = "trip_opening_creation"
@@ -22,6 +24,8 @@ class TripItemTypeEnum(PyEnum):
     INCLUDED="included"
     OPTIONAL="optional"
     EXCLUDED="excluded"
+
+#----------------------------------------------------------TRIP MODELS-----------------------------------------------------------------------------
 
 class Trip(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "trips"

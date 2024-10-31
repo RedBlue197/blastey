@@ -3,8 +3,9 @@ from fastapi import HTTPException, UploadFile, status
 from google.cloud import storage
 from typing import List
 from config import settings  # Adjust the import as necessary
+from PIL import Image
+import io
 import uuid
-
 
 def post_trip_images_on_gcs(trip_id: uuid.UUID, files: List[UploadFile]):
     bucket_name = settings.BUCKET_NAME
@@ -13,9 +14,15 @@ def post_trip_images_on_gcs(trip_id: uuid.UUID, files: List[UploadFile]):
 
     for file in files:
         if file.content_type.lower() not in ["image/jpeg", "image/png"]:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Only images are allowed")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Only JPEG and PNG images are allowed")
 
         try:
+            # Convert image to .webp format
+            image = Image.open(file.file)
+            webp_image_io = io.BytesIO()
+            image.save(webp_image_io, format="WEBP", quality=80)  # Adjust quality if needed
+            webp_image_io.seek(0)  # Reset pointer to the start of the buffer
+
             # Initialize a storage client
             client = storage.Client.from_service_account_json(service_account_json)
 
@@ -28,11 +35,11 @@ def post_trip_images_on_gcs(trip_id: uuid.UUID, files: List[UploadFile]):
 
             # Generate a UUID for the image
             image_uuid = str(uuid.uuid4())
-            blob_name = f"trip_images/{trip_id}/{image_uuid}.jpg"  # Use .jpg or .png as needed
+            blob_name = f"trip_images/{trip_id}/{image_uuid}.webp"
             blob = bucket.blob(blob_name)
 
-            # Upload the file to GCS
-            blob.upload_from_file(file.file, content_type=file.content_type)
+            # Upload the webp image to GCS
+            blob.upload_from_file(webp_image_io, content_type="image/webp")
 
             # Get the public URL for the uploaded file
             public_url = blob.public_url
