@@ -135,6 +135,7 @@ class TripInterface(BaseInterface[Trip]):
             lowest_price = self.db.query(func.min(TripOpening.trip_opening_price)).filter(
                 TripOpening.trip_id == trip.trip_id,
                 TripOpening.is_deleted == False,
+                TripOpening.status=True
             ).scalar()
             
             trip.trip_lowest_trip_opening_price = lowest_price if lowest_price is not None else 0

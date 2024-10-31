@@ -39,7 +39,6 @@ export async function createUser(create_user_data:CreateUserInterface){
   }
 }
 
-
 //------------------------------------------------UPDATE REQUESTS-------------------------------------
 
 export async function updateUserEmailVerificationStatus(update_user_email_verification_status_data:UpdateUserEmailVerificationStatus){

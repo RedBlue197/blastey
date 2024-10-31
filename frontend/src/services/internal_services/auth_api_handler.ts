@@ -7,7 +7,7 @@ export async function fetchToken(data:any , token: string | null) {
     // Make API request
     const response = await makeAPIRequest<{ result: any[] }>(
       microservices.CORE, // Replace with your actual microservice name
-      endpoints.auth.GET_TOKEN, // Endpoint
+      endpoints.auth.GET.GET_TOKEN, // Endpoint
       {
         method:"POST",
         version: 'v1', // Provide necessary options
