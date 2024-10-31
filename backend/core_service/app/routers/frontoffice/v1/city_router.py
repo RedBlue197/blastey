@@ -29,10 +29,10 @@ router = APIRouter(
 @limiter.limit("5/minute")
 async def get_cities(
     request: Request,
-    # user: user_dependency,
+    user: user_dependency,
     db: db_dependency,
     search: Optional[str] = Query(None),
-):
+    ):
     # Query cities using the interface
     cities = CityInterface(db=db).get_cities(search)
 

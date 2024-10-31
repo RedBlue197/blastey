@@ -163,6 +163,52 @@ async def get_trips_by_host_id(
         status_code=200
     )
 
+#API to get the top trips in terms of upvotes
+@router("/top-trips")
+@limiter.limit("5/minute")
+async def get_top_trips(
+    db: db_dependency,
+    page: int = Query(1, ge=1),
+    items_per_page: int = Query(4, le=100),
+    ):
+    offset = (page - 1) * items_per_page
+    limit = items_per_page
+
+    # Query trips with pagination using the interface
+    trips, total_count = TripInterface(db=db).get_top_trips(offset, limit)
+
+    # Calculate total pages
+    total_pages = (total_count + items_per_page - 1) // items_per_page
+
+    # Handle response for empty trips
+    if not trips:
+        return api_response(
+            success=True,
+            message="No trips found",
+            data=[],
+            total_count=0,
+            current_page=page,
+            total_pages=0,
+            items_per_page=items_per_page,
+            status_code=200
+        )
+    
+    # Validate response
+    trips_response = GetTripsResponse.model_validate(trips, from_attributes=True)
+
+    # Return paginated trips data
+    return api_response(
+        message="Trips found",
+        data=trips_response,
+        total_count=total_count,
+        current_page=page,
+        total_pages=total_pages,
+        items_per_page=items_per_page,
+        status_code=200
+    )
+
+#API to get the top trips based on origin and/or destination and trip opening date  
+
 #----------------------------------------------------CREATE ENDPOINTS----------------------------------------------------
 
 @router.post("/create-trip")

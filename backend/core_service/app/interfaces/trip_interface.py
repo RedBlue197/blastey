@@ -149,6 +149,70 @@ class TripInterface(BaseInterface[Trip]):
         
         return {"trips": trips}, total_count
 
+    def get_top_trips(self, offset: int, limit: int):
+        # Calculate total count of trips
+        total_count_query = (
+            self.db.query(func.count(Trip.trip_id))
+            .filter(
+                Trip.is_deleted == False,
+                Trip.status == True
+            )
+            .scalar_subquery()
+        )
+
+        # Query for trips ordered by upvote-downvote difference
+        trips_query = (
+            self.db.query(
+                Trip,
+                total_count_query.label('total_count'),
+                (Trip.upvotes - Trip.downvotes).label('score')  # Calculate score
+            )
+            .filter(
+                Trip.is_deleted == False,
+                Trip.status == True
+            )
+            .order_by(func.desc("score"))  # Order by score in descending order
+            .offset(offset)
+            .limit(limit)
+            .all()
+        )
+
+        # Populate additional fields for each trip
+        for trip, total_count, _ in trips_query:
+            # Get host data
+            trip.host = self.db.query(User).filter(
+                User.user_id == trip.host_id,
+                User.is_deleted == False,
+                User.status == True
+            ).first()
+
+            # Get lowest trip opening price
+            lowest_price = self.db.query(func.min(TripOpening.trip_opening_price)).filter(
+                TripOpening.trip_id == trip.trip_id,
+                TripOpening.is_deleted == False,
+                TripOpening.status == True
+            ).scalar()
+            trip.trip_lowest_trip_opening_price = lowest_price if lowest_price is not None else 0
+
+            # Get default trip image
+            default_image = self.db.query(TripImage).filter(
+                TripImage.trip_id == trip.trip_id,
+                TripImage.trip_image_is_primary == True,
+                TripImage.is_deleted == False,
+                TripImage.status == True
+            ).first()
+            trip.trip_image_url = default_image.trip_image_url if default_image else None
+
+        # Prepare the response
+        if trips_query:
+            total_count = trips_query[0][1]  # Get total_count from the first result
+            trips = [trip for trip, _, _ in trips_query]
+        else:
+            total_count = 0
+            trips = []
+
+        return {"trips": trips}, total_count
+
 #---------------------------------CREATE Functions----------------------------------------
 
     def create_trip(self, trip: CreateTripRequest,host_id:uuid.UUID):
