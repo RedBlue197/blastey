@@ -37,7 +37,7 @@ export async function fetchTrips(page: number, limit: number) {
   }
 }
 
-export async function fetchTripById(tripId: UUID) {
+export async function getTripById(tripId: UUID) {
   try {
     // Make API request
     const response = await makeAPIRequest<{ data: any }>(

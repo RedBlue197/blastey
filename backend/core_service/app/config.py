@@ -37,6 +37,7 @@ class DevSettings(BaseSettings):
     IOS_FALLBACK_LINK: str = "https://play.google.com/store/apps/details?id=com.hytego.tiwaline"
 
     # SMTP Mail Settings for smtplib
+    SENDGRID_API_KEY: str = "your_sendgrid_api_key"
     MAIL_USERNAME: str = "goubs"
     MAIL_PASSWORD: str = "3SS5fe71"
     MAIL_FROM: str = "hamzagoubraim@email.com"
@@ -68,16 +69,16 @@ class ProdSettings(BaseSettings):
     IOS_FALLBACK_LINK: str = "https://play.google.com/store/apps/details?id=com.hytego.tiwaline"
 
     # SMTP Mail Settings for smtplib
-    SENDGRID_API_KEY = "your_sendgrid_api_key"
-    MAIL_USERNAME = "apikey"  # SendGrid uses "apikey" as the username for API key authentication
-    MAIL_PASSWORD = "your_sendgrid_api_key"  # Same as the API key
-    MAIL_FROM = "your_verified_email@example.com"
-    MAIL_PORT = 587
-    MAIL_SERVER = "smtp.sendgrid.net"
-    MAIL_FROM_NAME = "Your App Name"
-    MAIL_USE_TLS = True
-    MAIL_USE_SSL = False
-    MAIL_VALIDATE_CERTS = True
+    SENDGRID_API_KEY: str = "your_sendgrid_api_key"
+    MAIL_USERNAME: str = "goubs"
+    MAIL_PASSWORD: str = "3SS5fe71"
+    MAIL_FROM: str = "hamzagoubraim@email.com"
+    MAIL_PORT: int = 587
+    MAIL_SERVER: str = "mail.server.com"
+    MAIL_FROM_NAME: str = "Hamza Goubs"
+    MAIL_USE_TLS: bool = True
+    MAIL_USE_SSL: bool = False
+    MAIL_VALIDATE_CERTS: bool = True
 
 
 def get_settings() -> BaseSettings:

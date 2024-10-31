@@ -19,3 +19,4 @@ fastapi-redis-cache
 google-cloud-storage
 cryptography
 sendgrid
+pillow

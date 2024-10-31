@@ -165,8 +165,7 @@ async def get_trips_by_host_id(
     )
 
 #API to get the top trips in terms of upvotes
-@router("/top-trips")
-@limiter.limit("5/minute")
+@router.get("/top-trips")
 async def get_top_trips(
     db: db_dependency,
     page: int = Query(1, ge=1),

@@ -24,7 +24,11 @@ const TripCard: React.FC<{ trip: GetTripInterface }> = ({ trip }) => {
 
   return (
     <div className={styles.tripCard}>
-      <img src={trip.trip_image_url} alt={`${trip.trip_title}'s picture`} className={styles.picture} />
+      <img src={
+        trip.trip_image_url
+          ? trip.trip_image_url
+          : 'https://picsum.photos/2400/300'
+       } alt={`${trip.trip_title}'s picture`} className={styles.picture} />
       <div className={styles.details}>
         <h2>{trip.trip_title}</h2>
         <p className={styles.description}>{trip.trip_description}</p>

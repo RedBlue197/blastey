@@ -27,6 +27,7 @@ from schemas.trip_schema import (
     CreateTripItemsRequest,
     CreateTripOpeningsRequest,
     CreateTripImagesRequest,
+    CreateTripSearchRequest,
     PutTripRequest,
     PutTripItemsRequest,
     PutTripOpeningsRequest
@@ -82,7 +83,6 @@ class TripInterface(BaseInterface[Trip]):
             # Get default trip image
             default_image = self.db.query(TripImage).filter(
                 TripImage.trip_id == trip.trip_id,
-                TripImage.trip_image_is_primary == True,
                 TripImage.is_deleted == False,
                 TripImage.status == True
             ).first()
@@ -136,7 +136,7 @@ class TripInterface(BaseInterface[Trip]):
             lowest_price = self.db.query(func.min(TripOpening.trip_opening_price)).filter(
                 TripOpening.trip_id == trip.trip_id,
                 TripOpening.is_deleted == False,
-                TripOpening.status=True
+                TripOpening.status==True
             ).scalar()
             
             trip.trip_lowest_trip_opening_price = lowest_price if lowest_price is not None else 0
@@ -426,15 +426,14 @@ class TripInterface(BaseInterface[Trip]):
         }
         search=SearchLog(
                 search_log_filters=search_log_filters
-                created_by=trip_search_request.user_id
         )
         total_count_query = (
             self.db.query(func.count(Trip.trip_id))
             .filter(
                 Trip.is_deleted == False,
                 Trip.status == True,
-                Trip.trip_origin=trip_search_request.trip_origin,
-                Trip.trip_destination=trip_search_request.trip_destination,
+                Trip.trip_origin==trip_search_request.trip_origin,
+                Trip.trip_destination==trip_search_request.trip_destination,
             )
             .scalar_subquery()
         )
