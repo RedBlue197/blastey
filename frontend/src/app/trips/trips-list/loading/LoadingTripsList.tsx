@@ -1,9 +1,12 @@
+import * as React from 'react';
+import Skeleton from '@mui/material/Skeleton';
+import Box from '@mui/material/Box';
+
 const LoadingTripsList = () => {
     return (
-      <div className="loadingList">
-        <p>Loading trips and suggestions...</p>
-        {/* You can add skeleton loaders for each trip card here */}
-      </div>
+    <Skeleton variant="rectangular" width="100%">
+      <div style={{ paddingTop: '57%' }} />
+    </Skeleton>
     );
   };
   

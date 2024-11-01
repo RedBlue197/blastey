@@ -3,7 +3,7 @@ import UserHistory from './user-history/UserHistory';
 import UserInformations from './user-informations/UserInformations';
 import styles from './styles.css'; // Assuming CSS module for this component
 
-const Profile = () => {
+const ProfilePage = () => {
   return (
     <div className={styles.profileContainer}>
       {/* User Information Section */}
@@ -24,4 +24,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;

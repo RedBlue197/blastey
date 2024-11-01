@@ -19,7 +19,6 @@ class GetTripResponse(BaseModel):
     trip_origin: Optional[str] = None
     trip_destination: Optional[str] = None
     trip_link_url: Optional[str] = None
-    trip_image: Optional[str] = None
     trip_upvote: Optional[int] = None
     trip_downvote: Optional[int] = None
     trip_lowest_trip_opening_price:float
