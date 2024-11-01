@@ -27,7 +27,10 @@ const detectPlatform = (): string => {
   
     // Send event to GTM
     if (typeof window !== 'undefined' && window.dataLayer) {
+      console.log("Pushing event to dataLayer:", eventData); // Debugging log
       window.dataLayer.push(eventData);
+    } else {
+      console.warn("GTM dataLayer is not available.");
     }
   };
   

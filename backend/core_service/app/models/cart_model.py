@@ -38,8 +38,6 @@ class Cart(Base):
     trip_item_description = Column(String, nullable=True)
     trip_item_price = Column(Float, nullable=True)  # Store the trip item price at the time of adding to cart
 
-    
-
 class CartItem(Base):
     __tablename__ = 'cart_items'
 

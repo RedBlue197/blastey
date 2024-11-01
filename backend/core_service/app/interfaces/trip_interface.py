@@ -427,6 +427,9 @@ class TripInterface(BaseInterface[Trip]):
         search=SearchLog(
                 search_log_filters=search_log_filters
         )
+        self.db.add(search)
+        self.db.commit()
+
         total_count_query = (
             self.db.query(func.count(Trip.trip_id))
             .filter(
