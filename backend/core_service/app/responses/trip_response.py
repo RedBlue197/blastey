@@ -41,6 +41,10 @@ class GetTripByIdResponse(BaseModel):
     trip_total_availability: Optional[int] = None
     trip_total_booking: Optional[int] = None
     host_id: uuid.UUID
+    trip_items: Optional[dict] = None
+    trip_openings: Optional[dict] = None
+    trip_images: Optional[dict] = None
+    trip_ratings: Optional[dict] = None
 
     class Config:
         orm_mode = True

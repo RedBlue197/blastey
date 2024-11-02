@@ -96,7 +96,6 @@ async def get_trips(
 async def get_trip_by_id(
     db: db_dependency,
     trip_id: uuid.UUID,
-    user: user_dependency
     ):
     trip = TripInterface(db=db).get_trip_by_id(trip_id)
     if trip:
@@ -108,8 +107,8 @@ async def get_trip_by_id(
             )
     else:
         return api_response(
-            message="Trip not found"
-            ,error_code=404
+            message="Trip not found",
+            status_code=404
             )
 
 #API to get all trips by host id

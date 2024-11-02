@@ -2,8 +2,9 @@
 
 from fastapi import UploadFile, HTTPException
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session,joinedload
 from sqlalchemy.sql import func
+from sqlalchemy import and_
 
 from interfaces.base_interface import BaseInterface
 
@@ -17,7 +18,8 @@ from models.trip_model import (
     TripOpening,
     TripOpeningItem, 
     TripImage,
-    TripCreationStatusEnum
+    TripCreationStatusEnum,
+    TripRating
     )
 from models.user_model import User
 from models.search_model import SearchLog
@@ -26,7 +28,6 @@ from schemas.trip_schema import (
     CreateTripRequest,
     CreateTripItemsRequest,
     CreateTripOpeningsRequest,
-    CreateTripImagesRequest,
     CreateTripSearchRequest,
     PutTripRequest,
     PutTripItemsRequest,
@@ -98,10 +99,60 @@ class TripInterface(BaseInterface[Trip]):
         return {"trips": trips}, total_count
   
     def get_trip_by_id(self, trip_id: uuid.UUID):
-        return self.db.query(Trip).filter(
-            Trip.is_deleted == False,
-            Trip.trip_id == trip_id
-            ).first()
+        # Aliases for each related entity with filters
+        filtered_trip_items = (
+            self.db.query(TripItem)
+            .filter(
+                TripItem.trip_id == trip_id,
+                TripItem.is_deleted == False,
+                TripItem.status == True
+            )
+            .subquery()
+        )
+
+        filtered_trip_openings = (
+            self.db.query(TripOpening)
+            .filter(
+                TripOpening.trip_id == trip_id,
+                TripOpening.is_deleted == False,
+                TripOpening.status == True
+            )
+            .subquery()
+        )
+
+        filtered_trip_images = (
+            self.db.query(TripImage)
+            .filter(
+                TripImage.trip_id == trip_id,
+                TripImage.is_deleted == False,
+                TripImage.status == True
+            )
+            .subquery()
+        )
+
+        filtered_trip_ratings = (
+            self.db.query(TripRating)
+            .filter(
+                TripRating.trip_id == trip_id,
+                TripRating.is_deleted == False,
+                TripRating.status == True
+            )
+            .subquery()
+        )
+
+        # Main Trip query with left joins on filtered subqueries
+        return (
+            self.db.query(Trip)
+            .outerjoin(filtered_trip_items, Trip.trip_id == filtered_trip_items.c.trip_id)
+            .outerjoin(filtered_trip_openings, Trip.trip_id == filtered_trip_openings.c.trip_id)
+            .outerjoin(filtered_trip_images, Trip.trip_id == filtered_trip_images.c.trip_id)
+            .outerjoin(filtered_trip_ratings, Trip.trip_id == filtered_trip_ratings.c.trip_id)
+            .filter(
+                Trip.trip_id == trip_id,
+                Trip.is_deleted == False
+            )
+            .first()
+        )
     
     def get_trips_by_user_id_with_pagination(self, user_id: uuid.UUID, offset: int, limit: int):
         total_count_query = (
