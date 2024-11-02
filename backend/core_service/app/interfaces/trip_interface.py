@@ -119,7 +119,6 @@ class TripInterface(BaseInterface[Trip]):
             )
             .subquery()
         )
-
         filtered_trip_images = (
             self.db.query(TripImage)
             .filter(
@@ -139,7 +138,7 @@ class TripInterface(BaseInterface[Trip]):
             )
             .subquery()
         )
-
+        
         # Main Trip query with left joins on filtered subqueries
         return (
             self.db.query(Trip)
