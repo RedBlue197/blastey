@@ -135,6 +135,7 @@ async def verify_user_email(
         if is_verified:
             return api_response(
                 message="User verified successfully",
+                data={"is_verified": is_verified},
                 status_code=202
             )
         else:

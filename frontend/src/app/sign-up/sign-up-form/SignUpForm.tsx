@@ -3,7 +3,6 @@
 import React, { useState, FormEvent } from 'react';
 import styles from './SignUpForm.module.css';
 import { createUser, updateUserEmailVerificationStatus } from '@/services/internal_services/user_api_handler';
-import { useRouter } from 'next/router';
 
 const countryCodes = [
   { code: '+1', country: 'US' },
@@ -14,8 +13,6 @@ const countryCodes = [
 ];
 
 const SignUpForm = () => {
-  const router = useRouter();
-
   // State to manage signup form fields
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -44,7 +41,7 @@ const SignUpForm = () => {
     const userData = {
       user_email: email,
       user_password: password,
-      user_phone_number: countryCode + phoneNumber,
+      user_phone_number: `${countryCode}${phoneNumber}`,
     };
 
     const response = await createUser(userData);
@@ -63,11 +60,15 @@ const SignUpForm = () => {
     setError(null);
 
     try {
-      const response = await updateUserEmailVerificationStatus(email);
-      if (response && response.status_code === 202) {
+      const data = {
+        user_email: email,
+        verification_code_value: verificationCode,
+      }
+      const response = await updateUserEmailVerificationStatus(data);
+      if (response.status_code === 202) {
         setSuccess(true);
         setTimeout(() => {
-          router.push('/dashboard');
+          alert('Verification successful! Redirecting to your dashboard...');
         }, 2000);
       } else {
         setError('Invalid verification code');
@@ -87,7 +88,75 @@ const SignUpForm = () => {
           {error && <p className={styles.error}>{error}</p>}
           <form onSubmit={handleSignUpSubmit} className={styles.signUpForm}>
             {/* Signup form fields */}
-            {/* ... other fields */}
+            <div className={styles.formGroup}>
+              <label htmlFor="username" className={styles.label}>Username</label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                className={styles.input}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="email" className={styles.label}>Email</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className={styles.input}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="phoneNumber" className={styles.label}>Phone Number</label>
+              <div className={styles.phoneInputContainer}>
+                <select
+                  value={countryCode}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                  className={styles.countryCodeSelect}
+                >
+                  {countryCodes.map((code) => (
+                    <option key={code.code} value={code.code}>
+                      {code.code} ({code.country})
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="tel"
+                  id="phoneNumber"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  required
+                  className={`${styles.input} ${styles.phoneNumberInput}`} // Corrected syntax for className
+                  placeholder="Enter phone number"
+                />
+              </div>
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="password" className={styles.label}>Password</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className={styles.input}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="confirmPassword" className={styles.label}>Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className={styles.input}
+              />
+            </div>
             <button type="submit" className={styles.submitButton}>Sign Up</button>
           </form>
         </div>
@@ -106,8 +175,8 @@ const SignUpForm = () => {
               {loading ? 'Verifying...' : 'Verify'}
             </button>
           </form>
-          {error && <p className="error-message">{error}</p>}
-          {success && <p className="success-message">Verification successful!</p>}
+          {error && <p className={styles.error}>{error}</p>}
+          {success && <p className={styles.success}>Verification successful!</p>}
         </div>
       )}
     </div>

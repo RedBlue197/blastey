@@ -12,4 +12,5 @@ export interface CreateUserRequest {
 
 export interface UpdateUserEmailVerificationStatus {
     user_email: string;
+    verification_code_value: string;
 }

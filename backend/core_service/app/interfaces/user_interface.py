@@ -1,4 +1,6 @@
 # app/interfaces/user.py
+from datetime import datetime
+from fastapi import HTTPException, status
 
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -12,6 +14,8 @@ from schemas.user_schema import CreateUserRequest,PutUserVerificationRequest
 from dependencies.auth_dependency import bcrypt_context
 
 from utils.send_verification_email import send_verification_email,generate_verification_code,expiration_time 
+
+
 
 import uuid
 
@@ -116,25 +120,25 @@ class UserInterface(BaseInterface[User]):
         """Update an existing user."""
 
         try:
-            verification = self.db.query(VerificationCode).filter_by(email=user_data.user_email).first()
+            verification_code = self.db.query(VerificationCode).filter_by(verification_code_email=user.user_email).first()
 
-            if not verification:
+            if not verification_code:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Verification code not found.")
             
-            if verification.expires_at < datetime.now():
+            if verification_code.expires_at < datetime.now():
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Verification code has expired.")
             
-            if verification.verification_code_value != user_data.verification_code_value:
+            if verification_code.verification_code_value != user.verification_code_value:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid verification code.")
             
             # Mark the user as verified
-            self.db.query(User).filter_by(email=user_data.user_email).update({"is_verified": True})
+            db_user=self.db.query(User).filter_by(user_email=user.user_email).update({"is_verified": True})
 
             # Mark the code as used
-            self.db.query(VerificationCode).filter_by(verification_code_id=verification.verification_code_id).update({"is_used": True})
+            self.db.query(VerificationCode).filter_by(verification_code_id=verification_code.verification_code_id).update({"is_used": True})
             
             self.db.commit()
-            self.db.refresh()
+            self.db.refresh(verification_code)
 
             return True
         except Exception as e:

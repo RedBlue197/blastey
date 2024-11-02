@@ -21,4 +21,4 @@ class CreateUserRequest(BaseModel):
 
 class PutUserVerificationRequest(BaseModel):
     user_email: EmailStr = Field(..., pattern=r'^\S+@\S+\.\S+$', description="Email of the user")
-    verification_code_value: str = Field(..., min_length=1, max_length=6, description="City of the user")
+    verification_code_value: str = Field(..., min_length=1, max_length=8, description="City of the user")

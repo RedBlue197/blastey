@@ -1,11 +1,11 @@
 import { useState, FormEvent, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { redirect } from 'next/navigation'; // Import redirect
 
-import {updateUserEmailVerificationStatus} from '@/services/internal_services/user_api_handler'
+import { updateUserEmailVerificationStatus } from '@/services/internal_services/user_api_handler';
 
 const Verification: React.FC = () => {
-  const router = useRouter();
-  const { email } = router.query; // Retrieve email from query parameters
+  const { searchParams } = new URL(window.location.href); // Get current URL's search parameters
+  const email = searchParams.get('email'); // Retrieve email from query parameters
   const [verificationCode, setVerificationCode] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,14 +29,12 @@ const Verification: React.FC = () => {
     }
 
     try {
-      const response = await updateUserEmailVerificationStatus(
-        email
-      )
+      const response = await updateUserEmailVerificationStatus(email);
 
-      if (response && response.status_code==202) {
+      if (response && response.status_code === 202) {
         setSuccess(true);
         setTimeout(() => {
-          router.push('/dashboard');
+          redirect('/dashboard'); // Use redirect for navigation
         }, 2000);
       } else {
         setError(response.data || 'Invalid verification code');
