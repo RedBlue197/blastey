@@ -102,20 +102,11 @@ async def get_user_by_id(
 async def create_user(
     user_data: CreateUserRequest,
     db: db_dependency,
-    background_tasks: BackgroundTasks
     ):
     
     try:
-        user_obj = UserInterface(db).create_user(user_data)
-        user_response = CreateUserResponse.model_validate(user_obj.user, from_attributes=True)
-
-        # Generate Content
-        subject = "Verify your email"
-        body = "<h1>Welcome!</h1><p>Click the link below to verify your email:</p>"
-
-        # Add send_email as a background task
-        background_tasks.add_task(send_verification_email(), subject, [user_obj.user.user_email], body, user_obj.user.verification_code_value)
-
+        user_obj,verification_code = UserInterface(db).create_user(user_data)
+        user_response = CreateUserResponse.model_validate(user_obj, from_attributes=True)
 
         return api_response(
             message="User created successfully and verification email is sent",

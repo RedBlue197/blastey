@@ -46,6 +46,7 @@ def post_trip_images_on_gcs(trip_id: uuid.UUID, files: List[UploadFile]):
 
             # Collect the UUID and URL
             uploaded_images.append({"uuid": image_uuid, "public_url": public_url})
+            print(f"Uploaded image {image_uuid} to {public_url}")
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))

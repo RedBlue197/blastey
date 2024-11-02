@@ -1,5 +1,6 @@
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail, Email, Content
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from pydantic import EmailStr
 from config import get_settings
 import secrets
@@ -15,30 +16,30 @@ def generate_verification_code():
 verification_code = generate_verification_code()
 expiration_time = datetime.now() + timedelta(minutes=10)
 
-async def send_verification_email(subject: str, recipients: list[EmailStr], code: str, html: bool = True):
+async def send_verification_email(subject: str, recipients: list[str], code: str, html: bool = True):
     # Create the content of the email
+    print(f"Sending verification email to {recipients} with code: {code}")
     if html:
+        
         body_content = f"<p>Your verification code is: <strong>{code}</strong></p>"
     else:
         body_content = f"Your verification code is: {code}"
 
     # Loop through recipients to send individually
     for recipient in recipients:
-        message = Mail(
-            from_email=(settings.MAIL_FROM, settings.MAIL_FROM_NAME),
-            to_emails=recipient,
-            subject=subject,
-            html_content=Content("text/html", body_content) if html else Content("text/plain", body_content)
-        )
+        # Create the email message
+        msg = MIMEMultipart()
+        msg['From'] = f"{settings.MAIL_FROM_NAME} <{settings.MAIL_FROM}>"
+        msg['To'] = recipient
+        msg['Subject'] = subject
+        msg.attach(MIMEText(body_content, 'html' if html else 'plain'))
 
-        # Send email with SendGrid client
+        # Send email with Gmail SMTP server
         try:
-            sg = SendGridAPIClient(settings.SENDGRID_API_KEY)  # Use your SendGrid API key
-            response = sg.send(message)
-            if response.status_code == 202:
-                print(f"Verification email sent successfully to {recipient}.")
-            else:
-                print(f"Failed to send email to {recipient}. Status Code: {response.status_code}")
+            with smtplib.SMTP_SSL(settings.MAIL_SERVER, settings.MAIL_PORT) as server:
+                server.login(settings.MAIL_USERNAME, settings.MAIL_PASSWORD)
+                server.sendmail(settings.MAIL_FROM, recipient, msg.as_string())
+            print(f"Verification email sent successfully to {recipient}.")
         except Exception as e:
             print(f"Failed to send email to {recipient}: {e}")
 

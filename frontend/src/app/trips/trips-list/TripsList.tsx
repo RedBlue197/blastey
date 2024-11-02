@@ -16,7 +16,7 @@ const TripsList = () => {
   const [page, setPage] = useState<number>(1);
   const [hasMoreTrips, setHasMoreTrips] = useState<boolean>(true);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
-  const [limit] = useState<number>(10); // Keep limit constant
+  const [limit] = useState<number>(10); 
   const [totalPages, setTotalPages] = useState<number>(0);
   
   const getTrips = async (page: number) => {
@@ -27,24 +27,19 @@ const TripsList = () => {
         const newTrips = response.data.trips;
         const totalPages = response.pagination.total_pages;
 
-        // Set total pages for future reference
         setTotalPages(totalPages);
 
         if (page >= totalPages) {
           setHasMoreTrips(false);
         }
 
-        // Filter out trips that are already in the state
-        const uniqueTrips = newTrips.filter(newTrip => 
-          !trips.some(existingTrip => existingTrip.trip_id === newTrip.trip_id)
-        );
-
-        if (uniqueTrips.length === 0) {
-          setHasMoreTrips(false);
-        } else {
-          setTrips(prevTrips => [...prevTrips, ...uniqueTrips]);
-          setFilteredTrips(prevTrips => [...prevTrips, ...uniqueTrips]);
-        }
+        setTrips(prevTrips => {
+          // Filter out trips that are already in the state
+          const uniqueTrips = newTrips.filter(newTrip => 
+            !prevTrips.some(existingTrip => existingTrip.trip_id === newTrip.trip_id)
+          );
+          return [...prevTrips, ...uniqueTrips];
+        });
       } else {
         setHasMoreTrips(false);
       }
@@ -56,14 +51,12 @@ const TripsList = () => {
   // Fetch trips on initial render (only once)
   useEffect(() => {
     getTrips(page); 
-  }, []); // Empty dependency array ensures this runs only once
+  }, [page]); 
 
   // Fetch trips when "Show More" is clicked
-  const handleShowMore = async () => {
+  const handleShowMore = () => {
     setLoadingMore(true);
-    const nextPage = page + 1; // Calculate the next page to fetch
-    await getTrips(nextPage);
-    setPage(nextPage); // Update the page state after fetch
+    setPage(prevPage => prevPage + 1); // Update the page state to trigger getTrips
     setLoadingMore(false);
   };
 

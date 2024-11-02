@@ -1,85 +1,84 @@
 .signUpContainer {
-    max-width: 400px;
-    margin: auto;
-    padding: 2rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  h1 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .signUpForm {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .formGroup {
-    margin-bottom: 1.5rem;
-  }
-  
-  label {
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-  
-  input {
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  input:focus {
-    border-color: #00bf63;
-    outline: none;
-  }
-  
-  .phoneInputContainer {
-    display: flex;
-    align-items: center;
-  }
-  
-  .countryCodeSelect {
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 4px 0 0 4px;
-    font-size: 1rem;
-    background-color: #fff;
-    cursor: pointer;
-  }
-  
-  .phoneNumberInput {
-    flex: 1;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-left: none;
-    border-radius: 0 4px 4px 0;
-    font-size: 1rem;
-  }
-  
-  .submitButton {
-    padding: 0.75rem;
-    border: none;
-    border-radius: 4px;
-    background-color: #00bf63;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .submitButton:hover {
-    background-color: #009c51;
-  }
-  
-  .error {
-    color: red;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-  
+  max-width: 400px;
+  margin: auto;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.signUpForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.input {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.inputFocus {
+  border-color: #00bf63;
+  outline: none;
+}
+
+.phoneInputContainer {
+  display: flex;
+  align-items: center;
+}
+
+.countryCodeSelect {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  font-size: 1rem;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.phoneNumberInput {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+  font-size: 1rem;
+}
+
+.submitButton {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #00bf63;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submitButtonHover {
+  background-color: #009c51;
+}
+
+.error {
+  color: red;
+  margin-bottom: 1rem;
+  text-align: center;
+}

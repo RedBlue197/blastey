@@ -37,12 +37,12 @@ class DevSettings(BaseSettings):
     IOS_FALLBACK_LINK: str = "https://play.google.com/store/apps/details?id=com.hytego.tiwaline"
 
     # SMTP Mail Settings for smtplib
-    SENDGRID_API_KEY: str = "your_sendgrid_api_key"
-    MAIL_USERNAME: str = "goubs"
-    MAIL_PASSWORD: str = "3SS5fe71"
-    MAIL_FROM: str = "hamzagoubraim@email.com"
-    MAIL_PORT: int = 587
-    MAIL_SERVER: str = "mail.server.com"
+    BREVO_API_KEY: str = "cTpbnwaILMj9Ky3S"
+    MAIL_USERNAME: str = "7f27b6001@smtp-brevo.com"
+    MAIL_PASSWORD: str = "cTpbnwaILMj9Ky3S"
+    MAIL_FROM: str = "hamzagoubraim@gmail.com"
+    MAIL_PORT: int = 465
+    MAIL_SERVER: str = "smtp-relay.brevo.com"
     MAIL_FROM_NAME: str = "Hamza Goubs"
     MAIL_USE_TLS: bool = True
     MAIL_USE_SSL: bool = False
@@ -69,12 +69,11 @@ class ProdSettings(BaseSettings):
     IOS_FALLBACK_LINK: str = "https://play.google.com/store/apps/details?id=com.hytego.tiwaline"
 
     # SMTP Mail Settings for smtplib
-    SENDGRID_API_KEY: str = "your_sendgrid_api_key"
     MAIL_USERNAME: str = "goubs"
     MAIL_PASSWORD: str = "3SS5fe71"
     MAIL_FROM: str = "hamzagoubraim@email.com"
-    MAIL_PORT: int = 587
-    MAIL_SERVER: str = "mail.server.com"
+    MAIL_PORT: int = 465
+    MAIL_SERVER: str = "mail.gmail.com"
     MAIL_FROM_NAME: str = "Hamza Goubs"
     MAIL_USE_TLS: bool = True
     MAIL_USE_SSL: bool = False

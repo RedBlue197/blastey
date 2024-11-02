@@ -15,6 +15,9 @@ from utils.send_verification_email import send_verification_email,generate_verif
 
 import uuid
 
+import asyncio
+
+
 class UserInterface(BaseInterface[User]):
     
     def __init__(self, db: Session):
@@ -74,30 +77,23 @@ class UserInterface(BaseInterface[User]):
         """Create a new user and save it to the database."""
         try:
             db_user = User(
-                user_first_name=user.user_first_name,
-                user_last_name=user.user_last_name,
+                user_first_name="Test",
+                user_last_name="Test",
                 user_email=user.user_email,
-                user_role=user.user_role,  # Assume enums are validated before
-                user_rank=user.user_rank,
                 user_phone_number=user.user_phone_number,
                 user_hashed_password=bcrypt_context.hash(user.user_password),
-                user_address=user.user_address,
-                user_city=user.user_city,
-                user_country=user.user_country,
-                user_postal_code=user.user_postal_code,
-                is_verified=False
+                is_verified=False,
+                is_blocked=False
             )
             self.db.add(db_user)
             self.db.commit()
             self.db.refresh(db_user)
 
-            # Send verification Email
-
             # Generate verification code
             verification_code_value=generate_verification_code()
 
             verification_code=VerificationCode(
-                verification_code_email = db.user_email,
+                verification_code_email = db_user.user_email,
                 verification_code_value = verification_code_value,
                 expires_at = expiration_time
             )
@@ -106,8 +102,10 @@ class UserInterface(BaseInterface[User]):
             self.db.commit()
             self.db.refresh(verification_code)
 
+            # Send verification Email
+            #asyncio.create_task(send_verification_email("Verify your email",[db_user.user_email],verification_code_value))
 
-            return {"user":db_user,"verification_code":verification_code}
+            return db_user,verification_code
         except Exception as e:
             self.db.rollback()
             raise e

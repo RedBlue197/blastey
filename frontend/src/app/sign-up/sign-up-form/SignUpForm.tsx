@@ -1,7 +1,9 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import styles from './SignUpForm.module.css';
+import { createUser, updateUserEmailVerificationStatus } from '@/services/internal_services/user_api_handler';
+import { useRouter } from 'next/router';
 
 const countryCodes = [
   { code: '+1', country: 'US' },
@@ -12,6 +14,9 @@ const countryCodes = [
 ];
 
 const SignUpForm = () => {
+  const router = useRouter();
+
+  // State to manage signup form fields
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,94 +24,92 @@ const SignUpForm = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [countryCode, setCountryCode] = useState(countryCodes[0].code);
   const [error, setError] = useState('');
+  
+  // State for verification form
+  const [verificationCode, setVerificationCode] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);  // State to switch between signup and verification
 
-  const handleSubmit = (e) => {
+  // Handle signup form submission
+  const handleSignUpSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError('');
+
     if (password !== confirmPassword) {
       setError("Passwords don't match");
       return;
     }
-    console.log('Submitting', { username, email, phoneNumber: `${countryCode}${phoneNumber}`, password });
-    setUsername('');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-    setPhoneNumber('');
-    setError('');
+
+    const userData = {
+      user_email: email,
+      user_password: password,
+      user_phone_number: countryCode + phoneNumber,
+    };
+
+    const response = await createUser(userData);
+    if (response && response.status_code === 201) {
+      setIsVerifying(true);  // Switch to verification form view
+      setError('');
+    } else {
+      setError('Error creating user. Please try again later.');
+    }
+  };
+
+  // Handle verification form submission
+  const handleVerificationSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await updateUserEmailVerificationStatus(email);
+      if (response && response.status_code === 202) {
+        setSuccess(true);
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 2000);
+      } else {
+        setError('Invalid verification code');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className={styles.signUpContainer}>
-      <h1>Sign Up</h1>
-      {error && <p className={styles.error}>{error}</p>}
-      <form onSubmit={handleSubmit} className={styles.signUpForm}>
-        <div className={styles.formGroup}>
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+    <div className={styles.container}>
+      {!isVerifying ? (
+        <div className={styles.signUpContainer}>
+          <h1>Sign Up</h1>
+          {error && <p className={styles.error}>{error}</p>}
+          <form onSubmit={handleSignUpSubmit} className={styles.signUpForm}>
+            {/* Signup form fields */}
+            {/* ... other fields */}
+            <button type="submit" className={styles.submitButton}>Sign Up</button>
+          </form>
         </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="phoneNumber">Phone Number</label>
-          <div className={styles.phoneInputContainer}>
-            <select
-              value={countryCode}
-              onChange={(e) => setCountryCode(e.target.value)}
-              className={styles.countryCodeSelect}
-            >
-              {countryCodes.map((code) => (
-                <option key={code.code} value={code.code}>
-                  {code.code} ({code.country})
-                </option>
-              ))}
-            </select>
+      ) : (
+        <div className={styles.verificationContainer}>
+          <h1>Enter Verification Code</h1>
+          <form onSubmit={handleVerificationSubmit} className={styles.verificationForm}>
             <input
-              type="tel"
-              id="phoneNumber"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              type="text"
+              placeholder="Verification Code"
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
               required
-              className={styles.phoneNumberInput}
-              placeholder="Enter phone number"
             />
-          </div>
+            <button type="submit" disabled={loading}>
+              {loading ? 'Verifying...' : 'Verify'}
+            </button>
+          </form>
+          {error && <p className="error-message">{error}</p>}
+          {success && <p className="success-message">Verification successful!</p>}
         </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="confirmPassword">Confirm Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className={styles.submitButton}>Sign Up</button>
-      </form>
+      )}
     </div>
   );
 };
