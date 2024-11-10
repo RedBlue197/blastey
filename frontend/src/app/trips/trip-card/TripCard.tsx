@@ -16,7 +16,7 @@ const TripCard: React.FC<{ trip: GetTripInterface }> = ({ trip }) => {
   };
 
   const trackContactWhatsapp = () => {
-    trackEvent("user_engagement", {
+    trackEvent('whatsappButtonClick', {
       trip_id: trip.trip_id,
       trip_title: trip.trip_title,
     });

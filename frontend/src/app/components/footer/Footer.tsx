@@ -46,7 +46,7 @@ export default function Footer() {
           <a href="https://facebook.com/Blastey" target="_blank" rel="noopener noreferrer">
             <Image src="/social_icons/facebook.png" alt="Facebook" width={24} height={24} />
           </a>
-          <a href="https://twitter.com/Blastey" target="_blank" rel="noopener noreferrer">
+          <a href="https://tiktok.com/Blastey" target="_blank" rel="noopener noreferrer">
             <Image src="/social_icons/tiktok.png" alt="TikTok" width={24} height={24} />
           </a>
           <a href="https://linkedin.com/company/Blastey" target="_blank" rel="noopener noreferrer">

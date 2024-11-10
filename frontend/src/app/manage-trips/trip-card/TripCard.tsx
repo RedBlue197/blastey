@@ -2,6 +2,14 @@ import Link from 'next/link';
 import styles from './TripCard.module.css';
 import { Trip } from '@/types/trip';
 import { FaArrowRight } from 'react-icons/fa';
+import trackEvent from '@/utils/track_event';
+
+const handleWhatsappClick = (trip: Trip) => {
+  trackEvent('whatsappButtonClick', {
+    trip_id: trip.trip_id,
+    trip_title: trip.trip_title,
+  });
+  };
 
 const TripCard: React.FC<{ trip: Trip }> = ({ trip }) => {
   return (
@@ -19,7 +27,7 @@ const TripCard: React.FC<{ trip: Trip }> = ({ trip }) => {
           <strong>From:</strong> ${trip.trip_lowest_trip_opening_price}
         </p>
         <div className={styles.buttonsContainer}>
-          <Link href={`/trips/${trip.trip_id}`} className={`btn-secondary ${styles.detailsButton}`} onClick={() => {}}>
+          <Link href={`/trips/${trip.trip_id}`} className={`btn-secondary ${styles.detailsButton}`} onClick={handleWhatsappClick}>
             View Details
           </Link>
           <Link href={`/manage-trips/${trip.trip_id}`} target="_blank" className={`btn-primary ${styles.whatsappButton}`} onClick={() => {}}>
