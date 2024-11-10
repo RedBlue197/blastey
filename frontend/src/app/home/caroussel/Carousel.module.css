@@ -30,6 +30,8 @@
 
 /* Wrapper for search engine with centering */
 .searchEngineWrapper {
+  display: flex;
+  justify-content: center;
   border-radius: 8px;
   position: absolute; /* Allows the search engine to overlap the image */
   bottom: -30px; /* Adjust to position the search engine partially over the image */

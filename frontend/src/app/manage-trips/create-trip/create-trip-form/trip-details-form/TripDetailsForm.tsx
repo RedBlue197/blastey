@@ -1,10 +1,61 @@
 'use client';
 
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import styles from './TripDetailsForm.module.css';
+import citiesData from '@/static/cities.json';
 
 const TripDetailsForm = () => {
-  const { register, formState: { errors } } = useFormContext(); // Access the form context
+  const { register, setValue, formState: { errors } } = useFormContext();
+  const [cities] = useState(citiesData);
+  const [filteredOriginCities, setFilteredOriginCities] = useState([]);
+  const [filteredDestinationCities, setFilteredDestinationCities] = useState([]);
+  const [searchTermOrigin, setSearchTermOrigin] = useState('');
+  const [searchTermDestination, setSearchTermDestination] = useState('');
+
+  // Handle search term change for Origin
+  const handleOriginSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTermOrigin(value);
+
+    if (value.length >= 3) {
+      const filtered = cities.filter((city) =>
+        city.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredOriginCities(filtered.slice(0, 5)); // Limit to first 5
+    } else {
+      setFilteredOriginCities([]);
+    }
+  };
+
+  // Handle search term change for Destination
+  const handleDestinationSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTermDestination(value);
+
+    if (value.length >= 3) {
+      const filtered = cities.filter((city) =>
+        city.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredDestinationCities(filtered.slice(0, 5)); // Limit to first 5
+    } else {
+      setFilteredDestinationCities([]);
+    }
+  };
+
+  // Set city value when clicked for Origin
+  const handleOriginCitySelect = (cityName: string) => {
+    setValue('trip_origin', cityName);
+    setSearchTermOrigin(cityName);
+    setFilteredOriginCities([]);
+  };
+
+  // Set city value when clicked for Destination
+  const handleDestinationCitySelect = (cityName: string) => {
+    setValue('trip_destination', cityName);
+    setSearchTermDestination(cityName);
+    setFilteredDestinationCities([]);
+  };
 
   return (
     <div className={styles.sectionBig}>
@@ -23,64 +74,58 @@ const TripDetailsForm = () => {
           {errors.trip_title && <p className={styles.error}>{errors.trip_title.message}</p>}
         </div>
 
-        {/* Trip Description */}
-        <div className={styles.formGroup}>
-          <label className={styles.formLabel}>Description</label>
-          <textarea
-            className={styles.formInput}
-            {...register('trip_description', {
-              maxLength: { value: 1000, message: 'Description must be less than 1000 characters' },
-            })}
-          />
-          {errors.trip_description && <p className={styles.error}>{errors.trip_description.message}</p>}
-        </div>
-
         {/* Trip Origin */}
         <div className={styles.formGroup}>
           <label className={styles.formLabel}>Origin</label>
-          <select
+          <input
+            type="text"
             className={styles.formInput}
-            {...register('trip_origin', {
-              required: 'Origin is required',
-              maxLength: { value: 100, message: 'Origin must be less than 100 characters' },
-            })}
-          >
-            <option value="City 1">City 1</option>
-            <option value="City 2">City 2</option>
-          </select>
+            value={searchTermOrigin}
+            onChange={handleOriginSearch}
+            placeholder="Start typing a city..."
+          />
+          {searchTermOrigin && filteredOriginCities.length > 0 && (
+            <div className={styles.filteredCitiesList}>
+              {filteredOriginCities.map((city, index) => (
+                <div
+                  key={index}
+                  className={styles.filteredCityItem}
+                  onClick={() => handleOriginCitySelect(city.name)}
+                >
+                  {city.name}
+                </div>
+              ))}
+            </div>
+          )}
           {errors.trip_origin && <p className={styles.error}>{errors.trip_origin.message}</p>}
         </div>
 
         {/* Trip Destination */}
         <div className={styles.formGroup}>
           <label className={styles.formLabel}>Destination</label>
-          <select
+          <input
+            type="text"
             className={styles.formInput}
-            {...register('trip_destination', {
-              required: 'Destination is required',
-              maxLength: { value: 100, message: 'Destination must be less than 100 characters' },
-            })}
-          >
-            <option value="City 1">City 1</option>
-            <option value="City 2">City 2</option>
-          </select>
+            value={searchTermDestination}
+            onChange={handleDestinationSearch}
+            placeholder="Start typing a city..."
+          />
+          
+          {searchTermDestination && filteredDestinationCities.length > 0 && (
+            <div className={styles.filteredCitiesList}>
+              {filteredDestinationCities.map((city, index) => (
+                <div
+                  key={index}
+                  className={styles.filteredCityItem}
+                  onClick={() => handleDestinationCitySelect(city.name)}
+                >
+                  {city.name}
+                </div>
+              ))}
+            </div>
+          )}
           {errors.trip_destination && <p className={styles.error}>{errors.trip_destination.message}</p>}
         </div>
-
-        {/* Trip Link URL */}
-        {/* <div className={styles.formGroup}>
-          <label className={styles.formLabel}>Trip Link URL</label>
-          <input
-            className={styles.formInput}
-            {...register('trip_link_url', {
-              pattern: {
-                value: /^https?:\/\/\S+$/,
-                message: 'Please enter a valid URL',
-              },
-            })}
-          />
-          {errors.trip_link_url && <p className={styles.error}>{errors.trip_link_url.message}</p>}
-        </div> */}
 
         {/* Trip Base Price */}
         <div className={styles.formGroup}>

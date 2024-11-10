@@ -6,7 +6,7 @@ import {
   CreateTripInterface,
   CreateTripItemsInterface,
   CreateTripOpeningsInterface,
-  CreateTripImagesInterface,
+  CreateTripSearchInterface,
   UpdateTripInterface,
   UpdateTripItemsInterface,
   UpdateTripOpeningsInterface
@@ -201,6 +201,31 @@ export async function createTripImages(formData: FormData) {
   }
 }
 
+export async function createTripSearch(create_trip_search_data:CreateTripSearchInterface,page: number, limit: number){
+  try {
+    // Make API request
+    const response = await makeAPIRequest<{ data: any }>(
+      microservices.CORE, // Replace with your actual microservice name
+      endpoints.trips.CREATE.CREATE_TRIP_SEARCH+"?page="+page.toString()+"&items_per_page="+limit.toString(), // Endpoint
+      {
+        method: 'POST',
+        data: create_trip_search_data,
+        version: 'v1', // Provide necessary options
+      }
+    );
+
+    // Check if the response was successful and has expected data
+    if (!response || !response.data) {
+      throw new Error('No trips found or invalid response structure');
+    }
+
+    return response; // Return the fetched trips if needed elsewhere
+
+  } catch (error: any) {
+    // Log the full error details to get more information
+    return error;
+  }
+}
 //------------------------------------------------UPDATE REQUESTS-------------------------------------
 
 export async function updateTripById(update_trip_data:UpdateTripInterface){

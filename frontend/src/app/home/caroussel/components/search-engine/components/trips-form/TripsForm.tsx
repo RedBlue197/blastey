@@ -1,7 +1,17 @@
-// TripsForm.tsx
 import React, { useState } from 'react';
-import { TextField, Button } from '@mui/material';
-import styles from './TripsForm.module.css'; // Import styles as needed
+import { TextField, Button, List, ListItem, ListItemText } from '@mui/material';
+import styles from './TripsForm.module.css';
+import cityData from '@/static/cities.json'; // Import your JSON data
+
+interface City {
+  id: string;
+  name: string;
+  country: string;
+  admin1: string;
+  lat: string;
+  lon: string;
+  pop: string;
+}
 
 interface TripsFormProps {
   onSubmit: (data: any) => void;
@@ -12,11 +22,54 @@ const TripsForm: React.FC<TripsFormProps> = ({ onSubmit }) => {
   const [returnDate, setReturnDate] = useState<string>('');
   const [origin, setOrigin] = useState<string>('');
   const [destination, setDestination] = useState<string>('');
-  const [routeType, setRouteType] = useState<'one-way' | 'round-trip'>('one-way');
+  const [originSuggestions, setOriginSuggestions] = useState<City[]>([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<City[]>([]);
+  const [showOriginSuggestions, setShowOriginSuggestions] = useState<boolean>(false);
+  const [showDestinationSuggestions, setShowDestinationSuggestions] = useState<boolean>(false);
+
+  const handleOriginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setOrigin(value);
+
+    if (value.length >= 3) {
+      const filteredSuggestions = cityData.filter((city) =>
+        city.name.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setOriginSuggestions(filteredSuggestions);
+      setShowOriginSuggestions(true);
+    } else {
+      setShowOriginSuggestions(false);
+    }
+  };
+
+  const handleDestinationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setDestination(value);
+
+    if (value.length >= 3) {
+      const filteredSuggestions = cityData.filter((city) =>
+        city.name.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setDestinationSuggestions(filteredSuggestions);
+      setShowDestinationSuggestions(true);
+    } else {
+      setShowDestinationSuggestions(false);
+    }
+  };
+
+  const handleSuggestionClick = (type: 'origin' | 'destination', city: City) => {
+    if (type === 'origin') {
+      setOrigin(city.name);
+      setShowOriginSuggestions(false);
+    } else {
+      setDestination(city.name);
+      setShowDestinationSuggestions(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ departureDate, returnDate, origin, destination, routeType });
+    onSubmit({ departureDate, returnDate, origin, destination });
   };
 
   return (
@@ -27,9 +80,22 @@ const TripsForm: React.FC<TripsFormProps> = ({ onSubmit }) => {
           variant="outlined"
           fullWidth
           value={origin}
-          onChange={(e) => setOrigin(e.target.value)}
+          onChange={handleOriginChange}
           required
         />
+        {showOriginSuggestions && (
+          <List className={styles.suggestionsList}>
+            {originSuggestions.map((city) => (
+              <ListItem
+                key={city.id}
+                button
+                onClick={() => handleSuggestionClick('origin', city)}
+              >
+                <ListItemText primary={city.name} secondary={`${city.admin1}, ${city.country}`} />
+              </ListItem>
+            ))}
+          </List>
+        )}
       </div>
       <div className={styles.formGroup}>
         <TextField
@@ -37,9 +103,22 @@ const TripsForm: React.FC<TripsFormProps> = ({ onSubmit }) => {
           variant="outlined"
           fullWidth
           value={destination}
-          onChange={(e) => setDestination(e.target.value)}
+          onChange={handleDestinationChange}
           required
         />
+        {showDestinationSuggestions && (
+          <List className={styles.suggestionsList}>
+            {destinationSuggestions.map((city) => (
+              <ListItem
+                key={city.id}
+                button
+                onClick={() => handleSuggestionClick('destination', city)}
+              >
+                <ListItemText primary={city.name} secondary={`${city.admin1}, ${city.country}`} />
+              </ListItem>
+            ))}
+          </List>
+        )}
       </div>
       <div className={styles.formGroup}>
         <TextField
@@ -57,39 +136,21 @@ const TripsForm: React.FC<TripsFormProps> = ({ onSubmit }) => {
       </div>
       <div className={styles.formGroup}>
         <TextField
-          label="Departure Date"
+          label="Return Date"
           type="date"
           variant="outlined"
           fullWidth
           InputLabelProps={{
             shrink: true,
           }}
-          value={departureDate}
-          onChange={(e) => setDepartureDate(e.target.value)}
+          value={returnDate}
+          onChange={(e) => setReturnDate(e.target.value)}
           required
         />
       </div>
-      {routeType === 'round-trip' && (
-        <div className={styles.formGroup}>
-          <TextField
-            label="Return Date"
-            type="date"
-            variant="outlined"
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={returnDate}
-            onChange={(e) => setReturnDate(e.target.value)}
-            required
-          />
-        </div>
-      )}
-      <div className={styles.searchButtonWrapper}>
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Search
-        </Button>
-      </div>
+      <Button type="submit" variant="contained" color="primary" className={styles.searchButton}>
+        Search
+      </Button>
     </form>
   );
 };

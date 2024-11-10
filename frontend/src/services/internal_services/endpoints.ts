@@ -15,6 +15,7 @@ export const endpoints= {
             CREATE_TRIP_ITEMS:'/trips/create-trip-items',
             CREATE_TRIP_OPENINGS:'/trips/create-trip-openings',
             CREATE_TRIP_IMAGES:'/trips/create-trip-images',
+            CREATE_TRIP_SEARCH:'/trips/create-trip-search',
         },
         UPDATE :{
             UPDATE_TRIP:'/trips/update-trip',

@@ -82,6 +82,14 @@ export interface CreateTripImagesInterface {
     trip_images: File[];
 }
 
+export interface CreateTripSearchInterface {
+    trip_search_origin: string;
+    trip_search_destination: string;
+    trip_search_start_date?: string;
+    trip_search_end_date?: string;
+    trip_search_comment?: string;
+}
+
 //--------------------------------------------UPDATE INTERFACE--------------------------------------------
 
 export interface UpdateTripInterface {

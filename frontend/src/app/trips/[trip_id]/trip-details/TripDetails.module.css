@@ -1,132 +1,163 @@
 .tripDetailsContainer {
-    width: 90%;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .mainInfo {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .mainImage {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    border-radius: 8px;
-    margin-right: 20px;
-  }
-  
-  .infoContent {
-    flex: 1;
-  }
-  
-  .title {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  .description {
-    color: #555;
-    line-height: 1.5;
-  }
-  
-  .location {
-    display: flex;
-    align-items: center;
-    color: #888;
-    font-size: 1.1rem;
-    margin-top: 10px;
-  }
-  
-  .icon {
-    margin-right: 8px;
-    color: #00bf63;
-  }
-  
-  .detailsGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
-  .detailItem {
-    display: flex;
-    align-items: center;
-    color: #333;
-    font-size: 1rem;
-    background-color: #ffffff;
-    padding: 15px;
-    border-radius: 6px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .votes {
-    display: flex;
-    justify-content: space-around;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #555;
-  }
-  
-  .itemsSection {
-    margin-top: 30px;
-  }
-  
-  .itemsSection h2 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  .tripItem {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    background-color: #f4f4f9;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
-  .itemImage {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-right: 15px;
-    object-fit: cover;
-  }
-  
-  .itemInfo {
-    flex: 1;
-  }
-  
-  .ratingsSection {
-    margin-top: 30px;
-  }
-  
-  .ratingsSection h2 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  .ratingItem {
-    display: flex;
-    align-items: center;
-    color: #555;
-    margin-bottom: 10px;
-  }
-  
-  .ratingIcon {
-    color: #ff914d;
-    margin-right: 10px;
-  }
-  
+  max-width: 1200px; /* Limit the width for better readability */
+  margin: 0 auto; /* Center the container */
+  padding: 20px;
+  background-color: #fff; /* White background for better contrast */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  margin-top: 20px;
+}
+
+.mainInfo {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically on small screens */
+  align-items: center;
+  margin-bottom: 30px; /* Space below main info */
+}
+
+.picture {
+  width: 100%; /* Make image responsive */
+  max-width: 600px; /* Set a maximum width */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 8px; /* Rounded corners for images */
+}
+
+.infoContent {
+  text-align: center; /* Center-align text */
+}
+
+.title {
+  font-size: 2em; /* Larger font for title */
+  color: #00bf63; /* Primary color */
+  margin: 10px 0; /* Space above and below title */
+}
+
+.description {
+  font-size: 1.2em; /* Slightly larger font for description */
+  color: #555; /* Grey color for text */
+  margin: 10px 0; /* Space around description */
+}
+
+.location {
+  display: flex;
+  align-items: center; /* Align icon and text */
+  color: #777; /* Lighter grey for location */
+}
+
+.detailsGrid {
+  display: grid; /* Use grid layout for details */
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive columns */
+  gap: 15px; /* Space between grid items */
+  margin-bottom: 20px; /* Space below details grid */
+}
+
+.detailItem {
+  background-color: #f8f8f8; /* Light background for detail items */
+  padding: 10px; /* Inner padding */
+  border-radius: 8px; /* Rounded corners */
+  text-align: center; /* Center text in detail items */
+}
+
+.icon {
+  margin-right: 5px; /* Space between icon and text */
+}
+
+.votes {
+  text-align: center; /* Center align votes */
+  font-size: 1.2em; /* Slightly larger font for votes */
+}
+
+.opening {
+  text-align: center; /* Center text for availability */
+}
+
+.itemsSection, .ratingsSection {
+  margin-top: 20px; /* Space above sections */
+}
+
+.itemsSection h2, .ratingsSection h2 {
+  font-size: 1.5em; /* Larger font for section titles */
+  color: #00bf63; /* Primary color */
+  margin-bottom: 10px; /* Space below title */
+}
+
+.tripItem {
+  display: flex; /* Use flexbox for item layout */
+  align-items: center; /* Center align vertically */
+  margin: 10px 0; /* Space between items */
+  background-color: #f9f9f9; /* Light background for items */
+  padding: 10px; /* Inner padding */
+  border-radius: 8px; /* Rounded corners */
+}
+
+.itemImage {
+  width: 100px; /* Fixed width for images */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 4px; /* Slight rounding */
+  margin-right: 15px; /* Space between image and text */
+}
+
+.itemInfo {
+  flex-grow: 1; /* Allow text to take remaining space */
+}
+
+.ratingItem {
+  display: flex; /* Use flexbox for rating layout */
+  align-items: center; /* Center align icon and text */
+  margin: 10px 0; /* Space between ratings */
+  padding: 10px; /* Inner padding */
+  background-color: #f8f8f8; /* Light background for ratings */
+  border-radius: 8px; /* Rounded corners */
+}
+
+.ratingIcon {
+  margin-right: 5px; /* Space between icon and rating score */
+}
+
+.openingsSection {
+  margin-top: 20px;
+}
+
+.openingItem {
+  background-color: #f8f8f8;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.gallerySection {
+  margin-top: 20px;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Space between images */
+}
+
+.galleryImage {
+  width: 100px; /* Thumbnail size */
+  height: auto; /* Maintain aspect ratio */
+  cursor: pointer; /* Change cursor to pointer */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.contactButtons {
+  display: flex;
+  justify-content: space-between; /* Space out buttons */
+  margin-top: 20px;
+}
+
+.contactButton, .orderButton {
+  background-color: #00bf63; /* Primary color for buttons */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.contactButton:hover, .orderButton:hover {
+  background-color: #008c50; /* Darken on hover */
+}

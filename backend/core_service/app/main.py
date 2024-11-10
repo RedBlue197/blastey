@@ -63,6 +63,7 @@ import models.activity_model as activity_model
 import models.newsletter_model as newsletter_model
 import models.trip_model as trip_model
 import models.city_model as city_model
+import models.search_model as search_model
 
 
 #Creating tables
@@ -77,6 +78,7 @@ activity_model.Base.metadata.create_all(bind=engine)
 newsletter_model.Base.metadata.create_all(bind=engine)
 trip_model.Base.metadata.create_all(bind=engine)
 city_model.Base.metadata.create_all(bind=engine)
+search_model.Base.metadata.create_all(bind=engine)
 
 app.add_middleware(LoggingMiddleware)
 app.add_middleware(DecryptionMiddleware)

@@ -47,7 +47,7 @@ router = APIRouter(
 
 #API to get all trips
 @router.get("/")
-@limiter.limit("5/minute")
+@limiter.limit("60/minute")
 async def get_trips(
     request: Request,
     db: db_dependency,
@@ -326,7 +326,6 @@ async def create_trip_images(
 
         # Pass the parsed data and images to the interface
         trip_images_obj = TripInterface(db=db).create_trip_images(trip_id,trip_images_data_obj, trip_images, host_id)
-                
         return api_response(
             message="Trip images created",
             status_code=201
@@ -340,23 +339,35 @@ async def create_trip_images(
 @router.post("/create-trip-search")
 async def create_trip_search(
     db: db_dependency,
-    trip_search: CreateTripSearchRequest
+    trip_search: CreateTripSearchRequest,
+    page: int = Query(1, ge=1),
+    items_per_page: int = Query(10, le=100),
     ):
 
+    offset = (page - 1) * items_per_page
+    limit = items_per_page
+
+    # Query trips with pagination using the interface
+
+    # Calculate total pages
     try :
-        trip_search_obj = TripInterface(db=db).create_trip_search(trip_search)
-        if not trip_search_obj:
+        trip_search_obj,total_count = TripInterface(db=db).create_trip_search(trip_search, offset, limit)
+        if not trip_search_obj['trips']:
             return api_response(
                 message="Trip search not found",
                 status_code=404
             )
         else: 
-            trip_search_response = CreateTripOpeningsResponse.model_validate(trip_search_obj, from_attributes=True)
-            
+            trip_search_response = GetTripsResponse.model_validate(trip_search_obj, from_attributes=True)
+            total_pages = (total_count + items_per_page - 1) // items_per_page
             return api_response(
                 data=trip_search_response,
                 message="Trip search created",
-                status_code=201
+                status_code=201,
+                total_count=total_count,
+                current_page=page,
+                total_pages=total_pages,
+                items_per_page=items_per_page,
             )
     except Exception as e:
         return api_response(

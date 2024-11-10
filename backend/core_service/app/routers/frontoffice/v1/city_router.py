@@ -26,7 +26,7 @@ router = APIRouter(
 #----------------------------------------------------GET ENDPOINTS----------------------------------------------------
 
 @router.get("/", status_code=status.HTTP_200_OK)
-@limiter.limit("5/minute")
+@limiter.limit("60/minute")
 async def get_cities(
     request: Request,
     user: user_dependency,

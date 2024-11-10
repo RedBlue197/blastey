@@ -31,7 +31,11 @@ const TripCard: React.FC<{ trip: GetTripInterface }> = ({ trip }) => {
        } alt={`${trip.trip_title}'s picture`} className={styles.picture} />
       <div className={styles.details}>
         <h2>{trip.trip_title}</h2>
-        <p className={styles.description}>{trip.trip_description}</p>
+        <p className={styles.description}>
+          {trip.trip_description && trip.trip_description.length > 80 
+            ? `${trip.trip_description.substring(0, 80)}...` 
+            : 'no description'}
+        </p>
         <div className={styles.tripInfo}>
           <p className={styles.detailsParagraph}>{trip.trip_origin}</p>
           <FaArrowRight className={styles.arrowIcon} />

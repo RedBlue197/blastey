@@ -1,6 +1,11 @@
 // components/Newsletter.js
-
+"use client";
 import styles from './Newsletter.module.css';
+
+const handleNewsletterSubscription = async () => {
+    // Implement your newsletter subscription logic here
+    console.log('Subscribing to newsletter...');
+}
 
 const Newsletter = () => {
     return (
@@ -21,7 +26,7 @@ const Newsletter = () => {
                         required
                         className={styles.emailInput}
                     />
-                    <button type="submit" className={styles.subscribeButton}>
+                    <button type="submit" className={styles.subscribeButton} onClick={handleNewsletterSubscription}>
                         Subscribe
                     </button>
                 </form>

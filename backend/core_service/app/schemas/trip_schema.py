@@ -70,7 +70,6 @@ class CreateTripSearchRequest(BaseModel):
     trip_search_start_date : datetime = Field(None, description="Start date of the trip")
     trip_search_end_date : Optional[datetime] = Field(None, description="End date of the trip")
     trip_search_comment : Optional[str] = Field(None, max_length=500, description="Comment of the trip")
-    user_id : Optional[UUID4] = Field(..., description="User ID")
 
 #----------------------------------------------------------PATCH SCHEMAS-----------------------------------------------------------------------------
 

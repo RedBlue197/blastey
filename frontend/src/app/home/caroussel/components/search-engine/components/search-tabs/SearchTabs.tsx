@@ -1,12 +1,13 @@
+// components/search-tabs/SearchTabs.tsx
 import React from 'react';
-import styles from './SearchTabs.module.css'; // Assuming the CSS module is named Tabs.module.css
+import styles from './SearchTabs.module.css'; // Ensure this path matches your project structure
 
 interface SearchTabsProps {
+  activeTab: string;
   onTabChange: (tab: string) => void;
-  activeTab: string; // Add activeTab prop
 }
 
-const SearchTabs: React.FC<SearchTabsProps> = ({ onTabChange, activeTab }) => {
+const SearchTabs: React.FC<SearchTabsProps> = ({ activeTab, onTabChange }) => {
   return (
     <div className={styles.tabs}>
       <button
@@ -21,7 +22,7 @@ const SearchTabs: React.FC<SearchTabsProps> = ({ onTabChange, activeTab }) => {
       >
         Activities
       </button>
-      {/* Add other tabs like hotels, car rentals, etc */}
+      
     </div>
   );
 };

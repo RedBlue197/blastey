@@ -7,7 +7,6 @@ import TripItemsForm from './trip-items-form/TripItemsForm';
 import TripOpeningsForm from './trip-openings-form/TripOpeningsForm';
 import TripImagesForm from './trip-images-form/TripImagesForm';
 import Stepper from './stepper/Stepper';
-import axios from 'axios';
 import styles from './CreateTripForm.module.css';
 import Toast from '@/app/components/toast/Toast';
 import { 
@@ -28,6 +27,7 @@ import {
   updateTripItems,
   updateTripOpenings
  } from "@/services/internal_services/trip_api_handler";
+import { Router } from 'next/router';
 
  
 
@@ -144,7 +144,6 @@ const CreateTripForm = () => {
               newSteps[1] = true;
               return newSteps;
             });
-            return;
           }
 
           
@@ -304,10 +303,15 @@ const CreateTripForm = () => {
       }
 
       // Stepper Navigation
-      if (response && response.status_code === 201) {
+      if (response.status_code === 201) {
+        console.log(`Step ${currentStep + 1} completed successfully!`);
         if (currentStep < steps.length - 1){
           setToastMessage({ type: 'success', message: `Step ${currentStep + 1} completed successfully!` });
           setCurrentStep((prevStep) => prevStep + 1);
+        }
+        else if (currentStep === steps.length - 1) {
+          setToastMessage({ type: 'success', message: `Trip created successfully!` });
+          Router.push('/manage-trips');
         }
         else {
           setToastMessage({ type: 'success', message: `Trip created successfully!` });

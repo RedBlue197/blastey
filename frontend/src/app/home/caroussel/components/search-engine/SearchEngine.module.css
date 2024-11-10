@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center; /* Center the content */
   box-sizing: border-box;
-  width: 100%;
+  width: 90%;
   padding: 1.5rem; /* Add padding for spacing */
   background-color: #ffffff; /* Light background for the entire section */
   border-radius: 8px; /* Rounded corners for a softer look */
@@ -39,11 +39,20 @@
 }
 
 /* Main form container */
+
+.searchFormRow {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 1rem;
+  height:max-content;
+}
 .searchForm {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: 1rem;
   width: 100%;
+  height: max-content;
 }
 
 /* Form group container */
@@ -54,28 +63,11 @@
 }
 
 /* Style for search button */
-.searchButton {
-  padding: 0.75rem 1.5rem; /* Larger padding for better spacing */
-  background: #1668d6;
-  color: white;
-  border: none;
-  border-radius: 24px; /* Rounded button for consistency */
-  cursor: pointer;
-  height: 45px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
 
-.searchButton:hover {
-  background-color: #135cb8;
-  transform: translateY(-2px); /* Lift effect on hover */
-}
 
 .searchButtonWrapper {
-  display: flex;
-  justify-content: center;
-  align-self: flex-end;
+  width: 400px;
+  background-color: #135cb8;
 }
 
 /* Responsive Styles */

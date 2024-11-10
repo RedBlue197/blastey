@@ -95,9 +95,6 @@ export default function Navbar() {
                   <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
                     {t('trips.trips')}
                   </button>
-                  <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
-                    {t('activities.activities')}
-                  </button>
                   <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
                     {t('login.login')}
                   </button>
@@ -128,7 +125,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {isOpen && (
         <div className={styles.mobileMenu}>
           <button onClick={() => navigate('/home')} className={getLinkClass('/home', 'medium')}>
@@ -162,9 +158,6 @@ export default function Navbar() {
             <>
               <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
                 {t('navbar.trips')}
-              </button>
-              <button onClick={() => navigate('/activities')} className={getLinkClass('/activities', 'medium')}>
-                {t('activities.activities')}
               </button>
               <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
                 {t('navbar.login')}
