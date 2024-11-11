@@ -5,6 +5,7 @@
   justify-content: center;
   align-items: center; /* Center the content */
   box-sizing: border-box;
+  max-width: 1100px;
   width: 90%;
   padding: 1.5rem; /* Add padding for spacing */
   background-color: #ffffff; /* Light background for the entire section */
@@ -66,8 +67,8 @@
 
 
 .searchButtonWrapper {
-  width: 400px;
-  background-color: #135cb8;
+  width: 200px;
+  background-color: #00bf63;
 }
 
 /* Responsive Styles */

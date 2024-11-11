@@ -5,6 +5,7 @@
     flex-wrap: wrap; /* Allow items to wrap on smaller screens */
     gap: 20px;
     padding: 20px;
+    margin-top: 120px;
 }
 
 .updateItem {
@@ -53,13 +54,16 @@
     display: flex;
     justify-content: flex-end; /* Align button to the left */
     margin-top: auto; /* Push the button to the bottom */
+    cursor: pointer;
+
 }
 
 .updateLink {
+    /* adding cursor */
     font-size: 14px;
     color: #fff; /* Light blue color for links */
     text-decoration: none; /* Remove underline from links */
-    background-color: #38b6ff; /* White background for button */
+    background-color: #00bf63; /* White background for button */
     padding: 10px 15px; /* Padding around the button text */
     border-radius: 5px; /* Rounded corners for button */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for button */
@@ -69,13 +73,13 @@
 .updateLink:hover {
     text-decoration: underline; /* Underline on hover */
     background-color: #e6f0ff; /* Light blue background on hover */
-    color: #0056b3;
+    color: #00bf63;
 }
 
 .updateLink:active {
-    color: #0056b3; /* Darker blue for active state */
+    color: #00bf63; /* Darker blue for active state */
     background-color: #e6f0ff; /* Light blue background on hover */
-    color: #0056b3;}
+    color: #00bf63;}
 
 @media (max-width: 1200px) {
     .updateItem {

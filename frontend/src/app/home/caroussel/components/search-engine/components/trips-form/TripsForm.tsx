@@ -148,7 +148,7 @@ const TripsForm: React.FC<TripsFormProps> = ({ onSubmit }) => {
           required
         />
       </div>
-      <Button type="submit" variant="contained" color="primary" className={styles.searchButton}>
+      <Button type="submit" variant="contained" className={styles.searchButton}>
         Search
       </Button>
     </form>

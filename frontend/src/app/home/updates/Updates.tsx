@@ -6,35 +6,35 @@ import styles from './Updates.module.css'; // Import the CSS module
 const updates = [
     {
         id: 1,
-        imageUrl: 'https://static.avianca.com/media/qfbptgkb/fotografia_mujer_lifemiles-red-plus-elite.png',
-        title: 'Flying within Colombia',
-        description: 'You can obtain your Red Plus Elite status with special offers.',
+        imageUrl: '/cities_images/marrakech.jpg',
+        title: 'Marrakech',
+        description: '',
         link: 'https://www.lifemiles.com/bonus-subscription2x1/en/wr/RPSCOL24?utm_source=avianca&utm_medium=banner_secundario&utm_campaign=red_plus_elite',
-        linkText: 'Subscribe now'
+        linkText: 'Find trips'
     },
     {
         id: 2,
-        imageUrl: 'https://static-nuxqa.avtest.ink/media/rmjbo5dg/thumbnail_cob_generica.png',
-        title: 'Your Credit Card with',
-        description: 'Up to 20,000 welcome miles.',
+        imageUrl: '/cities_images/fes.jpg',
+        title: 'Fes',
+        description: '',
         link: 'https://www.lifemiles.com/credit-card/get-credit-card?utm_source=avianca&utm_medium=banner_secundario&utm_campaign=tarjeta_credito_lifemiles',
-        linkText: 'Apply now!'
+        linkText: 'Find trips'
     },
     {
         id: 3,
-        imageUrl: 'https://static.avianca.com/media/s1xbhmpk/banner-star.jpg',
-        title: 'Some take to the sky',
-        description: 'We soar among stars.',
+        imageUrl: '/cities_images/tangier.webp',
+        title: 'Tangier',
+        description: '',
         link: 'https://www.staralliance.com/en/home',
-        linkText: 'Find out more'
+        linkText: 'Find trips'
     },
     {
         id: 4,
-        imageUrl: 'https://static.avianca.com/media/o02jxfzj/card_bussiness_es.png',
-        title: 'Fly in Business Class',
-        description: 'Enhance your experience with our Business Class services.',
+        imageUrl: '/cities_images/casablanca.webp',
+        title: 'Casablanca',
+        description: '',
         link: 'https://www.avianca.com/en/your-booking/business-class/',
-        linkText: 'Learn more'
+        linkText: 'Find trips'
     }
 ];
 

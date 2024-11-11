@@ -34,10 +34,9 @@
   justify-content: center;
   border-radius: 8px;
   position: absolute; /* Allows the search engine to overlap the image */
-  bottom: -30px; /* Adjust to position the search engine partially over the image */
+  bottom: -120px; /* Adjust to position the search engine partially over the image */
   left: 50%;
   transform: translateX(-50%); /* Centers the search engine horizontally */
-  max-width: 80%; /* Increase the width */
   width: 80%; /* Ensure the width is explicitly set */
 }
 

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import SearchEngine from './components/search-engine/SearchEngine';
 import styles from './Carousel.module.css';
 
-const fullWidthImage = 'https://picsum.photos/2400/300'; // Adjust as needed
+const fullWidthImage = '/cover.jpeg'; // Adjust as needed
 
 export default function Carousel() {
 

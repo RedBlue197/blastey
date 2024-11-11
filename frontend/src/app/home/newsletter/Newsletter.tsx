@@ -12,7 +12,7 @@ const Newsletter = () => {
         <div className={styles.newsletterContainer}>
             <div className={styles.newsletterImage}>
                 <img
-                    src="https://picsum.photos/400/300" // Replace with your image URL
+                    src="/newsletter.jpg" // Replace with your image URL
                     alt="Newsletter"
                 />
             </div>
