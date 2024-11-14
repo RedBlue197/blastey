@@ -43,14 +43,17 @@ export default function Footer() {
             <Image src="/blastey.ico" alt="Blastey Logo" width={30} height={30} />
           </div>
         <div className={styles.socialIcons}>
-          <a href="https://facebook.com/Blastey" target="_blank" rel="noopener noreferrer">
+          <a href="https://web.facebook.com/profile.php?id=61568250431523" target="_blank" rel="noopener noreferrer">
             <Image src="/social_icons/facebook.png" alt="Facebook" width={24} height={24} />
           </a>
-          <a href="https://tiktok.com/Blastey" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.tiktok.com/@blastey_official?_t=8rOdy8PCO8u&_r=1" target="_blank" rel="noopener noreferrer">
             <Image src="/social_icons/tiktok.png" alt="TikTok" width={24} height={24} />
           </a>
-          <a href="https://linkedin.com/company/Blastey" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.blastey.com/" target="_blank" rel="noopener noreferrer">
             <Image src="/social_icons/linkedin.png" alt="LinkedIn" width={24} height={24} />
+          </a>
+          <a href="https://www.instagram.com/blastey_official/" target="_blank" rel="noopener noreferrer">
+            <Image src="/social_icons/instagram3.png" alt="LinkedIn" width={24} height={24} />
           </a>
         </div>
         </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, List, ListItem, ListItemText } from '@mui/material';
 import styles from './TripsForm.module.css';
 import cityData from '@/static/cities.json'; // Import your JSON data
+import PrimaryButton from '@/app/components/button/PrimaryButton';
 
 interface City {
   id: string;
@@ -148,9 +149,9 @@ const TripsForm: React.FC<TripsFormProps> = ({ onSubmit }) => {
           required
         />
       </div>
-      <Button type="submit" variant="contained" className={styles.searchButton}>
+      <button className={styles.searchButton}>
         Search
-      </Button>
+      </button>
     </form>
   );
 };

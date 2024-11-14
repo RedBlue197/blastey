@@ -6,7 +6,6 @@ from fastapi.staticfiles import StaticFiles
 from slowapi.util import get_remote_address
 from slowapi import Limiter
 
-from routers.frontoffice.v1 import activity_router as activity_router
 from utils.responses import api_response
 
 from middleware.logging_middleware import LoggingMiddleware
@@ -107,7 +106,8 @@ if include_frontoffice_routers:
         activity_router as activity_router,
         trip_router as trip_router,
         auth_router as auth_router,
-        city_router as city_router
+        city_router as city_router,
+        newsletter_router as newsletter_router
     )
 if include_frontoffice_routers:
     app.include_router(frontoffice_user_router.router)
@@ -116,6 +116,7 @@ if include_frontoffice_routers:
     app.include_router(trip_router.router)
     app.include_router(auth_router.router)
     app.include_router(city_router.router)
+    app.include_router(newsletter_router.router)
     
 
 @app.on_event("startup")

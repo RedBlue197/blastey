@@ -92,7 +92,7 @@ async def get_trips(
     )
 
 #API to get a specific trip by id
-@router.get("/{trip_id}")
+@router.get("/by-trip-id/{trip_id}")
 async def get_trip_by_id(
     db: db_dependency,
     trip_id: uuid.UUID,
@@ -190,6 +190,53 @@ async def get_top_trips(
             total_pages=0,
             items_per_page=items_per_page,
             status_code=200
+        )
+    
+    # Validate response
+    trips_response = GetTripsResponse.model_validate(trips, from_attributes=True)
+
+    # Return paginated trips data
+    return api_response(
+        message="Trips found",
+        data=trips_response,
+        total_count=total_count,
+        current_page=page,
+        total_pages=total_pages,
+        items_per_page=items_per_page,
+        status_code=200
+    )
+
+#API get the trips by city name
+@router.get("/by-city-name")
+async def get_trips_by_city_name(
+    db: db_dependency,
+    city_name: str = Query(..., description="Name of the city"),
+    page: int = Query(1, ge=1, description="Page number"),
+    items_per_page: int = Query(10, le=100, description="Number of items per page"),
+):
+    offset = (page - 1) * items_per_page
+    limit = items_per_page
+
+    # put first letter capital letter
+    city_name = city_name.capitalize()
+    print(city_name)
+    # Query trips with pagination using the interface
+    trips, total_count = TripInterface(db=db).get_trips_by_city_name(city_name, offset, limit)
+
+    # Calculate total pages
+    total_pages = (total_count + items_per_page - 1) // items_per_page
+
+    # Handle response for empty trips
+    if len(trips['trips'])==0:
+        return api_response(
+            success=True,
+            message="No trips found",
+            data=[],
+            total_count=0,
+            current_page=page,
+            total_pages=0,
+            items_per_page=items_per_page,
+            status_code=404
         )
     
     # Validate response

@@ -7,8 +7,9 @@ export const endpoints= {
     "trips" :{   
         GET:{
             GET_TRIPS : '/trips/',
-            GET_TRIP_BY_ID : '/trips/',
+            GET_TRIP_BY_ID : '/trips/by-trip-id/',
             GET_TRIPS_BY_HOST_ID : '/trips/by-host-id/',
+            GET_TRIPS_BY_CITY_NAME : '/trips/by-city-name',
         },
         CREATE : {
             CREATE_TRIP:'/trips/create-trip',
@@ -31,6 +32,11 @@ export const endpoints= {
         UPDATE:{
             UPDATE_USER_EMAIL_VERIFICATION_STATUS:'/users/update-user-email-verification-status'
         },
+    },
+    "newsletters":{
+        CREATE:{
+            CREATE_NEWSLETTER:'/newsletters/create-newsletter-email'
+        }
     }
     
 }

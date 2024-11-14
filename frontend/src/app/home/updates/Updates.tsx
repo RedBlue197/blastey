@@ -9,7 +9,7 @@ const updates = [
         imageUrl: '/cities_images/marrakech.jpg',
         title: 'Marrakech',
         description: '',
-        link: 'https://www.lifemiles.com/bonus-subscription2x1/en/wr/RPSCOL24?utm_source=avianca&utm_medium=banner_secundario&utm_campaign=red_plus_elite',
+        link: `/trips/by-city-name/Marrakesh`,
         linkText: 'Find trips'
     },
     {
@@ -17,7 +17,7 @@ const updates = [
         imageUrl: '/cities_images/fes.jpg',
         title: 'Fes',
         description: '',
-        link: 'https://www.lifemiles.com/credit-card/get-credit-card?utm_source=avianca&utm_medium=banner_secundario&utm_campaign=tarjeta_credito_lifemiles',
+        link: `/trips/by-city-name/Fes`,
         linkText: 'Find trips'
     },
     {
@@ -25,7 +25,7 @@ const updates = [
         imageUrl: '/cities_images/tangier.webp',
         title: 'Tangier',
         description: '',
-        link: 'https://www.staralliance.com/en/home',
+        link:`/trips/by-city-name/Tangier`,
         linkText: 'Find trips'
     },
     {
@@ -33,7 +33,7 @@ const updates = [
         imageUrl: '/cities_images/casablanca.webp',
         title: 'Casablanca',
         description: '',
-        link: 'https://www.avianca.com/en/your-booking/business-class/',
+        link: `/trips/by-city-name/Casablanca`,
         linkText: 'Find trips'
     }
 ];

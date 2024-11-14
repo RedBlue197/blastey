@@ -1,13 +1,24 @@
 // components/Newsletter.js
 "use client";
 import styles from './Newsletter.module.css';
+import {createNewsletter} from '@/services/internal_services/newsletter_api_handler';
+import { useState } from 'react';
 
-const handleNewsletterSubscription = async () => {
-    // Implement your newsletter subscription logic here
-    console.log('Subscribing to newsletter...');
-}
+
 
 const Newsletter = () => {
+    const [email, setEmail] = useState<string>('');
+
+    
+    const handleNewsletterSubscription = async () => {
+
+    // Implement your newsletter subscription logic here
+    const data={
+        newsletter_email :email
+    }
+    const response = createNewsletter(data);
+    console.log('Response:', response);
+    }
     return (
         <div className={styles.newsletterContainer}>
             <div className={styles.newsletterImage}>
@@ -24,6 +35,7 @@ const Newsletter = () => {
                         type="email"
                         placeholder="Enter your email"
                         required
+                        onChange={e => setEmail(e.target.value)}    
                         className={styles.emailInput}
                     />
                     <button type="submit" className={styles.subscribeButton} onClick={handleNewsletterSubscription}>

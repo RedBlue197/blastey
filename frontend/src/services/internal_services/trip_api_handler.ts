@@ -86,6 +86,32 @@ export async function fetchTripsByHostId(page: number, limit: number) {
     return error;
   }
 }
+
+export async function getTripsByCityName(cityName: string, page: number, limit: number) {
+  try {
+    // Make API request
+    const endpoint = `${endpoints.trips.GET.GET_TRIPS_BY_CITY_NAME}?city_name=${encodeURIComponent(cityName)}&page=${page.toString()}&items_per_page=${limit.toString()}`;
+    const response = await makeAPIRequest<{ data: any }>(
+      microservices.CORE, // Replace with your actual microservice name
+      endpoint, // Endpoint
+      {
+        withCredentials: true, // Use withCredentials to send the token in the request
+        version: 'v1', // Provide necessary options
+      }
+    );
+
+    // Check if the response was successful and has expected data
+    if (!response || !response.data) {
+      throw new Error('No trips found or invalid response structure');
+    }
+
+    return response; // Return the fetched trips if needed elsewhere
+
+  } catch (error: any) {
+    // Log the full error details to get more information
+    return error;
+  }
+}
 //------------------------------------------------CREATE REQUESTS-------------------------------------
 
 export async function createTrip(create_trip_data:CreateTripInterface){

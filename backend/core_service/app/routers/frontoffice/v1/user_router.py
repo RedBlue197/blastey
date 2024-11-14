@@ -1,6 +1,6 @@
 # app/routers/user_router.py
 
-from fastapi import status, APIRouter, Query,Request,BackgroundTasks
+from fastapi import status, APIRouter, Query,Request
 
 from dependencies.db_dependency import db_dependency
 from dependencies.auth_dependency import auth_bearer
@@ -11,7 +11,7 @@ from interfaces.user_interface import UserInterface
 
 from schemas.user_schema import (
     CreateUserRequest,
-    PutUserVerificationRequest
+    PutUserVerificationRequest,
     )
 
 from responses.user_response import (
@@ -119,7 +119,6 @@ async def create_user(
             status_code=500
         )
 
-
 #----------------------------------------------------PUT ENDPOINTS----------------------------------------------------
 
 #API to verify email
@@ -149,3 +148,4 @@ async def verify_user_email(
             message="User verification failed: " + str(e),
             status_code=500
         )
+    

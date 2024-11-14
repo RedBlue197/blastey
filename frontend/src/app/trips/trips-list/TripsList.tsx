@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useState, Suspense } from 'react';
 import styles from './TripsList.module.css';
-import { fetchTrips } from '@/services/internal_services/trip_api_handler';
+import { fetchTrips, getTripsByCityName } from '@/services/internal_services/trip_api_handler';
 import FilterAndSearch from '../filter-and-search/FilterAndSearch';
 import TripCard from '../trip-card/TripCard';
 import LoadingTripsList from './loading/LoadingTripsList';
 import { Trip } from '@/types/trip';
 
-const TripsList = () => {
+const TripsList = ({ cityName }: { cityName: string }) => {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -19,38 +19,61 @@ const TripsList = () => {
   const [limit] = useState<number>(10); 
   const [totalPages, setTotalPages] = useState<number>(0);
   
-  const getTrips = async (page: number) => {
+  const getTrips = async (cityName:string,page: number) => {
     console.log('Fetching trips...');
     try {
-      const response = await fetchTrips(page, limit);
-      if (response.status_code === 200) {
-        const newTrips = response.data.trips;
-        const totalPages = response.pagination.total_pages;
+      if (cityName) {
+        const response = await getTripsByCityName(cityName,page, limit);
+        if (response.status_code === 200) {
+          const newTrips = response.data.trips;
+          const totalPages = response.pagination.total_pages;
 
-        setTotalPages(totalPages);
+          setTotalPages(totalPages);
 
-        if (page >= totalPages) {
+          if (page >= totalPages) {
+            setHasMoreTrips(false);
+          }
+
+          setTrips(prevTrips => {
+            // Filter out trips that are already in the state
+            const uniqueTrips = newTrips.filter(newTrip => 
+              !prevTrips.some(existingTrip => existingTrip.trip_id === newTrip.trip_id)
+            );
+            return [...prevTrips, ...uniqueTrips];
+          });
+        } else {
           setHasMoreTrips(false);
         }
-
-        setTrips(prevTrips => {
-          // Filter out trips that are already in the state
-          const uniqueTrips = newTrips.filter(newTrip => 
-            !prevTrips.some(existingTrip => existingTrip.trip_id === newTrip.trip_id)
-          );
-          return [...prevTrips, ...uniqueTrips];
-        });
       } else {
-        setHasMoreTrips(false);
-      }
-    } catch (error) {
+        const response = await fetchTrips(page, limit);
+        if (response.status_code === 200) {
+          const newTrips = response.data.trips;
+          const totalPages = response.pagination.total_pages;
+
+          setTotalPages(totalPages);
+
+          if (page >= totalPages) {
+            setHasMoreTrips(false);
+          }
+
+          setTrips(prevTrips => {
+            // Filter out trips that are already in the state
+            const uniqueTrips = newTrips.filter(newTrip => 
+              !prevTrips.some(existingTrip => existingTrip.trip_id === newTrip.trip_id)
+            );
+            return [...prevTrips, ...uniqueTrips];
+          });
+        } else {
+          setHasMoreTrips(false);
+        }
+    }} catch (error) {
       console.error('Error fetching trips:', error);
     }
   };
 
   // Fetch trips on initial render (only once)
   useEffect(() => {
-    getTrips(page); 
+    getTrips(cityName,page); 
   }, [page]); 
 
   // Fetch trips when "Show More" is clicked
