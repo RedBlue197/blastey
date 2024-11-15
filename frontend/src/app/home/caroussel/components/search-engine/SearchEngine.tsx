@@ -23,9 +23,12 @@ const SearchEngine: React.FC = () => {
       trip_search_end_date: formData.returnDate,
       trip_search_comment: formData.comments,
     }
-    console.log('Trip search data:', trip_search_data);
     const response = createTripSearch(trip_search_data,1,20);
-    console.log('Response:', response);
+    if (response.status_code===201) {
+      console.log(response.data)
+    } else {
+
+    }
   };
 
   return (

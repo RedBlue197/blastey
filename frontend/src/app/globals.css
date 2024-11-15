@@ -109,4 +109,9 @@ body {
   .btn-secondary:hover {
     @apply bg-[#25d366] text-white;
   }
+
+  .page-transition {
+    opacity: 0.5; /* Adjust as needed for your desired effect */
+    transition: opacity 0.5s ease-in-out;
+  }
 }
