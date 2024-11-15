@@ -6,6 +6,7 @@ import i18n from '../../../i18n';
 import LoginModal from '../login-modal/LoginModal';
 import { useAuth } from '@/context/AuthContext'; // Ensure this path is correct
 import styles from './Navbar.module.css';
+import TransitionLink from '../transition-link/TransitionLink'; // Ensure this path is correct
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -62,21 +63,21 @@ export default function Navbar() {
           </div>
           <div className={styles.desktopMenuLangage}>
             <div className={styles.desktopMenu}>
-              <button onClick={() => navigate('/home')} className={getLinkClass('/home', 'medium')}>
-                {t('home.home')}
-              </button>
+            <TransitionLink href="/" className={getLinkClass('/home','medium')}>
+              {t('navbar.home')}
+            </TransitionLink>
 
               {/* Conditionally render links based on authentication and role */}
               {isAuthenticated ? (
                 <>
                   {userRole === 'admin' && (
-                    <button onClick={() => navigate('/admin')} className={getLinkClass('/admin', 'medium')}>
+                    <TransitionLink href="/admin" className={getLinkClass('/admin', 'medium')}>
                       {t('admin.admin')}
-                    </button>
+                    </TransitionLink>
                   )}
-                  <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                  <TransitionLink onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
                     {t('navbar.trips')}
-                  </button>
+                  </TransitionLink>
                   <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
                     {t('navbar.dashboard')}
                   </button>
