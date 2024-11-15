@@ -6,7 +6,7 @@ import i18n from '../../../i18n';
 import LoginModal from '../login-modal/LoginModal';
 import { useAuth } from '@/context/AuthContext'; // Ensure this path is correct
 import styles from './Navbar.module.css';
-import TransitionLink from '../transition-link/TransitionLink'; // Ensure this path is correct
+import TransitionLink from '@/hooks/useTransitionLink'; // Ensure this path is correct
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
