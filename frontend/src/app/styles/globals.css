@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Slick Carousel styles */
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
+/* Import Tajawal font with different weights */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+
+/* Define Design Tokens */
+:root {
+  /* Primary and Secondary Colors */
+  --primary-color: #00a653; /* #00a653 is used as primary color */
+  --secondary-color: #ff914d; /* #ff914d is used as secondary color */
+  
+  /* Neutral Colors */
+  --foreground-color: rgb(51, 51, 51); /* Dark Slate Grey for text */
+  --background-light: rgb(255, 255, 255); /* Light background color */
+  --background-dark: rgb(214, 219, 220); /* Darker background for gradients */
+
+  /* Font Sizes */
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-xxl: 32px;
+
+  /* Spacing */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+
+  /* Border Radius */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+}
+
+/* Light/Dark Mode Customization */
+@media (prefers-color-scheme: light) {
+  :root {
+    --foreground-color: rgb(51, 51, 51); /* Dark Slate Grey text in light mode */
+    --background-light: rgb(255, 255, 255); /* White background in light mode */
+    --background-dark: rgb(214, 219, 220); /* Light Sand gradient for light mode */
+  }
+}
+
+/* Apply Tajawal font globally */
+body {
+  font-family: 'Tajawal', sans-serif;
+  color: var(--foreground-color);
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      var(--background-light)
+    ) var(--background-dark);
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* Universal Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Apply consistent font weight across all elements */
+* {
+  font-weight: 400; /* Default font weight */
+}
+
+/* Global Body Styles */
+body {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  background-color: var(--background-light);
+}
+
+/* Main Content Styles */
+.main-content {
+  background-color: var(--background-light);
+  min-height: calc(100vh - 60px); /* Adjust height considering fixed footer or header */
+  padding: var(--spacing-md);
+}
+
+/* Utility class for text balance (Improvement: using text-align justify) */
+@layer utilities {
+  .text-balance {
+    text-align: justify;
+    text-justify: inter-word; /* Ensure justified text with word breaking */
+  }
+}
+
+/* Custom Components (Including Button Styles, Titles) */
+@layer components {
+  /* Layout setup */
+  .layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .layout > * {
+    flex-shrink: 0;
+  }
+
+  .layout > :nth-child(2) {
+    flex-grow: 1;
+  }
+
+  /* Page Title */
+  .page-title {
+    @apply text-3xl font-bold text-center;
+    color: var(--foreground-color);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  /* Section Title */
+  .section-title {
+    @apply text-2xl font-semibold text-left;
+    color: var(--foreground-color);
+    margin-bottom: var(--spacing-md);
+  }
+
+  /* Primary Button */
+  .btn-primary {
+    @apply bg-[var(--primary-color)] text-white font-bold text-center rounded-lg transition duration-200;
+    width: 60%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+  }
+
+  .btn-primary:hover {
+    @apply bg-[var(--primary-color)];
+    opacity: 0.8; /* Add hover effect */
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    @apply bg-white text-[var(--primary-color)] font-bold text-center rounded-lg border-2 border-[var(--primary-color)] transition duration-200;
+    width: 60%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+  }
+
+  .btn-secondary:hover {
+    @apply bg-[var(--primary-color)] text-white;
+  }
+
+  /* Page transition */
+  .page-transition {
+    opacity: 0.5;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  /* Text Helper */
+  .text-muted {
+    color: rgba(51, 51, 51, 0.6); /* Muted text color */
+  }
+
+  /* Responsive Design Helper */
+  @media (max-width: 768px) {
+    .btn-primary, .btn-secondary {
+      width: 80%; /* Button width for smaller screens */
+    }
+
+    .page-title {
+      font-size: var(--font-size-lg);
+    }
+
+    .section-title {
+      font-size: var(--font-size-lg);
+    }
+
+    .main-content {
+      padding: var(--spacing-sm);
+    }
+  }
+}

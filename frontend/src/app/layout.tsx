@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import RootLayout from "./components/RootLayout";
 import { AuthProvider } from "@/context/AuthContext";
 import Script from "next/script"; // For inserting GTM and gtag scripts
-import './globals.css';
+import './styles/global.css'; // Import the global CSS here
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -1,51 +1,57 @@
-import { NextRequest, NextResponse } from "next/server";
-import jwt from 'jsonwebtoken';
+import { NextRequest, NextResponse } from 'next/server';
+import { jwtVerify } from 'jose';
 
-const protectedRoutes: { [key: string]: string[] } = {
-    '/dashboard': ['host', 'admin'],  // accessible by both user and admin
-    '/profile': ['user','host', 'admin'],
-    '/admin-panel': ['admin']         // accessible only by admin
+const protectedRoutes : { [key: string]: string[] } = {
+    '/dashboard': ['host', 'admin'],
+    '/profile': ['user', 'host', 'admin'],
+    '/admin-panel': ['admin']
 };
 
-const publicRoutes = [
+const publicRoutesSet = new Set([
     '/sign-in',
     '/sign-up'
-];
+]);
 
-const SECRET_KEY = process.env.JWT_SECRET; // Store your JWT secret in .env
+const SECRET_KEY = process.env.JWT_SECRET;
 
 export default async function middleware(req: NextRequest) {
     const path = req.nextUrl.pathname;
-    const isProtectedRoute = Object.keys(protectedRoutes).includes(path);
-    const isPublicRoute = publicRoutes.includes(path);
-
-    // Retrieve token from cookies
-    const token = req.cookies.get('token');
+    const isProtectedRoute = path in protectedRoutes;  // Check if the path is in protected routes
+    const isPublicRoute = publicRoutesSet.has(path);
     
+    const token = req.cookies.get('token');
+
     if (isProtectedRoute) {
         if (!token) {
             return NextResponse.redirect(new URL('/sign-in', req.nextUrl).toString());
         }
 
         try {
-            // Decode and verify the token to get the user role
-            const decodedToken = jwt.verify(token, SECRET_KEY) as { role: string };
+            // Verify JWT using 'jose' library
+            const { payload: decodedToken } = await jwtVerify(token, new TextEncoder().encode(SECRET_KEY));
             const userRole = decodedToken.user_role;
 
-            // Check if user role is authorized for this route
+            // Check if the token is expired
+            if (decodedToken.exp * 1000 < Date.now()) {
+                return NextResponse.redirect(new URL('/sign-in', req.nextUrl).toString());
+            }
+
+            // Get allowed roles for the current protected route
             const allowedRoles = protectedRoutes[path];
+
             if (!allowedRoles.includes(userRole)) {
-                // Redirect to a "not authorized" page or dashboard if role is insufficient
-                return NextResponse.redirect(new URL('/dashboard', req.nextUrl).toString());
+                return NextResponse.redirect(new URL('/not-authorized', req.nextUrl).toString());
             }
         } catch (error) {
             console.error('Token verification failed:', error);
-            // Redirect to sign-in if token is invalid
             return NextResponse.redirect(new URL('/sign-in', req.nextUrl).toString());
         }
     }
 
     if (isPublicRoute && token) {
+        if (path === '/sign-in' || path === '/sign-up') {
+            return NextResponse.next();
+        }
         return NextResponse.redirect(new URL('/dashboard', req.nextUrl).toString());
     }
 
