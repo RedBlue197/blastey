@@ -75,7 +75,7 @@ export default function Navbar() {
                       {t('admin.admin')}
                     </TransitionLink>
                   )}
-                  <TransitionLink onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                  <TransitionLink href="/admin" onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
                     {t('navbar.trips')}
                   </TransitionLink>
                   <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
