@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { AppProps } from 'next/app';
 import { AuthProvider } from '@/context/AuthContext';
-import '../globals.css'; // Include your global styles
+import '@/app/styles/globals.css'; // Include your global styles
 import LoadingScreen from '@/app/components/loading/LoadingScreen'; // Adjust the path as needed
 
 function Index({ Component, pageProps }: AppProps) {
