@@ -1,15 +1,23 @@
 .searchForm {
   display: flex;
-  flex-direction: column; /* Ensures elements stack in a column by default */
+  flex-direction: row; /* Ensures elements stack in a column by default */
   gap: 1rem; /* Space between form elements */
   position: relative;
+  width: fit-content;
+  align-items: center;
+
 }
 
 /* Form group styling */
 .formGroup {
   flex: 1;
-  min-width: 200px; /* Minimum width to ensure responsive behavior */
+  min-width: 150px; /* Minimum width to ensure responsive behavior */
   position: relative; /* Needed for absolute positioning of suggestion lists */
+}
+
+.formGroupButton {
+  position: relative; /* Needed for absolute positioning of suggestion lists */
+  width: fit-content;
 }
 
 /* Suggestion list styling */

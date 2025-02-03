@@ -1,7 +1,7 @@
 // src/components/Carousel.tsx
 "use client"
-import React, { useState } from 'react';
-import SearchEngine from './components/search-engine/SearchEngine';
+import React from 'react';
+import SearchEngine from '@/app/components/search-engine/SearchEngine';
 import styles from './Carousel.module.css';
 
 const fullWidthImage = '/cover.jpeg'; // Adjust as needed

@@ -3,6 +3,7 @@
   background-color: #00bf63;
   color: white;
   width: 60%;
+  min-width: 150px;
   padding: 10px 20px;
   text-decoration: none;
   font-family: 'Tajawal', sans-serif;
@@ -15,7 +16,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 50px;
+  height: 56px;
 }
 
 .primaryButton:hover {
@@ -27,8 +28,18 @@
   cursor: not-allowed; /* Disable interaction during loading */
   width: 60%;
   padding: 10px 20px;
-  height: 50px;
-
+  text-decoration: none;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
 }
 
 /* Text styles for the button */

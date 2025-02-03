@@ -22,18 +22,26 @@ const TripCard: React.FC<{ trip: GetTripInterface }> = ({ trip }) => {
     });
   };
 
+  // Format the trip opening date (assumes the trip object has a valid opening date)
+  const formattedOpeningDate = new Date(trip.trip_opening_date).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
   return (
     <div className={styles.tripCard}>
       <img src={
         trip.trip_image_url
           ? trip.trip_image_url
           : 'https://picsum.photos/2400/300'
-       } alt={`${trip.trip_title}'s picture`} className={styles.picture} />
+      } alt={`${trip.trip_title}'s picture`} className={styles.picture} />
       <div className={styles.details}>
         <h2>{trip.trip_title}</h2>
         <p className={styles.description}>
-          {trip.trip_description && trip.trip_description.length > 80 
-            ? `${trip.trip_description.substring(0, 80)}...` 
+          {trip.trip_description && trip.trip_description.length > 70 
+            ? `${trip.trip_description.substring(0, 70)}...` 
             : 'no description'}
         </p>
         <div className={styles.tripInfo}>
@@ -41,9 +49,12 @@ const TripCard: React.FC<{ trip: GetTripInterface }> = ({ trip }) => {
           <FaArrowRight className={styles.arrowIcon} />
           <p className={styles.detailsParagraph}>{trip.trip_destination}</p>
         </div>
+
+        {/* Add the formatted opening date */}
         <p className={styles.detailsParagraph}>
-          <span className={styles.detailsStrong}>From:</span> ${trip.trip_lowest_trip_opening_price}
+          <span className={styles.detailsStrong}>Opening Date:</span> {formattedOpeningDate}
         </p>
+
         {/* Add buttons */}
         <div className={styles.buttonsContainer}>
           <Link

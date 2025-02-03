@@ -1,9 +1,11 @@
 // ActivitiesForm.tsx
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TextField, Button } from '@mui/material';
 import styles from './ActivitiesForm.module.css';
 
 const ActivitiesForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubmit }) => {
+  const { t } = useTranslation();
   const [activityType, setActivityType] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [date, setDate] = useState<string>('');
@@ -17,7 +19,7 @@ const ActivitiesForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubmit 
     <form onSubmit={handleSubmit} className={styles.searchForm}>
       <div className={styles.formGroup}>
         <TextField
-          label="Activity Type"
+          label={t('activities.activityType')}
           variant="outlined"
           fullWidth
           value={activityType}
@@ -27,7 +29,7 @@ const ActivitiesForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubmit 
       </div>
       <div className={styles.formGroup}>
         <TextField
-          label="Location"
+          label={t('activities.location')}
           variant="outlined"
           fullWidth
           value={location}
@@ -37,7 +39,7 @@ const ActivitiesForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubmit 
       </div>
       <div className={styles.formGroup}>
         <TextField
-          label="Date"
+          label={t('activities.date')}
           type="date"
           variant="outlined"
           fullWidth
@@ -50,7 +52,7 @@ const ActivitiesForm: React.FC<{ onSubmit: (data: any) => void }> = ({ onSubmit 
         />
       </div>
       <Button type="submit" variant="contained" color="primary">
-        Search
+        {t('activities.search')}
       </Button>
     </form>
   );

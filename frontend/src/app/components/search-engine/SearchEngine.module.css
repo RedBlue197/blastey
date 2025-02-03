@@ -5,8 +5,7 @@
   justify-content: center;
   align-items: center; /* Center the content */
   box-sizing: border-box;
-  max-width: 1100px;
-  width: 90%;
+  width: fit-content;
   padding: 1.5rem; /* Add padding for spacing */
   background-color: #ffffff; /* Light background for the entire section */
   border-radius: 8px; /* Rounded corners for a softer look */
@@ -39,8 +38,6 @@
   transform: scale(1.05); /* Slight scale on hover for interactivity */
 }
 
-/* Main form container */
-
 .searchFormRow {
   display: flex;
   justify-content: center;
@@ -48,6 +45,7 @@
   gap: 1rem;
   height:max-content;
 }
+
 .searchForm {
   display: flex;
   justify-content: center;

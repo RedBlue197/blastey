@@ -30,7 +30,10 @@
   "trips": {
     "trips": "Trips",
     "tripHistory": "Your Trip History",
-    "trackTrip": "Track your trip"
+    "trackTrip": "Track your trip",
+    "departureDate": "Departure Date",
+    "returnDate": "Return Date"
+
   },
   "activities": {
     "activities": "Activities",

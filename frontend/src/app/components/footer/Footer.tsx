@@ -8,7 +8,7 @@ export default function Footer() {
         <div className={styles.logoAndContact}>
           <div className={styles.contactInfo}>
             <h4>Contact Us</h4>
-            <p>Email: support@Blastey.com</p>
+            <p>Email: contact@Blastey.com</p>
           </div>
         </div>
         <div className={styles.quickLinks}>
@@ -38,7 +38,7 @@ export default function Footer() {
         </div> */}
       </div>
       <div className={styles.bottomText}>
-        <p>© 2024 Blastey. All rights reserved.</p>
+        <p>© 2025 Blastey. All rights reserved.</p>
         <div className={styles.logo}>
             <Image src="/blastey.ico" alt="Blastey Logo" width={30} height={30} />
           </div>

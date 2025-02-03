@@ -98,13 +98,12 @@
 
 .languageSelector {
   margin-left: auto;
-  padding-left: 1rem;
   display: flex;
   align-items: center;
 }
 
 .languageSelector select {
-  padding: 0.5rem;
+  padding: 0.75rem;
   border-radius: 4px;
   border: 1px solid #ccc;
 }

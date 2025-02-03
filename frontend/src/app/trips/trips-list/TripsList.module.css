@@ -56,6 +56,48 @@
   opacity: 0.6; /* Make button look disabled */
   cursor: not-allowed; /* Change cursor to show it's not clickable */
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  background-color: #00bf63; /* Green button */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin: 0 10px;
+  border-radius: 5px;  /* Smooth corners */
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+}
+
+.pagination-button:hover {
+  background-color: #20c659; /* Lighter green on hover */
+  transform: scale(1.05); /* Slightly enlarge button on hover */
+}
+
+.pagination-button:disabled {
+  background-color: #e0e0e0; /* Disabled button color */
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 1rem;
+  margin: 0 15px;
+  color: #333; /* Dark text for better readability */
+}
+
+.pageInfo span {
+  font-weight: bold; /* Make page info bold */
+}
+
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
