@@ -30,7 +30,10 @@
   "trips": {
     "trips": "Trips",
     "tripHistory": "Your Trip History",
-    "trackTrip": "Track your trip"
+    "trackTrip": "Track your trip",
+    "departureDate": "Departure Date",
+    "returnDate": "Return Date"
+
   },
   "activities": {
     "activities": "Activities",
@@ -46,5 +49,89 @@
   "orders": {
     "orderHistory": "Your Order History",
     "trackOrder": "Track your order"
+  },
+  "about-us":{
+    "title": "About Blastey",
+    "paragraph1": "Welcome to Blastey, a vibrant marketplace crafted with passion by Moroccan enthusiasts. We are more than just a platform; we are a community built for travelers, by travelers.",
+    "paragraph2": "Our mission is simple: to empower you to explore the world with ease, connect with like-minded individuals, and discover unforgettable experiences. Whether you're a seasoned globetrotter or just starting your journey, Blastey provides the tools and connections to make every trip extraordinary.",
+    "subtitle": "What We Offer:",
+    "listItems": [
+      "Seamless Travel Planning: Organize every detail of your adventure, from flights and accommodation to local activities and hidden gems.",
+      "Trip Organization Made Easy: Curate your own unique tours or experiences and share them with fellow adventurers.",
+      "Meet New Places: Explore a diverse array of destinations, each offering its own unique culture and attractions.",
+      "Meaningful Networking: Connect with other travelers, locals, and trip organizers to expand your network and gain invaluable insights.",
+      "Authentic Experiences: Discover off-the-beaten-path adventures and immerse yourself in local cultures."
+    ],
+    "closingParagraph": "Blastey is more than just a marketplace; it's a place where dreams take flight, connections are forged, and unforgettable memories are made. Join our community of travelers and start planning your next adventure today!",
+    "signature": "With love from Morocco,\nThe Blastey Team"
+  },
+    "privacy-policy": {
+      "title": "Privacy Policy",
+      "effectiveDate": "Effective Date: October 26, 2023",
+      "informationWeCollect": "Information We Collect",
+      "informationWeCollectDetails": "We collect the following types of information...",
+      "howWeUseYourInformation": "How We Use Your Information",
+      "howWeUseYourInformationDetails": "We use your information to...",
+      "sharingYourInformation": "Sharing Your Information",
+      "sharingDetails": "We may share your information with...",
+      "rightsDetails": "You have the following rights regarding your data...",
+      "dataSecurity": "Data Security",
+      "securityDetails": "We take these measures to protect your data...",
+      "changesToThisPolicy": "Changes to this Privacy Policy",
+      "changesDetails": "We may update this policy from time to time...",
+      "contactUs": "Contact Us",
+      "contactDetails": "If you have any questions..."
+    },
+    "terms-and-conditions": {
+      "title": "Terms and Conditions of Use",
+      "effectiveDate": "Effective Date: October 27, 2023",
+      "acceptanceOfTerms": "Acceptance of Terms",
+      "acceptanceDetails": "By accessing or using the Blastey platform (the \"Services\"), you agree to be bound by these Terms and Conditions of Use (the \"Terms\"). If you do not agree to these Terms, please do not access or use the Services.",
+      "accountCreation": "Account Creation",
+      "accountDetails": "To access certain features of the Services, you may be required to create an account. You agree to provide accurate, current, and complete information during the registration process and to keep your account information updated. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.",
+      "prohibitedActivities": "Prohibited Activities",
+      "prohibitedList": [
+        "Violating any applicable laws or regulations.",
+        "Infringing upon the intellectual property rights of others.",
+        "Engaging in any activity that interferes with or disrupts the Services.",
+        "Impersonating any person or entity, or falsely stating or otherwise misrepresenting your affiliation with a person or entity.",
+        "Collecting or harvesting any personally identifiable information, including account names, from the Services.",
+        "Using the Services for any commercial solicitation purposes.",
+        "Posting or transmitting any unlawful, threatening, libelous, defamatory, obscene, pornographic, or other material or content that would violate the rights of others."
+      ],
+      "intellectualProperty": "Intellectual Property",
+      "intellectualDetails": "The Services and their entire contents, features, and functionality (including but not limited to all information, software, text, displays, images, video, and audio, and the design, selection, and arrangement thereof) are owned by Blastey, its licensors, or other providers of such material and are protected by [Your Country] and international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.",
+      "termination": "Termination",
+      "terminationDetails": "We may terminate or suspend your access to the Services immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.",
+      "governingLaw": "Governing Law",
+      "governingDetails": "These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law provisions.",
+      "changesToTerms": "Changes to These Terms",
+      "changesDetails": "We may revise and update these Terms from time to time in our sole discretion. All changes are effective immediately when we post them.",
+      "contactUs": "Contact Us",
+      "contactDetails": "If you have any questions about these Terms, please contact us at contact@blastey.com."
+    },
+  
+      "footer": {
+        "contactUs": "Contact Us",
+        "contactEmail": "Email: contact@Blastey.com",
+        "quickLinks": "Quick Links",
+        "home": "Home",
+        "trips": "Trips",
+        "moreInformation": "More Information",
+        "aboutUs": "About Us",
+        "contact": "Contact",
+        "privacyPolicy": "Privacy Policy",
+        "termsAndConditions": "Terms and Conditions",
+        "copyright": "© {{year}} Blastey. All rights reserved." 
+      },
+  "tripsList": {
+    "pageTitle": "Traveller Trips",
+    "modifySearch": "Modify Your Search",
+    "noTripsAvailable": "No trips are available.",
+    "noTripsAlt": "Empty trip illustration",
+    "showMore": "Show More",
+    "loading": "Loading..."
+
   }
+
 }

@@ -45,5 +45,24 @@
   "orders": {
     "orderHistory": "Historique de vos commandes",
     "trackOrder": "Suivez votre commande"
-  }
+  },
+
+    "footer": {
+      "contactUs": "Contactez-nous",
+      "contactEmail": "Courriel : contact@Blastey.com",
+      "quickLinks": "Liens rapides",
+      "home": "Accueil",
+      "trips": "Voyages",
+      "activities": "Activités",
+      "offers": "Offres",
+      "moreInformation": "Plus d'informations",
+      "aboutUs": "À propos de nous",
+      "contact": "Contactez-nous",
+      "privacyPolicy": "Politique de confidentialité",
+      "termsAndConditions": "Conditions générales",
+      "faq": "FAQ",
+      "careers": "Carrières",
+      "copyright": "© {{year}} Blastey. Tous droits réservés."
+    }
+  
 }

@@ -1,0 +1,96 @@
+.searchForm {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically by default */
+  gap: 1rem; /* Space between form elements */
+  position: relative;
+  width: 100%; /* Take full width */
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f9f9f9; /* Light background */
+  box-sizing: border-box; /* Important to include padding and border in width calculation */
+}
+
+/* Form group styling */
+.formGroup {
+  width: 100%; /* Occupy full width on smaller screens */
+  position: relative; /* Needed for absolute positioning of suggestion lists */
+}
+
+.formGroupButton {
+  width: 100%;
+  display: flex;         /* Enable flexbox */
+  justify-content: center; /* Center content horizontally */
+  text-align: center;    /* Center text within the button */
+
+}
+
+/* Style for the TextField inside DateRangePicker */
+.formGroup > div > div > div > div > div > div > TextField{
+    width: 48%;
+}
+
+/* Suggestion list styling */
+.suggestionsList {
+  position: absolute;
+  top: 100%; /* Aligns the list just below the input field */
+  left: 0;
+  width: 100%; /* Matches the width of the input field */
+  max-height: 150px; /* Limits the height of the list */
+  overflow-y: auto; /* Adds scroll if too many suggestions */
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 10; /* Ensures the list appears above other elements */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+.suggestionItem {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestionItem:hover {
+  background-color: #f5f5f5;
+}
+
+/* Responsive styling for larger screens */
+@media (min-width: 768px) {
+  .searchForm {
+    flex-direction: row; /* Changes to row layout on larger screens */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    justify-content: space-between;
+    align-items: center; /* Align items vertically in the same line */
+  }
+
+  .formGroup {
+    width: auto; /* Adjust width to fit more fields in a single row */
+    flex: 1;       /* Let the form groups distribute the space */
+    margin-bottom: 0;
+  }
+
+  /* Ensure the DateRangePicker takes up the space it needs */
+  .formGroup > div {
+    width: 100%; /* Let the DateRangePicker manage its internal layout */
+  }
+
+    .formGroup > div > div > div > div > div > div > TextField{
+        width: 48%;
+   }
+
+  .formGroupButton {
+    width: auto;
+    display: flex;          /* Enable flexbox */
+    justify-content: center;  /* Center content horizontally */
+    text-align: center;     /* Center text within the button */
+    align-self: stretch; /* Make the button the same height as other elements */
+  }
+
+  .PrimaryButton {
+    width: fit-content;   /* Button fits to content */
+    margin: 0 auto;        /* Center the button */
+  }
+  
+  .TextField {
+    width: 100%;/* Adjust width to fit more fields in a single row */
+  }
+}

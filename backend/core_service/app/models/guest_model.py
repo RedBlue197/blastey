@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Float,Date
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, ForeignKey,Date,Boolean,Enum
 from database import Base
 from sqlalchemy.dialects.postgresql import UUID
+from models.base_model import TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin
+from enum import Enum as PyEnum
 
 
 class GuestType(PyEnum):
@@ -11,7 +12,7 @@ class GuestType(PyEnum):
 
 
 
-class Guests(Base):
+class Guests(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = 'guests'
     guest_id = Column(Integer, primary_key=True, index=True)
     guest_gender=Column(String, nullable=True)

@@ -1,6 +1,12 @@
+/* Navbar.module.css */
 .nav {
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
 }
 
 .container {
@@ -25,22 +31,23 @@
   width: auto;
 }
 
-/* Updated desktop menu to align with buttons */
 .desktopMenuLangage {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: flex-start; /* Align items to the start */
+  align-items: center;
+  gap: 20px; /* Add spacing between menu and language selector */
 }
 
 .desktopMenu {
   display: flex;
   gap: 15px;
+  align-items: center;
 }
 
-/* Navbar button using the same primaryButton style */
 .navbarButton {
-  background-color: #00bf63; /* Primary Color */
-  color: white; /* Text color */
+  background-color: #00bf63;
+  color: white;
   border: none;
   border-radius: 4px;
   padding: 8px 16px;
@@ -77,6 +84,13 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  position: absolute;
+  top: 64px;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .link {
@@ -97,29 +111,67 @@
 }
 
 .languageSelector {
-  margin-left: auto;
-  padding-left: 1rem;
   display: flex;
   align-items: center;
+  padding: 10px;    /* Add padding around the select */
+  margin-left: 10px;
+}
+/* Mobile adjustments */
+@media (max-width: 768px) {
+   .desktopMenuLangage .languageSelector {
+      display: none;
+    }
+    .desktopMenuLangage {
+      justify-content: space-between;
+    }
+    .desktopMenu {
+        margin-left: 0;
+    }
 }
 
-.languageSelector select {
-  padding: 0.5rem;
+.languageSelect {
   border-radius: 4px;
-  border: 1px solid #ccc;
+  width: 60px;
+  appearance: none; /* Remove default arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem top 50%;
+  background-size: 1rem;
+  padding-right: 1.5rem; /* Adjust for arrow */
+  cursor: pointer;
+  font-weight: 500;
+  margin: 0; /* Reset margins */
+ padding-left: 5px; /* Keep language and arrow spaced */
+}
+
+/* Hover Style (optional) */
+.languageSelect:hover {
+  border-color: #ccc;
+}
+
+/* Focus Style (optional) */
+.languageSelect:focus {
+  outline: none;
+  border-color: #aaa;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
   .languageSelector {
-      padding-left: 0;
-      margin-right: 10px; /* Adjust margin as needed */
+    padding-left: 0;
+    margin-right: 10px;
   }
 
   .desktopMenu {
-      display: none;
+    display: none;
   }
 
   .mobileMenuButton {
-      display: block;
+    display: block;
+  }
+  /* mobileMenu language selector */
+  .mobileMenu .languageSelector {
+    border-top: 1px solid #ccc;
+    display: block;
   }
 }

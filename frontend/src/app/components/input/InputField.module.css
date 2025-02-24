@@ -1,0 +1,47 @@
+.inputContainer {
+    width: 100%;
+    max-height: 60px;
+  }
+  
+  /* Default Input Style */
+  .inputField {
+    background-color: white;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+  }
+  /* Hover Effect: Change border color */
+  .inputField:hover .MuiOutlinedInput-notchedOutline {
+    border-color: #00a653 !important; /* Green on hover */
+  }
+  
+  /* Focus Effect (When selected but no value is entered) */
+  .inputField:focus-within .MuiOutlinedInput-notchedOutline {
+    border-color: #ff914d !important; /* Orange when selected */
+  }
+  
+  /* Focus Effect (When selected and a value is typed) */
+  .inputField input:not(:placeholder-shown) + fieldset {
+    border-color: #009e54 !important; /* Orange when filled */
+  }
+  
+  /* Label color when input is focused */
+  .inputField:focus-within label {
+  }
+  
+  /* Change background slightly when selected */
+  .inputField:focus-within {
+    background-color: #f9f9f9;
+  }
+  
+  /* Text color */
+  .inputField input {
+    font-size: 16px;
+    padding: 16px;
+    color: #333;
+  }
+  
+  /* Change text color when typing */
+  .inputField input:focus {
+    color: #000;
+  }
+  

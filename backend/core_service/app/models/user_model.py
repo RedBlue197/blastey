@@ -45,6 +45,7 @@ class User(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     is_active = Column(Boolean, default=True)
     is_blocked = Column(Boolean, default=False)
     user_last_login_date = Column(DateTime, nullable=True)
+    is_newsletter_activated = Column(Boolean, default=False)
 
     user_rank = Column(Enum(UserRank), default=UserRank.BRONZE, nullable=False)
     user_role = Column(Enum(UserRole), default=UserRole.USER, nullable=False)

@@ -1,0 +1,34 @@
+/* PrivacyPolicyContent.module.css */
+.privacyPolicyContainer {
+    max-width: 800px;  /* Adjust as needed */
+    margin: 2rem auto;
+    padding: 2rem;
+    line-height: 1.6; /* Improve readability */
+}
+
+.privacyPolicyContainer h1 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.privacyPolicyContainer h2 {
+    font-size: 1.5em;
+    color: #444;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.privacyPolicyContainer p {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+/* Add more styles as needed, e.g., for lists, links, etc. */
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .privacyPolicyContainer {
+        padding: 1rem;
+    }
+}

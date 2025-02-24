@@ -1,0 +1,93 @@
+/* AboutUsContent.module.css */
+
+.aboutUsContainer {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  position: relative;
+}
+
+
+.logoContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+
+.imageContainer {
+  height: 400px;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.aboutUsImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.aboutUsTitle {
+  font-size: 2em;
+  color: #333;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.aboutUsSubtitle {
+  font-size: 1.5em;
+  color: #444;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.aboutUsParagraph {
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 1rem;
+  text-align: justify;  /* Justify text for paragraphs */
+}
+
+.aboutUsList {
+  list-style: disc;
+  padding-left: 20px;
+  margin-bottom: 1.5rem;
+}
+
+.listItemText {
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+
+.signatureText {
+  text-align: right;
+  font-style: italic;
+  margin-top: 2rem;
+  color: #777;
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .aboutUsContainer {
+      padding: 1.5rem 1rem; /* Reduced padding on smaller screens */
+  }
+
+  .aboutUsTitle {
+      font-size: 1.6em; /* Smaller title on smaller screens */
+  }
+
+  .aboutUsSubtitle {
+      font-size: 1.3em; /* Smaller subtitle on smaller screens */
+  }
+  .aboutUsList{
+      padding-left: 15px;
+  }
+}

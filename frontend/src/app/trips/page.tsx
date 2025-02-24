@@ -20,7 +20,7 @@ function Trips() {
       </Suspense> */}
 
       <Suspense fallback={<LoadingTripsList />}>
-        <TripsList />
+        <TripsList/>
       </Suspense>
     </main>
   );

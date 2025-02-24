@@ -1,19 +1,43 @@
-import React from 'react';
+import React from "react";
+import { TextField } from "@mui/material";
+import styles from "./InputField.module.css"; // Import CSS module
 
 interface InputFieldProps {
-  placeholder: string;
+  label: string;
+  type?: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
+  fullWidth?: boolean;
+  disabled?: boolean;
+  placeholder?: string;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ placeholder, value, onChange }) => {
+const InputField: React.FC<InputFieldProps> = ({
+  label,
+  type = "text",
+  value,
+  onChange,
+  required = false,
+  fullWidth = true,
+  disabled = false,
+  placeholder = "",
+}) => {
   return (
-    <input
-      className="border border-gray-300 rounded-lg py-2 px-4 w-full focus:outline-none focus:ring-2 focus:ring-[#00bf63] focus:border-transparent transition-all"
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-    />
+    <div className={styles.inputContainer}>
+      <TextField
+        className={styles.inputField}
+        label={label}
+        type={type}
+        value={value}
+        onChange={onChange}
+        required={required}
+        fullWidth={fullWidth}
+        disabled={disabled}
+        placeholder={placeholder}
+        variant="outlined"
+      />
+    </div>
   );
 };
 

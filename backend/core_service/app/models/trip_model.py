@@ -46,12 +46,6 @@ class Trip(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     #Foreign Keys
     host_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
 
-    #Relationships
-    trip_items = relationship("TripItem", backref="trip", cascade="all, delete-orphan")
-    trip_openings = relationship("TripOpening", backref="trip", cascade="all, delete-orphan")
-    trip_images = relationship("TripImage", backref="trip", cascade="all, delete-orphan")
-    trip_ratings = relationship("TripRating", backref="trip", cascade="all, delete-orphan")
-
 class TripItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "trip_items"
 

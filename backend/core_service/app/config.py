@@ -19,8 +19,8 @@ class DevSettings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080
     HS256_ALGORITHM: str = "HS256"
 
-    DATABASE_URL: str = os.getenv("DEV_DATABASE_URL", "postgresql://postgres:3SS5fe71@localhost:5432/db_blastey")
-    DATABASE_NAME: str = "db_blastey"
+    DATABASE_URL: str = os.getenv("DEV_DATABASE_URL", "postgresql://postgres:3SS5fe71@localhost:5432/db_blastey_2")
+    DATABASE_NAME: str = "db_blastey_2"
     DATABASE_USER: str = "postgres"
     DATABASE_PASSWORD: str = os.getenv("DEV_DATABASE_PASSWORD", "3SS5fe71")
     DATABASE_HOST: str = "localhost"

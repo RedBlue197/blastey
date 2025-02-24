@@ -51,7 +51,6 @@ from contextvars import ContextVar
 current_user_var = ContextVar('current_user', default=None)
 
 # Import models first
-import models.address_model as address_model
 import models.conversation_model as conversation_model
 import models.message_model as message_model
 import models.booking_model as booking_model
@@ -72,7 +71,6 @@ message_model.Base.metadata.create_all(bind=engine)
 booking_model.Base.metadata.create_all(bind=engine)
 payment_model.Base.metadata.create_all(bind=engine)
 rating_model.Base.metadata.create_all(bind=engine)
-address_model.Base.metadata.create_all(bind=engine)
 activity_model.Base.metadata.create_all(bind=engine)
 newsletter_model.Base.metadata.create_all(bind=engine)
 trip_model.Base.metadata.create_all(bind=engine)
@@ -102,21 +100,24 @@ include_frontoffice_routers = True
 if include_frontoffice_routers:
     from routers.frontoffice.v1 import (
         user_router as frontoffice_user_router,
-        address_router as frontoffice_address_router,
         activity_router as activity_router,
-        trip_router as trip_router,
-        auth_router as auth_router,
         city_router as city_router,
         newsletter_router as newsletter_router
     )
+    from routers.frontoffice.v1.anonymous import (
+        auth_router as auth_router,
+        trip_router as trip_router
+        )
 if include_frontoffice_routers:
     app.include_router(frontoffice_user_router.router)
-    app.include_router(frontoffice_address_router.router)
     app.include_router(activity_router.router)
-    app.include_router(trip_router.router)
     app.include_router(auth_router.router)
     app.include_router(city_router.router)
     app.include_router(newsletter_router.router)
+
+# Include anonymous routers
+app.include_router(auth_router.router)
+app.include_router(trip_router.router)
     
 
 @app.on_event("startup")

@@ -3,7 +3,7 @@
 import { useState, ChangeEvent } from "react";
 // import { signIn } from "next-auth/react"; // Uncomment for actual sign-in
 import styles from "./LoginModal.module.css"; // Import the CSS module
-import {fetchToken} from "@/services/internal_services/auth_api_handler"
+import {postUserLoginRequest} from "@/services/internal_services/anonymous_services/auth_api_handler"; // Import the API handler
 import { Toast } from '@/app/components';
 import { useToast } from "@/hooks/useToast"; // Import the custom hook
 import trackEvent from"@/utils/track_event"
@@ -36,11 +36,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         "username":email,
         "password":password
       }
-      const result = await fetchToken(
+      const result = await postUserLoginRequest(
               signInData,null
             ).then((response)=>{
-              if (response.status_code === 200) {
-                localStorage.setItem('token', response.data);
+              if (response.status_code === 200 && response.data) {
+                localStorage.setItem('token', response.data.token);
                 console.log("Successfully connected")
                 trackEvent('button_click', { buttonName: 'Sign Up' });
                 onClose();

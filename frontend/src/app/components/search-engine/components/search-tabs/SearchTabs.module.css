@@ -1,0 +1,72 @@
+ /* Container for the tab buttons */
+ .tabs {
+  background-color: #f0f4f8; /* A light background for contrast */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem; /* Reduced gap */
+  margin-bottom: 1.5rem; /* Space between tabs and the form */
+  padding: 0.5rem; /* Add padding for better spacing */
+  border-radius: 8px; /* Rounded corners for a modern look */
+  flex-wrap: wrap;
+}
+
+/* Individual tab button */
+.tab {
+  padding: 0.75rem 1.5rem;
+  background-color: transparent; /* Transparent for default */
+  color: #333; /* Darker color for text */
+  font-size: 1rem;
+  font-weight: 500;
+  border: 2px solid transparent; /* Transparent border by default */
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  flex: 1; /* Distribute space evenly */
+  text-align: center;
+  min-width: 100px;
+  box-sizing: border-box;
+}
+
+/* Active tab */
+.tab.active {
+  background-color: #00bf63; /* Primary color for active tab */
+  color: #fff; /* White text for contrast */
+  border: 2px solid #00bf63; /* Border matches active tab color */
+  font-weight: 600; /* Slightly bolder text for active state */
+}
+
+/* Hover effect for inactive tabs */
+.tab:not(.active):hover {
+  background-color: #e0f2eb; /* Light shade for hover */
+  color: #00bf63; /* Primary color for hover text */
+  border-color: #00bf63; /* Border changes color on hover */
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+  .tabs {
+    flex-direction: row; /* Keep the row direction */
+    gap: 0.25rem; /* Smaller gap between tabs */
+  }
+
+  .tab {
+    /* width: 100%; Full-width tabs on mobile */
+    text-align: center; /* Center text on mobile */
+     padding: 0.5rem 1rem; /* Reduced padding */
+     font-size: 0.9rem;
+  }
+}
+
+/* Larger screens */
+@media (min-width: 768px) {
+  .tabs {
+    flex-direction: row; /* Row layout for larger screens */
+  }
+
+  .tab {
+    min-width: 120px; /* Minimum width for consistent tab size */
+    text-align: center; /* Center text */
+  }
+}

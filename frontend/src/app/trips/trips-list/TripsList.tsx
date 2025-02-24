@@ -1,13 +1,20 @@
 "use client";
-import { useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
+import { useRouter } from 'next/navigation';  // Import useRouter
 import styles from './TripsList.module.css';
 import { fetchTrips, getTripsByCityName } from '@/services/internal_services/trip_api_handler';
 import FilterAndSearch from '../filter-and-search/FilterAndSearch';
 import TripCard from '../trip-card/TripCard';
 import LoadingTripsList from './loading/LoadingTripsList';
 import { Trip } from '@/types/trip';
+import Pagination from '@/app/components/pagination/Pagination'; // Import the Pagination component
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
-const TripsList = ({ cityName }: { cityName: string }) => {
+const TripsList = () => {
+  const { t } = useTranslation(); // Get the translation function
+  const { query } = useRouter();  // Access URL parameters
+  const cityName = query?.cityName ? (query.cityName as string) : '';  // Safely access cityName
+
   const [trips, setTrips] = useState<Trip[]>([]);
   const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -16,14 +23,14 @@ const TripsList = ({ cityName }: { cityName: string }) => {
   const [page, setPage] = useState<number>(1);
   const [hasMoreTrips, setHasMoreTrips] = useState<boolean>(true);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
-  const [limit] = useState<number>(10); 
+  const [limit] = useState<number>(10);
   const [totalPages, setTotalPages] = useState<number>(0);
-  
-  const getTrips = async (cityName:string,page: number) => {
+
+  const getTrips = async (cityName: string, page: number) => {
     console.log('Fetching trips...');
     try {
       if (cityName) {
-        const response = await getTripsByCityName(cityName,page, limit);
+        const response = await getTripsByCityName(cityName, page, limit);
         if (response.status_code === 200) {
           const newTrips = response.data.trips;
           const totalPages = response.pagination.total_pages;
@@ -36,7 +43,7 @@ const TripsList = ({ cityName }: { cityName: string }) => {
 
           setTrips(prevTrips => {
             // Filter out trips that are already in the state
-            const uniqueTrips = newTrips.filter(newTrip => 
+            const uniqueTrips = newTrips.filter(newTrip =>
               !prevTrips.some(existingTrip => existingTrip.trip_id === newTrip.trip_id)
             );
             return [...prevTrips, ...uniqueTrips];
@@ -58,7 +65,7 @@ const TripsList = ({ cityName }: { cityName: string }) => {
 
           setTrips(prevTrips => {
             // Filter out trips that are already in the state
-            const uniqueTrips = newTrips.filter(newTrip => 
+            const uniqueTrips = newTrips.filter(newTrip =>
               !prevTrips.some(existingTrip => existingTrip.trip_id === newTrip.trip_id)
             );
             return [...prevTrips, ...uniqueTrips];
@@ -66,24 +73,23 @@ const TripsList = ({ cityName }: { cityName: string }) => {
         } else {
           setHasMoreTrips(false);
         }
-    }} catch (error) {
+      }
+    } catch (error) {
       console.error('Error fetching trips:', error);
     }
   };
 
   // Fetch trips on initial render (only once)
   useEffect(() => {
-    getTrips(cityName,page); 
-  }, [page]); 
+    getTrips(cityName, page);
+  }, [cityName, page]);  // Ensure cityName is watched and updates the trips
 
-  // Fetch trips when "Show More" is clicked
   const handleShowMore = () => {
     setLoadingMore(true);
     setPage(prevPage => prevPage + 1); // Update the page state to trigger getTrips
     setLoadingMore(false);
   };
 
-  // Filter and sort trips when search, sort, or filter options change
   useEffect(() => {
     let filtered = trips.filter(trip =>
       trip.trip_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -111,11 +117,17 @@ const TripsList = ({ cityName }: { cityName: string }) => {
     setFilteredTrips(filtered);
   }, [searchQuery, sortOption, filterOption, trips]);
 
+  // Handle page navigation
+  const handlePageChange = (newPage: number) => {
+    //  Removed totalPages from here.
+    setPage(newPage);
+  };
+
   return (
     <Suspense fallback={<LoadingTripsList />}>
       <div className={styles.container}>
-        <h1 className="page-title">Traveller Trips</h1>
-        <h2 className="section-title">Modify Your Search</h2>
+        <h1 className="page-title">{t('tripsList.pageTitle')}</h1>
+        <h2 className="section-title">{t('tripsList.modifySearch')}</h2>
 
         <FilterAndSearch
           searchQuery={searchQuery}
@@ -127,24 +139,46 @@ const TripsList = ({ cityName }: { cityName: string }) => {
         />
 
         {filteredTrips.length === 0 ? (
-          <p>No trips are available.</p>
+          <div className={styles.noTripsContainer}>
+            <p className={styles.noTripsMessage}>{t('tripsList.noTripsAvailable')}</p>
+            <img src="/no_content.webp" alt={t('tripsList.noTripsAlt')} className={styles.noTripsImage}/>
+            <div className={styles.paginationContainer}>
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+          </div>
         ) : (
+          <>
           <div className={styles.tripList}>
             {filteredTrips.map(trip => (
               <TripCard key={trip.trip_id} trip={trip} />
             ))}
           </div>
-        )}
-
-        {hasMoreTrips && (
+           {hasMoreTrips && (
           <button
             onClick={handleShowMore}
             className={`btn-secondary ${styles.showMoreButton}`}
             disabled={loadingMore}
           >
-            {loadingMore ? 'Loading...' : 'Show More'}
+            {loadingMore ? t('tripsList.loading') : t('tripsList.showMore')}
           </button>
         )}
+          {hasMoreTrips && <div className={styles.paginationContainer}>
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>}
+          </>
+        )}
+
+        {/* Pagination Controls - moved to the end */}
+
+
       </div>
     </Suspense>
   );
