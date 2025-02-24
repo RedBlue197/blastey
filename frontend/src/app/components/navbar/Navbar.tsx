@@ -1,12 +1,12 @@
 "use client";
-import { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../../i18n';
 import LoginModal from '../login-modal/LoginModal';
-import { useAuth } from '@/context/AuthContext'; // Ensure this path is correct
+import { useAuth } from '@/context/AuthContext';
 import styles from './Navbar.module.css';
-import TransitionLink from '@/hooks/useTransitionLink'; // Ensure this path is correct
+import Link from 'next/link';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -14,7 +14,30 @@ export default function Navbar() {
   const { t } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, userRole, logout } = useAuth(); // Using useAuth hook
+  const { isAuthenticated, userRole, logout } = useAuth();
+  const [isMobile, setIsMobile] = useState(false);
+  const [activePath, setActivePath] = useState('');
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Extract the first segment of the pathname
+    const pathSegments = pathname.split('/');
+    const firstSegment = pathSegments[1] || '/'; // Default to '/' if no segment
+    setActivePath('/' + firstSegment);  // Update activePath with leading slash
+  }, [pathname]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -25,21 +48,21 @@ export default function Navbar() {
     router.push(path);
   };
 
-  const getLinkClass: (path: string, size?: 'small' | 'medium' | 'large') => string = (
-    path: string,
-    size: 'small' | 'medium' | 'large' = 'medium'
-  ): string => {
-    const sizeClass =
-      size === 'small'
-        ? styles.buttonSmall
-        : size === 'large'
-        ? styles.buttonLarge
-        : styles.buttonMedium;
+  const getLinkClass = useCallback(
+    (path: string, size: 'small' | 'medium' | 'large' = 'medium'): string => {
+      const sizeClass =
+        size === 'small'
+          ? styles.buttonSmall
+          : size === 'large'
+          ? styles.buttonLarge
+          : styles.buttonMedium;
 
-    return pathname === path
-      ? `${styles.activeLink} ${styles.link} ${sizeClass}`
-      : `${styles.link} ${sizeClass}`;
-  };
+      return activePath === path
+        ? `${styles.activeLink} ${styles.link} ${sizeClass}`
+        : `${styles.link} ${sizeClass}`;
+    },
+    [activePath]
+  );
 
   const openLoginModal = () => {
     setIsModalOpen(true);
@@ -49,8 +72,7 @@ export default function Navbar() {
     setIsModalOpen(false);
   };
 
-  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLanguage = event.target.value;
+  const handleLanguageChange = (newLanguage: string) => {
     i18n.changeLanguage(newLanguage);
   };
 
@@ -63,52 +85,59 @@ export default function Navbar() {
           </div>
           <div className={styles.desktopMenuLangage}>
             <div className={styles.desktopMenu}>
-            <TransitionLink href="/" className={getLinkClass('/home','medium')}>
-              {t('navbar.home')}
-            </TransitionLink>
+              <Link href="/" className={getLinkClass('/')}>
+                {t('navbar.home')}
+              </Link>
 
-              {/* Conditionally render links based on authentication and role */}
               {isAuthenticated ? (
                 <>
                   {userRole === 'admin' && (
-                    <TransitionLink href="/admin" className={getLinkClass('/admin', 'medium')}>
+                    <Link href="/admin" className={getLinkClass('/admin')}>
                       {t('admin.admin')}
-                    </TransitionLink>
+                    </Link>
                   )}
-                  <TransitionLink href="/admin" onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                  <Link href="/trips" className={getLinkClass('/trips')}>
                     {t('navbar.trips')}
-                  </TransitionLink>
-                  <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                  </Link>
+                  <button onClick={logout} className={getLinkClass('/dashboard')}>
                     {t('navbar.dashboard')}
                   </button>
-                  <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                  <button onClick={logout} className={getLinkClass('/manage-trips')}>
                     {t('navbar.manage-trips')}
                   </button>
-                  <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                  <button onClick={logout} className={getLinkClass('/profile')}>
                     {t('navbar.profile')}
                   </button>
-                  <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+                  <button onClick={logout} className={getLinkClass('/logout')}>
                     {t('navbar.logout')}
                   </button>
                 </>
               ) : (
                 <>
-                  <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
+                  <Link href="/trips" className={getLinkClass('/trips')}>
                     {t('trips.trips')}
-                  </button>
-                  <button onClick={openLoginModal} className={getLinkClass('/login', 'medium')}>
-                    {t('login.login')}
+                  </Link>
+                  <button className={getLinkClass('/login')} onClick={openLoginModal}>
+                    {t('navbar.login')}
                   </button>
                 </>
               )}
             </div>
 
-            <div className={styles.languageSelector}>
-              <select value={i18n.language} onChange={handleLanguageChange}>
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-              </select>
-            </div>
+            {/* Remove language selector from here in desktop view */}
+            {!isMobile && (
+              <div className={styles.languageSelector}>
+                {/* Language Select */}
+                <select
+                  value={i18n.language}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
+                  className={styles.languageSelect}
+                >
+                  <option value="en">EN</option>
+                  <option value="fr">FR</option>
+                </select>
+              </div>
+            )}
           </div>
 
           <div className={styles.mobileMenuButton}>
@@ -142,16 +171,16 @@ export default function Navbar() {
               <button onClick={() => navigate('/trips')} className={getLinkClass('/trips', 'medium')}>
                 {t('navbar.trips')}
               </button>
-              <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+              <button onClick={logout} className={styles.desktopMenu}>
                 {t('navbar.dashboard')}
               </button>
-              <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+              <button onClick={logout} className={styles.desktopMenu}>
                 {t('navbar.manage-trips')}
               </button>
-              <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+              <button onClick={logout} className={styles.navbarButton}>
                 {t('navbar.profile')}
               </button>
-              <button onClick={logout} className={getLinkClass('/logout', 'medium')}>
+              <button onClick={logout} className={styles.navbarButton}>
                 {t('navbar.logout')}
               </button>
             </>
@@ -165,6 +194,18 @@ export default function Navbar() {
               </button>
             </>
           )}
+          {/* Add language selector to the mobile menu */}
+          <div className={styles.languageSelector}>
+            {/* Language Select */}
+            <select
+              value={i18n.language}
+              onChange={(e) => handleLanguageChange(e.target.value)}
+              className={styles.languageSelect}
+            >
+              <option value="en">EN</option>
+              <option value="fr">FR</option>
+            </select>
+          </div>
         </div>
       )}
 

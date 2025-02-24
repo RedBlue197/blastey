@@ -5,7 +5,9 @@ from config import settings
 from fastapi import APIRouter, HTTPException, status
 from dependencies.db_dependency import db_dependency
 
-from schemas.auth_schema import LoginRequest
+from schemas.anonymous.auth_schema import (
+    LoginRequest
+    )
 
 from utils.responses import api_response
 
@@ -14,13 +16,13 @@ from utils.responses import api_response
 
 
 router=APIRouter(
-    prefix="/core/frontoffice/v1",
+    prefix="/core/frontoffice/v1/anonymous/auth",
     tags=['Backoffice Authentification']
 )
 
 
 
-@router.post("/token", status_code=status.HTTP_200_OK)
+@router.post("/login", status_code=status.HTTP_200_OK)
 async def login_for_access_token(login_request: LoginRequest,db:db_dependency):
     user = authenticate_user(login_request.username, login_request.password, db)
     if not user :
@@ -33,7 +35,11 @@ async def login_for_access_token(login_request: LoginRequest,db:db_dependency):
     }
     token= create_access_token(data,timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
     return api_response(
-    data=token,
+    data={
+        "token": token,
+        "user_email": data["user_email"],
+        "user_id": str(data["user_id"]),
+    },
     status_code=200
 )
 

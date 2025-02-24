@@ -1,7 +1,10 @@
+/* TripsList.module.css */
 .container {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  position: relative; /* For absolute positioning of pagination */
+  min-height: 500px; /* or adjust based on content */
 }
 
 .filterSection {
@@ -36,7 +39,8 @@
   gap: 10px; /* Space between dropdowns */
 }
 
-.filterSelect, .sortSelect {
+.filterSelect,
+.sortSelect {
   padding: 10px; /* Padding for select elements */
   font-size: 16px; /* Font size for the select */
   border: 1px solid #ccc; /* Border style */
@@ -51,11 +55,11 @@
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
-
 .showMoreButton:disabled {
   opacity: 0.6; /* Make button look disabled */
   cursor: not-allowed; /* Change cursor to show it's not clickable */
 }
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -70,7 +74,7 @@
   padding: 10px 20px;
   cursor: pointer;
   margin: 0 10px;
-  border-radius: 5px;  /* Smooth corners */
+  border-radius: 5px; /* Smooth corners */
   font-size: 1rem;
   font-weight: bold;
   transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
@@ -95,37 +99,6 @@
 
 .pageInfo span {
   font-weight: bold; /* Make page info bold */
-}
-
-
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .filterSection {
-    flex-direction: column; /* Stack elements in mobile view */
-  }
-
-  .searchContainer {
-    width: 100%; /* Make search container full width */
-  }
-
-  .searchBar {
-    width: 100%; /* Full width for search bar */
-  }
-
-  .filterControls {
-    flex-direction: column; /* Stack filter controls */
-    width: 100%; /* Full width */
-  }
-
-  .filterSelect,
-  .sortSelect {
-    width: 100%; /* Full width for dropdowns */
-  }
-  .showMoreButton {
-    width: 100%; /* Full width on mobile */
-    align-self: stretch; /* Make the button fill the container */
-  }
 }
 
 .tripList {
@@ -183,7 +156,61 @@
 }
 
 /* No trips message */
-.noTripsMessage {
+.noTripsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border-radius: 8px;
   text-align: center;
-  color: #888; /* Color for the no trips message */
+  min-height: 300px; /* Ensure some minimum height */
+}
+
+.noTripsMessage {
+  font-size: 1.2rem;
+  color: #777;
+  margin-bottom: 1rem;
+}
+
+.noTripsImage {
+  max-width: 300px;
+  height: auto;
+  opacity: 0.7;
+}
+
+.paginationContainer {
+  position: relative;  /* Changed to relative - IMPORTANT */
+  width: 100%;        /* Make it full width */
+  margin-top: 2rem;  /* Space between content and pagination */
+  text-align: center;    /* Center the pagination controls */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .filterSection {
+    flex-direction: column; /* Stack elements in mobile view */
+  }
+
+  .searchContainer {
+    width: 100%; /* Make search container full width */
+  }
+
+  .searchBar {
+    width: 100%; /* Full width for search bar */
+  }
+
+  .filterControls {
+    flex-direction: column; /* Stack filter controls */
+    width: 100%; /* Full width */
+  }
+
+  .filterSelect,
+  .sortSelect {
+    width: 100%; /* Full width for dropdowns */
+  }
+  .showMoreButton {
+    width: 100%; /* Full width on mobile */
+    align-self: stretch; /* Make the button fill the container */
+  }
 }

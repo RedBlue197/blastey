@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query,Request
+from fastapi import APIRouter, Query,Request, status
 
 from dependencies.db_dependency import db_dependency
 
@@ -8,6 +8,10 @@ from responses.trip_response import (
     GetTripsResponse,
     GetTripByIdResponse,
     )
+
+from schemas.trip_schema import (
+    CreateTripSearchRequest
+)
 
 from utils.responses import api_response
 
@@ -95,3 +99,45 @@ async def get_trip_by_id(
             message="Trip not found",
             status_code=404
             )
+
+#----------------------------------------------------POST ENDPOINTS----------------------------------------------------
+
+
+@router.post("/create-trip-search",status_code=status.HTTP_201_CREATED)
+async def create_trip_search(
+    db: db_dependency,
+    trip_search: CreateTripSearchRequest,
+    page: int = Query(1, ge=1),
+    items_per_page: int = Query(10, le=100),
+    ):
+
+    offset = (page - 1) * items_per_page
+    limit = items_per_page
+
+    # Query trips with pagination using the interface
+
+    # Calculate total pages
+    try :
+        trip_search_obj,total_count = TripInterface(db=db).create_trip_search(trip_search, offset, limit)
+        if not trip_search_obj['trips']:
+            return api_response(
+                message="Trip search not found",
+                status_code=201
+            )
+        else: 
+            trip_search_response = GetTripsResponse.model_validate(trip_search_obj, from_attributes=True)
+            total_pages = (total_count + items_per_page - 1) // items_per_page
+            return api_response(
+                data=trip_search_response,
+                message="Trip search created",
+                status_code=201,
+                total_count=total_count,
+                current_page=page,
+                total_pages=total_pages,
+                items_per_page=items_per_page,
+            )
+    except Exception as e:
+        return api_response(
+            message="Failed to create trip search: " + str(e),
+            status_code=500
+        )

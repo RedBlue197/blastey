@@ -1,21 +1,23 @@
-/* Wrapper for the search engine form and tabs */
-.searchEngine {
+ /* Wrapper for the search engine form and tabs */
+ .searchEngine {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center; /* Center the content */
   box-sizing: border-box;
-  width: fit-content;
+  width: 90%; /* Make it responsive */
   padding: 1.5rem; /* Add padding for spacing */
+  max-width: fit-content;
   background-color: #ffffff; /* Light background for the entire section */
   border-radius: 8px; /* Rounded corners for a softer look */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  margin: 0 auto; /* Center the component horizontally */
 }
 
 /* Tabs section */
 .tabs {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .tab {
@@ -52,6 +54,8 @@
   gap: 1rem;
   width: 100%;
   height: max-content;
+  flex-direction: column; /* Stack forms vertically */
+  align-items: stretch; /* Make forms take full width */
 }
 
 /* Form group container */
@@ -92,15 +96,13 @@
 
 @media (min-width: 768px) {
   .searchForm {
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
+    flex-direction: column; /* Stack forms vertically */
+    align-items: stretch; /* Make forms take full width */
   }
 
   .formGroup {
-    flex-direction: row;
-    align-items: center;
-    width: auto;
+    flex-direction: column;
+    width: 100%;
   }
 
   .formGroup label {

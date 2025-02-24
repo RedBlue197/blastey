@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {jwtDecode} from 'jwt-decode'; // Import jwt-decode
 

@@ -232,7 +232,7 @@ export async function createTripSearch(create_trip_search_data:CreateTripSearchI
     // Make API request
     const response = await makeAPIRequest<{ data: any }>(
       microservices.CORE, // Replace with your actual microservice name
-      endpoints.trips.CREATE.CREATE_TRIP_SEARCH+"?page="+page.toString()+"&items_per_page="+limit.toString(), // Endpoint
+      endpoints.anonymous.trips.POST.POST_SEARCH_TRIPS+"?page="+page.toString()+"&items_per_page="+limit.toString(), // Endpoint
       {
         method: 'POST',
         data: create_trip_search_data,

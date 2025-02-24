@@ -35,7 +35,6 @@ class Activity(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByM
 
     #Foreign Keys
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
-    address_id = Column(UUID(as_uuid=True), ForeignKey("addresses.address_id", ondelete="SET NULL"), nullable=True)
 
 
 class ActivityItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):

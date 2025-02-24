@@ -1,14 +1,15 @@
-/* Container for the tab buttons */
-.tabs {
+ /* Container for the tab buttons */
+ .tabs {
   background-color: #f0f4f8; /* A light background for contrast */
   display: flex;
   justify-content: center;
   width: 100%;
   align-items: center;
-  gap: 1rem; /* Space between tabs */
+  gap: 0.5rem; /* Reduced gap */
   margin-bottom: 1.5rem; /* Space between tabs and the form */
   padding: 0.5rem; /* Add padding for better spacing */
   border-radius: 8px; /* Rounded corners for a modern look */
+  flex-wrap: wrap;
 }
 
 /* Individual tab button */
@@ -22,6 +23,10 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  flex: 1; /* Distribute space evenly */
+  text-align: center;
+  min-width: 100px;
+  box-sizing: border-box;
 }
 
 /* Active tab */
@@ -42,13 +47,15 @@
 /* Responsive styling for smaller screens */
 @media (max-width: 768px) {
   .tabs {
-    flex-direction: column; /* Stack tabs vertically */
-    gap: 0.5rem; /* Smaller gap between tabs */
+    flex-direction: row; /* Keep the row direction */
+    gap: 0.25rem; /* Smaller gap between tabs */
   }
 
   .tab {
-    width: 100%; /* Full-width tabs on mobile */
+    /* width: 100%; Full-width tabs on mobile */
     text-align: center; /* Center text on mobile */
+     padding: 0.5rem 1rem; /* Reduced padding */
+     font-size: 0.9rem;
   }
 }
 

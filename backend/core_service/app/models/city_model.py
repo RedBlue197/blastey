@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, Float,Boolean
 from sqlalchemy.orm import relationship
 from database import Base
 from sqlalchemy.dialects.postgresql import UUID
@@ -18,6 +18,8 @@ class City(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     city_longitude = Column(Float, nullable=True)
     city_image = Column(String, nullable=True)
     city_code = Column(String, nullable=True)
+    is_popular = Column(Boolean,default=False)
+    is_new = Column(Boolean,default=False)
 
 
 

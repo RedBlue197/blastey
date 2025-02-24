@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SearchTabs from './components/search-tabs/SearchTabs';
-import TripsForm from './components/trips-form/TripsForm'; 
-import styles from './SearchEngine.module.css'; 
+import TripsForm from './components/trips-form/TripsForm';
+import styles from './SearchEngine.module.css';
 import { CreateTripSearchInterface } from '@/types/trip';
 import { createTripSearch } from '@/services/internal_services/trip_api_handler';
 
@@ -23,7 +23,7 @@ const SearchEngine: React.FC = () => {
       trip_search_end_date: formData.returnDate,
       trip_search_comment: formData.comments,
     };
-    
+
     try {
       const response = await createTripSearch(tripSearchData, 1, 20);
       if (response.status_code === 201) {
@@ -44,6 +44,7 @@ const SearchEngine: React.FC = () => {
       <div className={styles.searchFormRow}>
         <div className={styles.searchForm}>
           {selectedTab === 'trips' && <TripsForm onSubmit={handleFormSubmit} />}
+          {selectedTab === 'activities' && <TripsForm onSubmit={handleFormSubmit} />} {/* Conditional rendering for ActivitiesForm */}
         </div>
       </div>
     </div>

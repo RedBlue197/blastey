@@ -1,23 +1,32 @@
 .searchForm {
   display: flex;
-  flex-direction: row; /* Ensures elements stack in a column by default */
+  flex-direction: column; /* Stack elements vertically by default */
   gap: 1rem; /* Space between form elements */
   position: relative;
-  width: fit-content;
-  align-items: center;
-
+  width: 100%; /* Take full width */
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f9f9f9; /* Light background */
+  box-sizing: border-box; /* Important to include padding and border in width calculation */
 }
 
 /* Form group styling */
 .formGroup {
-  flex: 1;
-  min-width: 150px; /* Minimum width to ensure responsive behavior */
+  width: 100%; /* Occupy full width on smaller screens */
   position: relative; /* Needed for absolute positioning of suggestion lists */
 }
 
 .formGroupButton {
-  position: relative; /* Needed for absolute positioning of suggestion lists */
-  width: fit-content;
+  width: 100%;
+  display: flex;         /* Enable flexbox */
+  justify-content: center; /* Center content horizontally */
+  text-align: center;    /* Center text within the button */
+
+}
+
+/* Style for the TextField inside DateRangePicker */
+.formGroup > div > div > div > div > div > div > TextField{
+    width: 48%;
 }
 
 /* Suggestion list styling */
@@ -44,44 +53,44 @@
   background-color: #f5f5f5;
 }
 
-/* Styling for the search button */
-.searchButton {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 600;
-  background-color: #00bf63; /* Primary color */
-  color: white;
-  height: 57px; /* Ensure consistent height */
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-  padding: 0.75rem 1rem;
-}
-
-.searchButton:hover {
-  background-color: #009e54; /* Darker shade for hover effect */
-}
-
 /* Responsive styling for larger screens */
 @media (min-width: 768px) {
   .searchForm {
     flex-direction: row; /* Changes to row layout on larger screens */
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Prevent wrapping */
     justify-content: space-between;
-    align-items: flex-end; /* Aligns items to the bottom of the row */
+    align-items: center; /* Align items vertically in the same line */
   }
 
   .formGroup {
-    width: 30%; /* Adjust width to fit more fields in a single row */
+    width: auto; /* Adjust width to fit more fields in a single row */
+    flex: 1;       /* Let the form groups distribute the space */
+    margin-bottom: 0;
   }
 
-  /* Adjust button size and position */
-  .searchButtonWrapper {
+  /* Ensure the DateRangePicker takes up the space it needs */
+  .formGroup > div {
+    width: 100%; /* Let the DateRangePicker manage its internal layout */
+  }
+
+    .formGroup > div > div > div > div > div > div > TextField{
+        width: 48%;
+   }
+
+  .formGroupButton {
     width: auto;
-    margin-top: 0; /* Inline alignment */
+    display: flex;          /* Enable flexbox */
+    justify-content: center;  /* Center content horizontally */
+    text-align: center;     /* Center text within the button */
+    align-self: stretch; /* Make the button the same height as other elements */
   }
 
-  .searchButtonWrapper button {
-    padding: 0.75rem 1.5rem;
+  .PrimaryButton {
+    width: fit-content;   /* Button fits to content */
+    margin: 0 auto;        /* Center the button */
+  }
+  
+  .TextField {
+    width: 100%;/* Adjust width to fit more fields in a single row */
   }
 }

@@ -1,0 +1,39 @@
+/* TermsAndConditionsContent.module.css */
+.termsAndConditionsContainer {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    line-height: 1.6;
+}
+
+.termsAndConditionsContainer h1 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.termsAndConditionsContainer h2 {
+    font-size: 1.5em;
+    color: #444;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.termsAndConditionsContainer p {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.listItemText {
+    color: #666;
+    margin-bottom: 0.5rem;
+    list-style-type: disc; /* Add bullet points */
+    margin-left: 20px;   /* Indent list items */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .termsAndConditionsContainer {
+        padding: 1rem;
+    }
+}

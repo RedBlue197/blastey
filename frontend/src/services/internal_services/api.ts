@@ -1,13 +1,15 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { createCipheriv, randomBytes } from 'crypto';
+import Cookies from 'js-cookie'; // Import js-cookie
 
-const URL = 'localhost:8000'; // Replace with your actual URL
-const BASE_URL = 'http://' + URL;
-export const WS_BASE_URL = 'ws://' + URL + '/mobile-app/v1/messages/ws/';
+import config from "@/config";
+
+export const BASE_URL = config.apiUrl;
+export const WS_BASE_URL = 'ws://' + BASE_URL + '/mobile-app/v1/messages/ws/';
 
 const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000, // 10 seconds timeout
+  timeout: 30000, // 10 seconds timeout
   headers: {
     'Content-Type': 'application/json',
   },
@@ -17,11 +19,11 @@ interface MakeAPIRequestOptions {
   version?: string; // Default to 'v1' or 'v2'
   headers?: Record<string, string>;
   withCredentials?: boolean; // To indicate if the request needs credentials
-  data?: any;
+  data?: unknown;
   microservice?: string;
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'; // Specify HTTP method
-  encrypt?: boolean; // New parameter to specify whether encryption is needed
-  [key: string]: any; // Allow for other Axios request options
+  encrypt?: boolean; // To indicate if the request data should be encrypted
+  method?: 'GET' | 'POST' | 'PATCH' |'PUT' | 'DELETE'; // Specify HTTP method
+  [key: string]: unknown; // Allow for other Axios request options
 }
 
 // Define your AES encryption key (32 bytes for AES-256) and initialization vector (IV)
@@ -29,7 +31,7 @@ const AES_SECRET_KEY = Buffer.from('04f5e5332f60cbe3f35f4a7d2525b9ce2678e3590db1
 const IV = randomBytes(16); // IV should be 16 bytes
 
 // Function to encrypt data
-const encryptData = (data: any) => {
+const encryptData = (data: unknown) => {
   if (data === undefined || data === null) {
     throw new Error("Data to encrypt cannot be undefined or null");
   }
@@ -44,18 +46,34 @@ const encryptData = (data: any) => {
   return { iv: IV.toString('hex'), encryptedData: encrypted };
 };
 
+interface PaginationMetadata {
+  total_count: number;
+  current_page: number;
+  total_pages: number;
+  items_per_page: number;
+}
+
+interface APIResponse<T> {
+  success: boolean;
+  message: string;
+  data?: T;
+  pagination: PaginationMetadata;
+  status_code?: number;
+  cacheable?: boolean;
+}
+
 export const makeAPIRequest = async <T>(
   microservice: string,
   endpoint: string,
   options: MakeAPIRequestOptions = {}
-): Promise<T> => {
+): Promise<APIResponse<T>> => {
   const {
     version = 'v1',
     headers = {},
-    withCredentials = false, // Default value for withCredentials
+    withCredentials = false,
     data = null,
     method = 'GET',
-    encrypt = true, // Default to encrypting data unless specified otherwise
+    encrypt = true,
     ...rest
   } = options;
 
@@ -70,36 +88,40 @@ export const makeAPIRequest = async <T>(
     ...rest,
   };
 
-  // Get the token from local storage if withCredentials is true
+  // Add token to headers if necessary
   if (withCredentials) {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null; // Access local storage only in the browser context
+    const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
   } else if (options.token && config.headers) {
-    // If a token was passed in options, use that
     config.headers.Authorization = `Bearer ${options.token}`;
   }
 
-  // Encrypt data if encryption is enabled
+  // Encrypt data if required
   if (data) {
     if (encrypt) {
       try {
         const { iv, encryptedData } = encryptData(data);
-        config.data = { iv, data: encryptedData }; // Wrap the encrypted data inside a 'data' object
+        config.data = { iv, data: encryptedData };
       } catch (error) {
         console.error("Error encrypting data:", error);
         throw error;
       }
     } else {
-      // Send data as-is without encryption
       config.data = data;
     }
   }
 
   try {
     const response = await api(config);
-    return response.data as T;
+
+    // The response is expected to match the APIResponse structure
+    const apiResponse: APIResponse<T> = response.data;
+
+    // Optionally handle pagination, success, and other response properties here
+
+    return apiResponse;
   } catch (error) {
     console.error("API request error:", error);
     throw error;

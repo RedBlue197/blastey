@@ -4,7 +4,7 @@
   flex-direction: column; /* Stacked layout by default */
   gap: 1rem; /* Space between form fields */
   width: 100%;
-  max-width: 1200px; /* Keep the max width for the desktop view */
+  /* max-width: 1200px;  Keep the max width for the desktop view */
   background-color: white; /* Form background */
   border-radius: 8px; /* Rounded corners */
 }
@@ -39,14 +39,14 @@
 /* Responsive styling for larger screens */
 @media (min-width: 768px) {
   .searchForm {
-    flex-direction: row; /* Change to row layout on larger screens */
+    flex-direction: column; /* Change to row layout on larger screens */
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: flex-end; /* Align items to the bottom of the row */
+    align-items: stretch;
   }
 
   .formGroup {
-    width: 30%; /* Adjust width to allow more form fields in the same row */
+    width: 100%; /* Adjust width to allow more form fields in the same row */
   }
 
   /* Search button should be on the left side and smaller */

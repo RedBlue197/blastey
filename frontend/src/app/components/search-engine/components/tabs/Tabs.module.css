@@ -1,52 +1,96 @@
-.journeyTypeRadio {
+.searchForm {
   display: flex;
-  justify-content: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  background-color: #f0f3f7;
-  border-radius: 3rem;
-  padding: 1em;
-  width: fit-content;
-}
-
-.journeyTypeRadioItem {
-  display: flex;
-  align-items: center;
-}
-
-.radioInput {
-  display: none;
-}
-
-.tab {
+  flex-direction: column; /* Stack elements vertically */
+  gap: 1rem; /* Space between form elements */
   position: relative;
-  padding-left: 2rem;
-  cursor: pointer;
-  font-size: 1rem;
-  color: #333;
-  transition: color 0.3s ease;
+  width: 100%; /* Take full width */
+  align-items: stretch; /* Stretch items to fill the container */
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f9f9f9; /* Light background */
 }
 
-.tab::before {
-  content: '';
+/* Form group styling */
+.formGroup {
+  flex: 1;
+  min-width: auto;
+  position: relative; /* Needed for absolute positioning of suggestion lists */
+}
+
+.formGroupButton {
+  position: relative; /* Needed for absolute positioning of suggestion lists */
+  width: 100%;
+}
+
+/* Suggestion list styling */
+.suggestionsList {
   position: absolute;
+  top: 100%; /* Aligns the list just below the input field */
   left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid #ccc;
-  border-radius: 50%;
+  width: 100%; /* Matches the width of the input field */
+  max-height: 150px; /* Limits the height of the list */
+  overflow-y: auto; /* Adds scroll if too many suggestions */
   background-color: white;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  border: 1px solid #ccc;
+  z-index: 10; /* Ensures the list appears above other elements */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
 }
 
-.radioInput:checked + .tab::before {
-  background-color: #1668d6;
-  border-color: #1668d6;
+.suggestionItem {
+  padding: 8px;
+  cursor: pointer;
 }
 
-.radioInput:checked + .tab {
-  color: #1668d6;
-  font-weight: bold;
+.suggestionItem:hover {
+  background-color: #f5f5f5;
+}
+
+/* Styling for the search button */
+.searchButton {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+  background-color: #00bf63; /* Primary color */
+  color: white;
+  height: 57px; /* Ensure consistent height */
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  padding: 0.75rem 1rem;
+}
+
+.searchButton:hover {
+  background-color: #009e54; /* Darker shade for hover effect */
+}
+
+/* Responsive styling for larger screens */
+@media (min-width: 768px) {
+  .searchForm {
+    flex-direction: row; /* Changes to row layout on larger screens */
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch; /* Aligns items to the bottom of the row */
+  }
+
+  .formGroup {
+    width: calc(50% - 0.5rem); /* Adjust width to fit more fields in a single row */
+  }
+
+   .formGroup:last-child {
+    width: 100%; /* Ensure full width for the last element */
+  }
+
+  .formGroupButton {
+      width: 100%;
+      text-align: right; /* Align button to the right */
+  }
+
+    .PrimaryButton{
+      width: fit-content;
+      margin-left: auto;
+    }
+    .TextField{
+       width: calc(50% - 0.5rem); /* Adjust width to fit more fields in a single row */
+    }
 }

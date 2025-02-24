@@ -1,4 +1,4 @@
-"use client";"use client";
+"use client";
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';  // Import useRouter
 import styles from './TripsList.module.css';
@@ -7,8 +7,11 @@ import FilterAndSearch from '../filter-and-search/FilterAndSearch';
 import TripCard from '../trip-card/TripCard';
 import LoadingTripsList from './loading/LoadingTripsList';
 import { Trip } from '@/types/trip';
+import Pagination from '@/app/components/pagination/Pagination'; // Import the Pagination component
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const TripsList = () => {
+  const { t } = useTranslation(); // Get the translation function
   const { query } = useRouter();  // Access URL parameters
   const cityName = query?.cityName ? (query.cityName as string) : '';  // Safely access cityName
 
@@ -116,15 +119,15 @@ const TripsList = () => {
 
   // Handle page navigation
   const handlePageChange = (newPage: number) => {
-    if (newPage < 1 || newPage > totalPages) return; // Prevent going out of bounds
+    //  Removed totalPages from here.
     setPage(newPage);
   };
 
   return (
     <Suspense fallback={<LoadingTripsList />}>
       <div className={styles.container}>
-        <h1 className="page-title">Traveller Trips</h1>
-        <h2 className="section-title">Modify Your Search</h2>
+        <h1 className="page-title">{t('tripsList.pageTitle')}</h1>
+        <h2 className="section-title">{t('tripsList.modifySearch')}</h2>
 
         <FilterAndSearch
           searchQuery={searchQuery}
@@ -136,43 +139,46 @@ const TripsList = () => {
         />
 
         {filteredTrips.length === 0 ? (
-          <p>No trips are available.</p>
+          <div className={styles.noTripsContainer}>
+            <p className={styles.noTripsMessage}>{t('tripsList.noTripsAvailable')}</p>
+            <img src="/no_content.webp" alt={t('tripsList.noTripsAlt')} className={styles.noTripsImage}/>
+            <div className={styles.paginationContainer}>
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+          </div>
         ) : (
+          <>
           <div className={styles.tripList}>
             {filteredTrips.map(trip => (
               <TripCard key={trip.trip_id} trip={trip} />
             ))}
           </div>
-        )}
-
-        {hasMoreTrips && (
+           {hasMoreTrips && (
           <button
             onClick={handleShowMore}
             className={`btn-secondary ${styles.showMoreButton}`}
             disabled={loadingMore}
           >
-            {loadingMore ? 'Loading...' : 'Show More'}
+            {loadingMore ? t('tripsList.loading') : t('tripsList.showMore')}
           </button>
         )}
+          {hasMoreTrips && <div className={styles.paginationContainer}>
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>}
+          </>
+        )}
 
-        {/* Pagination Controls */}
-        <div className={styles.pagination}>
-          <button
-            onClick={() => handlePageChange(page - 1)}
-            disabled={page <= 1}
-            className="pagination-button"
-          >
-            Previous
-          </button>
-          <span className={styles.pageInfo}>Page {page} of {totalPages}</span>
-          <button
-            onClick={() => handlePageChange(page + 1)}
-            disabled={page >= totalPages}
-            className="pagination-button"
-          >
-            Next
-          </button>
-        </div>
+        {/* Pagination Controls - moved to the end */}
+
+
       </div>
     </Suspense>
   );
