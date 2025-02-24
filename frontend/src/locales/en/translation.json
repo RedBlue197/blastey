@@ -132,6 +132,33 @@
     "showMore": "Show More",
     "loading": "Loading..."
 
+  },
+
+  "dashboard": {
+    "title": "Professional Dashboard",
+    "widget1Title": "Sales Overview",
+    "widget1Content": "A summary of your recent sales performance.",
+    "widget2Title": "Customer Insights",
+    "widget2Content": "Key metrics about your customer base.",
+    "tripTableTitle": "Top Performing Trips",
+    "tableHeaderId": "ID",
+    "tableHeaderName": "Name",
+    "tableHeaderPrice": "Price",
+    "tableHeaderRating": "Rating",
+    "salesChartTitle": "Monthly Sales Trends",
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "sales": "Sales",
+    "totalSales": "Total Sales",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "search": "Search"
   }
+
+
 
 }
