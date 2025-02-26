@@ -26,7 +26,7 @@ import {
   updateTripById,
   updateTripItems,
   updateTripOpenings
- } from "@/services/internal_services/trip_api_handler";
+ } from "@/services/internal_services/professional_services/trip_api_handler";
 import { Router } from 'next/router';
 
  

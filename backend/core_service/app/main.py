@@ -99,21 +99,31 @@ include_frontoffice_routers = True
 # Include routers
 if include_frontoffice_routers:
     from routers.frontoffice.v1 import (
-        user_router as frontoffice_user_router,
         activity_router as activity_router,
-        city_router as city_router,
-        newsletter_router as newsletter_router
+        city_router as city_router
     )
     from routers.frontoffice.v1.anonymous import (
         auth_router as auth_router,
-        trip_router as trip_router
+        trip_router as trip_router,
+        newsletter_router as newsletter_router
         )
+    
+    from routers.frontoffice.v1.user import (
+        user_router as user_user_router
+    )
+
+    from routers.frontoffice.v1.professional import (
+        user_router as professional_user_router
+    )
 if include_frontoffice_routers:
-    app.include_router(frontoffice_user_router.router)
     app.include_router(activity_router.router)
     app.include_router(auth_router.router)
     app.include_router(city_router.router)
     app.include_router(newsletter_router.router)
+    #User
+    app.include_router(user_user_router.router)
+    #Professional
+    app.include_router(professional_user_router.router)
 
 # Include anonymous routers
 app.include_router(auth_router.router)

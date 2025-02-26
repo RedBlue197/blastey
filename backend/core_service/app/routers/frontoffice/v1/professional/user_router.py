@@ -7,7 +7,7 @@ from dependencies.auth_dependency import auth_bearer
 
 import uuid
 
-from interfaces.user_interface import UserInterface
+from interfaces.professional.user_interface import UserInterface
 
 from schemas.user_schema import (
     CreateUserRequest,
@@ -28,7 +28,7 @@ from utils.send_verification_email import send_verification_email
 from main import limiter
 
 router = APIRouter(
-    prefix="/core/frontoffice/v1/users",
+    prefix="/core/frontoffice/v1/professional/users",
     tags=['Frontoffice Users']
 )
 

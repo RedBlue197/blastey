@@ -39,7 +39,7 @@ import uuid
 import json
 
 router = APIRouter(
-    prefix="/core/frontoffice/v1/trips",
+    prefix="/core/frontoffice/v1/professional/trips",
     tags=['Frontoffice Trips']
 )
 
@@ -482,7 +482,7 @@ async def put_trip_items(
         # Update trip in the database through the interface
         trip_items_obj = TripInterface(db=db).put_trip_items(user_id,trip_items_update)
 
-        if not trip_trip_items_objobj:
+        if not trip_items_obj:
             return api_response(
                 message="Trip Items not found",
                 status_code=404  

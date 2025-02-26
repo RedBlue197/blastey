@@ -2,7 +2,7 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';  // Import useRouter
 import styles from './TripsList.module.css';
-import { fetchTrips, getTripsByCityName } from '@/services/internal_services/trip_api_handler';
+import { fetchTrips, getTripsByCityName } from '@/services/internal_services/professional_services/trip_api_handler';
 import FilterAndSearch from '../filter-and-search/FilterAndSearch';
 import TripCard from '../trip-card/TripCard';
 import LoadingTripsList from './loading/LoadingTripsList';

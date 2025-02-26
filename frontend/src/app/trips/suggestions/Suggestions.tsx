@@ -4,7 +4,7 @@ import React, { useState,Suspense } from 'react';
 import styles from './Suggestions.module.css';
 import LoadingSuggestions from './loading/LoadingSuggestions'; // Import the loading fallback component
 import { PrimaryButton } from '@/app/components';
-import { fetchTripById } from '@/services/internal_services/trip_api_handler'; // Import the fetchTripById function from the API service
+import { fetchTripById } from '@/services/internal_services/professional_services/trip_api_handler'; // Import the fetchTripById function from the API service
 
 interface Suggestion {
   id: string;
