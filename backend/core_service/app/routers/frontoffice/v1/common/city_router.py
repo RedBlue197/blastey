@@ -1,18 +1,17 @@
-from fastapi import status, APIRouter, Query, UploadFile, File,Form,HTTPException,Request
-from pydantic import ValidationError
+from fastapi import status, APIRouter, Query,Request
 
 from dependencies.db_dependency import db_dependency
 from dependencies.auth_dependency import user_dependency
 
-from backend.core_service.app.interfaces.commun.city_interface import CityInterface
+from interfaces.common.city_interface import CityInterface
 
 
 
-from backend.core_service.app.responses.commun.city_response import GetCitiesResponse
+from responses.common.city_response import GetCitiesResponse
 
 from utils.responses import api_response
 
-from typing import Optional,List
+from typing import Optional
 
 from main import limiter
 

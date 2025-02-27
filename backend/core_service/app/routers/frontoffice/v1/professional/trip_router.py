@@ -1,12 +1,11 @@
-from fastapi import status, APIRouter, Query, UploadFile, File,Form,HTTPException,Request
-from pydantic import UUID4
+from fastapi import APIRouter, Query, UploadFile, File,Form,HTTPException
 
 from dependencies.db_dependency import db_dependency
 from dependencies.auth_dependency import user_dependency
 
-from interfaces.trip_interface import TripInterface
+from interfaces.professional.trip_interface import TripInterface
 
-from backend.core_service.app.schemas.professional.trip_schema import (
+from schemas.professional.trip_schema import (
     CreateTripRequest,
     CreateTripItemsRequest,
     CreateTripOpeningsRequest,
@@ -17,9 +16,8 @@ from backend.core_service.app.schemas.professional.trip_schema import (
     PutTripOpeningsRequest
     )
 
-from responses.trip_response import (
+from responses.professional.trip_response import (
     GetTripsResponse,
-    GetTripByIdResponse,
     CreateTripResponse,
     CreateTripItemsResponse,
     CreateTripOpeningsResponse,
@@ -53,7 +51,7 @@ async def create_trip(
     db: db_dependency,
     trip: CreateTripRequest
     ):
-    if user['user_role'] not in ["admin", "host","user"]:
+    if user['user_role'] not in ["admin", "professional","user"]:
         return api_response(
             message="Unauthorized Role",
             status_code=403

@@ -2,14 +2,14 @@ from fastapi import APIRouter, Query,Request, status
 
 from dependencies.db_dependency import db_dependency
 
-from interfaces.trip_interface import TripInterface
+from interfaces.anonymous.trip_interface import TripInterface
 
-from responses.trip_response import (
+from responses.anonymous.trip_response import (
     GetTripsResponse,
     GetTripByIdResponse,
     )
 
-from backend.core_service.app.schemas.professional.trip_schema import (
+from schemas.anonymous.trip_schema import (
     CreateTripSearchRequest
 )
 

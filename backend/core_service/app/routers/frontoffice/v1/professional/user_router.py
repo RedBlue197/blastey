@@ -9,12 +9,12 @@ import uuid
 
 from interfaces.professional.user_interface import UserInterface
 
-from backend.core_service.app.schemas.user.user_schema import (
+from schemas.user.user_schema import (
     CreateUserRequest,
     PutUserVerificationRequest,
     )
 
-from backend.core_service.app.responses.user.user_response import (
+from responses.user.user_response import (
     GetUserByIdResponse,
     GetUserResponse,
     CreateUserResponse,
@@ -22,8 +22,6 @@ from backend.core_service.app.responses.user.user_response import (
     )
 
 from utils.responses import api_response
-
-from utils.send_verification_email import send_verification_email
 
 from main import limiter
 

@@ -4,7 +4,7 @@ import { useState, ChangeEvent } from "react";
 // import { signIn } from "next-auth/react"; // Uncomment for actual sign-in
 import styles from "./LoginModal.module.css"; // Import the CSS module
 import {postUserLoginRequest} from "@/services/internal_services/anonymous_services/auth_api_handler"; // Import the API handler
-import { Toast } from '@/app/components';
+import { Toast,PrimaryButton } from '@/app/components';
 import { useToast } from "@/hooks/useToast"; // Import the custom hook
 import trackEvent from"@/utils/track_event"
 
@@ -175,12 +175,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 onChange={handlePasswordChange}
                 className={styles.passwordInput}
               />
-              <button
-                className={`${styles.button} ${styles.signIn}`}
+              <PrimaryButton
                 onClick={handleEmailSignIn}
-              >
-                Sign In
-              </button>
+                label="Sign In"
+              />
 
               <p className={styles.forgotPassword} onClick={handleForgotPassword}>
                 Forgot your password?
