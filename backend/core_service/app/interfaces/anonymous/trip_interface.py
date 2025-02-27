@@ -19,7 +19,7 @@ from models.trip_model import (
 from models.user_model import User
 from models.search_model import SearchLog
 
-from backend.core_service.app.schemas.professional.trip_schema import (
+from schemas.professional.trip_schema import (
     CreateTripRequest,
     CreateTripItemsRequest,
     CreateTripOpeningsRequest,

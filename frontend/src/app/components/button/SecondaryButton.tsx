@@ -1,17 +1,43 @@
-import React from 'react';
+// SecondaryButton.jsx
+import React, { useState } from 'react'; // Import useState
+import styles from './SecondaryButton.module.css';
 
 interface SecondaryButtonProps {
   label: string;
-  onClick: () => void;
+  onClick?: () => Promise<void> | void; // Support async/await
+  disabled?: boolean;
 }
 
-const SecondaryButton: React.FC<SecondaryButtonProps> = ({ label, onClick }) => {
+
+const SecondaryButton: React.FC<SecondaryButtonProps> = ({ label, onClick, disabled = false }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    if (onClick) {
+      setLoading(true);
+      try {
+        await onClick();
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   return (
     <button
-      className="bg-[#ff914d] text-white py-2 px-4 rounded-lg transition-all duration-300 hover:bg-[#e6813b] active:transform active:scale-95"
-      onClick={onClick}
+      className={`${styles.secondaryButton} ${loading ? styles.loading : ''} ${disabled ? styles.disabled : ''}`}
+      onClick={handleClick}
+      disabled={disabled || loading} // Disable while loading or if explicitly disabled
     >
-      {label}
+      {loading ? (
+        <div className={styles.dotsContainer}>
+          <div className={styles.dot}></div>
+          <div className={styles.dot}></div>
+          <div className={styles.dot}></div>
+        </div>
+      ) : (
+        <span className={styles.secondaryButtonText}>{label}</span>
+      )}
     </button>
   );
 };

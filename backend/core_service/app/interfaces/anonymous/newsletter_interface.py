@@ -1,19 +1,13 @@
 # app/interfaces/user.py
-from datetime import datetime
-from fastapi import HTTPException, status
+
 
 from sqlalchemy.orm import Session
-from sqlalchemy import func
 
 from models.newsletter_model import Newsletter
 
 from interfaces.base_interface import BaseInterface
 
-from backend.core_service.app.schemas.anonymous.newsletter_schema import CreateNewsletterEmailRequest
-
-from dependencies.auth_dependency import bcrypt_context
-
-from utils.send_verification_email import send_verification_email,generate_verification_code,expiration_time 
+from schemas.anonymous.newsletter_schema import CreateNewsletterEmailRequest
 
 
 class NewsletterInterface(BaseInterface[Newsletter]):

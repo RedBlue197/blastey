@@ -28,6 +28,7 @@ import {
   updateTripOpenings
  } from "@/services/internal_services/professional_services/trip_api_handler";
 import { Router } from 'next/router';
+import { PrimaryButton, SecondaryButton } from '@/app/components';
 
  
 
@@ -362,22 +363,16 @@ const CreateTripForm = () => {
               </button>
             )}
             {currentStep === 0 && (
-              <button
-                type="button"
-                className={`btn-secondary ${styles.secondaryButton}`}
+              <SecondaryButton
+                label="Cancel"
                 onClick={() => reset()}
-              >
-                Cancel
-              </button>
+              />
             )}
-            <button
-              type="button"
-              className={`btn-primary ${styles.primaryButton}`}
+            <PrimaryButton
               onClick={handleNext}
               disabled={loading}
-            >
-              {loading ? 'Processing...' : stepCompleted[currentStep] ? 'Update' : 'Submit'}
-            </button>
+              label={currentStep === steps.length - 1 ? 'Create Trip' : 'Next'}
+            />
           </div>
         </div>
 

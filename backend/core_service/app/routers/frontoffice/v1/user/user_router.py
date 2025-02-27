@@ -7,14 +7,14 @@ from dependencies.auth_dependency import auth_bearer
 
 import uuid
 
-from backend.core_service.app.interfaces.anonymous.user_interface import UserInterface
+from interfaces.anonymous.user_interface import UserInterface
 
-from backend.core_service.app.schemas.user.user_schema import (
+from schemas.user.user_schema import (
     CreateUserRequest,
     PutUserVerificationRequest,
     )
 
-from backend.core_service.app.responses.user.user_response import (
+from responses.user.user_response import (
     GetUserByIdResponse,
     GetUserResponse,
     CreateUserResponse,

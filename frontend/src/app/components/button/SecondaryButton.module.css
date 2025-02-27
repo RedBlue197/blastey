@@ -1,0 +1,88 @@
+/* SecondaryButton.module.css */
+.secondaryButton {
+    background-color: transparent;
+    color: #00bf63;
+    border: 2px solid #00bf63;
+    min-width: 200px;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Reduced shadow: smaller offset, blur, and opacity */
+  }
+  
+  .secondaryButton:hover {
+      background-color: #00bf63;
+      color: white;
+      box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Reduced shadow: smaller offset, blur, and opacity */
+    }
+  
+  .secondaryButton:disabled,
+  .secondaryButton.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+  }
+  
+  .secondaryButton.loading {
+      background-color: #999;
+      color: white;
+      border-color: #999;
+      cursor: not-allowed;
+      box-shadow: none;
+  }
+  
+  
+  
+  .secondaryButtonText {
+    font-size: 1rem;
+  }
+  
+  
+  /* Dots container for loading state (shared with PrimaryButton) */
+  .dotsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 2rem;
+  }
+  
+  /* Styles for each dot in the loading state (shared with PrimaryButton) */
+  .dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    background-color: white;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+  }
+  
+  /* Keyframes for the dot animation (shared with PrimaryButton) */
+  @keyframes bounce {
+    0%, 80%, 100% {
+      transform: scale(0);
+    }
+    40% {
+      transform: scale(1);
+    }
+  }
+  
+  /* Delays for each dot to create staggered effect (shared with PrimaryButton) */
+  .dot:nth-child(1) {
+    animation-delay: -0.32s;
+  }
+  
+  .dot:nth-child(2) {
+    animation-delay: -0.16s;
+  }
+  
+  .dot:nth-child(3) {
+    animation-delay: 0s;
+  }

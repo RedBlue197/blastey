@@ -5,31 +5,7 @@ from typing import List, Optional
 from datetime import datetime
 
 #-------------------------------------GET RESPONSES--------------------------------------
-class GetTripHostResponse(BaseModel):
-    user_name: str
-    user_email: str
-    user_phone_number: Optional[str] = None
-    user_id: uuid.UUID
 
-class GetTripResponse(BaseModel):
-    trip_id: uuid.UUID
-    trip_title: str
-    trip_description: Optional[str] = None
-    trip_origin: Optional[str] = None
-    trip_destination: Optional[str] = None
-    trip_link_url: Optional[str] = None
-    trip_upvote: Optional[int] = None
-    trip_downvote: Optional[int] = None
-    trip_lowest_trip_opening_price:float
-    trip_image_url : Optional[str] = Field(None, pattern=r'^https?:\/\/\S+$', description="Link URL of the trip")
-    host: GetTripHostResponse
-
-class GetTripsResponse(BaseModel):
-    trips: list[GetTripResponse]
-
-    class Config:
-        orm_mode = True
-        from_attributes = True  # This is the key setting
 #-------------------------------------CREATE RESPONSES--------------------------------------
 
 class CreateTripOpeningItemResponse(BaseModel):
