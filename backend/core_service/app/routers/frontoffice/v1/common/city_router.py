@@ -4,11 +4,11 @@ from pydantic import ValidationError
 from dependencies.db_dependency import db_dependency
 from dependencies.auth_dependency import user_dependency
 
-from interfaces.city_interface import CityInterface
+from backend.core_service.app.interfaces.commun.city_interface import CityInterface
 
 
 
-from responses.city_response import GetCitiesResponse
+from backend.core_service.app.responses.commun.city_response import GetCitiesResponse
 
 from utils.responses import api_response
 

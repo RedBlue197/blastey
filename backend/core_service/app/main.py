@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from slowapi.util import get_remote_address
 from slowapi import Limiter
 
+from backend.core_service.app.routers.frontoffice.v1.professional import activity_router as activity_router
 from utils.responses import api_response
 
 from middleware.logging_middleware import LoggingMiddleware
@@ -98,37 +99,29 @@ include_frontoffice_routers = True
 
 # Include routers
 if include_frontoffice_routers:
-    from routers.frontoffice.v1 import (
-        activity_router as activity_router,
-        city_router as city_router
+    from routers.frontoffice.v1.common import (
+        city_router as common_city_router
     )
+    app.include_router(common_city_router.router)
     from routers.frontoffice.v1.anonymous import (
-        auth_router as auth_router,
-        trip_router as trip_router,
-        newsletter_router as newsletter_router
+        auth_router as anonymous_auth_router,
+        trip_router as anonymous_trip_router,
+        newsletter_router as anonymous_newsletter_router
         )
+    app.include_router(anonymous_auth_router.router)
+    app.include_router(anonymous_trip_router.router)
+    app.include_router(anonymous_newsletter_router.router)
     
     from routers.frontoffice.v1.user import (
         user_router as user_user_router
     )
+    app.include_router(user_user_router.router)
 
     from routers.frontoffice.v1.professional import (
         user_router as professional_user_router
     )
-if include_frontoffice_routers:
-    app.include_router(activity_router.router)
-    app.include_router(auth_router.router)
-    app.include_router(city_router.router)
-    app.include_router(newsletter_router.router)
-    #User
-    app.include_router(user_user_router.router)
-    #Professional
     app.include_router(professional_user_router.router)
 
-# Include anonymous routers
-app.include_router(auth_router.router)
-app.include_router(trip_router.router)
-    
 
 @app.on_event("startup")
 async def startup():

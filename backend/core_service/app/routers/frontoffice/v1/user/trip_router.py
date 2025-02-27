@@ -6,7 +6,7 @@ from dependencies.auth_dependency import user_dependency
 
 from interfaces.trip_interface import TripInterface
 
-from schemas.trip_schema import (
+from backend.core_service.app.schemas.professional.trip_schema import (
     CreateTripRequest,
     CreateTripItemsRequest,
     CreateTripOpeningsRequest,

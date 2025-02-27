@@ -9,7 +9,7 @@ from responses.trip_response import (
     GetTripByIdResponse,
     )
 
-from schemas.trip_schema import (
+from backend.core_service.app.schemas.professional.trip_schema import (
     CreateTripSearchRequest
 )
 

@@ -9,12 +9,12 @@ import uuid
 
 from interfaces.professional.user_interface import UserInterface
 
-from schemas.user_schema import (
+from backend.core_service.app.schemas.user.user_schema import (
     CreateUserRequest,
     PutUserVerificationRequest,
     )
 
-from responses.user_response import (
+from backend.core_service.app.responses.user.user_response import (
     GetUserByIdResponse,
     GetUserResponse,
     CreateUserResponse,
