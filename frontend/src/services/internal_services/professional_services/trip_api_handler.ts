@@ -1,7 +1,7 @@
 import { UUID } from 'crypto';
-import { makeAPIRequest } from './api'; // Adjust the import path
-import { endpoints } from './endpoints'; // Adjust the import path
-import { microservices } from './microservices';
+import { makeAPIRequest } from '../api'; // Adjust the import path
+import { endpoints } from '../endpoints'; // Adjust the import path
+import { microservices } from '../microservices';
 import {
   CreateTripInterface,
   CreateTripItemsInterface,
@@ -119,7 +119,7 @@ export async function createTrip(create_trip_data:CreateTripInterface){
     // Make API request
     const response = await makeAPIRequest<{ data: any }>(
       microservices.CORE, // Replace with your actual microservice name
-      endpoints.trips.CREATE.CREATE_TRIP, // Endpoint
+      endpoints.professional.trips.POST.POST_TRIP, // Endpoint
       {
         method: 'POST',
         data: create_trip_data,

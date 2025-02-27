@@ -4,7 +4,7 @@ import SearchTabs from './components/search-tabs/SearchTabs';
 import TripsForm from './components/trips-form/TripsForm';
 import styles from './SearchEngine.module.css';
 import { CreateTripSearchInterface } from '@/types/trip';
-import { createTripSearch } from '@/services/internal_services/trip_api_handler';
+import { createTripSearch } from '@/services/internal_services/professional_services/trip_api_handler';
 
 const SearchEngine: React.FC = () => {
   const { t } = useTranslation();

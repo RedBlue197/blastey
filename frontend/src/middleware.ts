@@ -5,9 +5,7 @@ import { jwtVerify } from 'jose';
 
 // Define protected routes and the roles allowed for each
 const protectedRoutes: { [key: string]: string[] } = {
-  '/dashboard': ['host', 'admin'],
-  '/profile': ['user', 'host', 'admin'],
-  '/admin-panel': ['admin'],
+  '/profile': ['user', 'professional', 'admin'],
 };
 
 // Define routes that are accessible to everyone (public)

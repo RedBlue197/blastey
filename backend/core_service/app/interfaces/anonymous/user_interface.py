@@ -9,7 +9,7 @@ from models.user_model import User,VerificationCode
 
 from interfaces.base_interface import BaseInterface
 
-from schemas.user_schema import CreateUserRequest,PutUserVerificationRequest
+from backend.core_service.app.schemas.user.user_schema import CreateUserRequest,PutUserVerificationRequest
 
 from dependencies.auth_dependency import bcrypt_context
 

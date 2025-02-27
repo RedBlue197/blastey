@@ -9,7 +9,7 @@ from models.newsletter_model import Newsletter
 
 from interfaces.base_interface import BaseInterface
 
-from schemas.newsletter_schema import CreateNewsletterEmailRequest
+from backend.core_service.app.schemas.anonymous.newsletter_schema import CreateNewsletterEmailRequest
 
 from dependencies.auth_dependency import bcrypt_context
 

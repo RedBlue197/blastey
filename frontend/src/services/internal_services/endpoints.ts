@@ -11,6 +11,22 @@ export const endpoints= {
             }
         }
     },
+    "professional" :{
+        "auth": {
+            POST:{
+                POST_USER_LOGIN_REQUEST : '/professional/auth/login'
+            }
+        },
+        "trips":{
+            POST :{
+                POST_TRIP:'/professional/trips/create-trip',
+                POST_TRIP_ITEMS:'/professional/trips/create-trip-items',
+                POST_TRIP_OPENINGS:'/professional/trips/create-trip-openings',
+                POST_TRIP_IMAGES:'/professional/trips/create-trip-images',
+                POST_SEARCH_TRIPS : '/professional/trips/create-trip-search'
+            }
+        }
+    },
     "auth" :{
         GET:{
             GET_TOKEN : '/token'

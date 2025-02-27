@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router'; // useRouter can be used after 'use client'
 import styles from './TripsList.module.css'; 
-import { fetchTripsByHostId } from '@/services/internal_services/trip_api_handler';
+import { fetchTripsByHostId } from '@/services/internal_services/professional_services/trip_api_handler';
 import TripCard from '../trip-card/TripCard';
 import { Trip } from '@/types/trip';
 import { UUID } from 'crypto';

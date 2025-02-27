@@ -18,7 +18,7 @@ class UserRank(PyEnum):
 
 class UserRole(PyEnum):
     ADMIN = "admin"
-    HOST= "host"
+    PROFESSIONAL= "professional"
     USER = "user"
 
 #----------------------------------------------------------USER MODELS-----------------------------------------------------------------------------

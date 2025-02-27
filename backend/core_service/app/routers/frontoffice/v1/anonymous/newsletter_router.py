@@ -5,9 +5,10 @@ from fastapi import status, APIRouter
 from dependencies.db_dependency import db_dependency
 
 
-from interfaces.newsletter_interface import NewsletterInterface
 
-from schemas.newsletter_schema import (
+from interfaces.anonymous.newsletter_interface import NewsletterInterface
+
+from schemas.anonymous.newsletter_schema import (
     CreateNewsletterEmailRequest,
     )
 

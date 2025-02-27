@@ -12,7 +12,7 @@ function Trip({ params }: { params: { trip_id: string } }) {
 
   useEffect(() => {
     if (trip_id) {
-      import("@/services/internal_services/trip_api_handler").then(
+      import("@/services/internal_services/professional_services/trip_api_handler").then(
         ({ getTripById }) => {
           setLoading(true);
           getTripById(trip_id)
