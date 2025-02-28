@@ -44,7 +44,7 @@ class Trip(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin
     trip_creation_status=Column(Enum(TripCreationStatusEnum),default=TripCreationStatusEnum.TRIP_ITEM_CREATION)
 
     #Foreign Keys
-    host_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
+    professional_id = Column(UUID(as_uuid=True), ForeignKey("professionals.professional_id", ondelete="CASCADE"), nullable=False)
 
 class TripItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "trip_items"
@@ -57,7 +57,7 @@ class TripItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByM
     trip_item_traveler_reward = Column(Numeric(precision=10, scale=2), nullable=True)  # Reward for the traveler
     trip_item_type=Column(Enum(TripItemTypeEnum),default=TripItemTypeEnum.INCLUDED)
     trip_item_price=Column(Float, nullable=True) 
-    trip_item_image = Column(String, nullable=True)
+    trip_item_image_url = Column(String, nullable=True)
 
     #Foreign Keys
     trip_id = Column(UUID(as_uuid=True), ForeignKey("trips.trip_id", ondelete="CASCADE"), nullable=False)
@@ -92,7 +92,7 @@ class TripRatingImages(Base,TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Upd
 
     trip_rating_image_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     trip_rating_id = Column(UUID(as_uuid=True), ForeignKey("trip_ratings.trip_rating_id", ondelete="CASCADE"), nullable=False)
-    trip_rating_image = Column(Text, nullable=False)
+    trip_rating_image_url = Column(String, nullable=False)
 
 class TripOpening(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "trip_openings"
@@ -108,9 +108,6 @@ class TripOpening(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, Updated
 
     # Foreign Keys
     trip_id = Column(UUID(as_uuid=True), ForeignKey("trips.trip_id", ondelete="CASCADE"), nullable=False)
-
-    #Relationships
-    trip_opening_items = relationship("TripOpeningItem", backref="trip_opening", cascade="all, delete-orphan")
 
 class TripOpeningItem(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "trip_opening_items"

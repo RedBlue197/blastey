@@ -14,3 +14,13 @@ class NotificationTypeEnum(PyEnum):
 
 class Notification(Base, TrackTimeMixin, SoftDeleteMixin, CreatedByMixin, UpdatedByMixin, StatusMixin, isDeletedMixin,DeletedByMixin):
     __tablename__ = "notifications"
+
+    notification_id=Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    notification_title=Column(String, nullable=False)
+    notification_description=Column(String, nullable=True)
+    notification_type=Column(Enum(NotificationTypeEnum), nullable=False)
+    notification_url=Column(String, nullable=True)
+    notification_image=Column(String, nullable=True)
+
+    receiver_id=Column(UUID(as_uuid=True), ForeignKey('users.user_id'))
+    sender_id=Column(UUID(as_uuid=True), ForeignKey('users.user_id'), nullable=True)
